@@ -19,10 +19,11 @@ include_once 'db.php';
 </div>
 
 <div class="row">
-
  	<div class="col-sm-2">
- 		<form role="form" action="tampil_rekam_medik.php" id="formcari" method="post">
 
+<div class="card card-block">
+ 
+ 		<form role="form"  id="formcari" method="post">
 
 <div class="form-group">
 	<label>Dari Tanggal</label>
@@ -51,10 +52,11 @@ include_once 'db.php';
 </div>	
 
 <button type="submit" class="btn btn-info" id="submit" > <i class="fa fa-search"></i>  Cari</button>
-<br>
-<br>
+
 
 </form>
+</div>
+
 <br>
 
  </div><!-- akhir div col-sm-3 form data pasien -->
@@ -63,16 +65,24 @@ include_once 'db.php';
 <span id="result">
   <br>
 
+
+<style>
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+</style>
+
+
 <div class="table-responsive">
- <table id="table-group" class="table table-bordered"> 
+ <table id="table-group" class="table table-bordered table-sm"> 
     <thead>
       <tr>
 
-         <th>No Reg </th>
-         <th>Nama Pasien</th>
-         <th>Tanggal Periksa</th>
-         <th>Nama Dokter</th>
-         <th>Poli</th>
+         <th style='background-color: #4CAF50; color: white' >No Reg </th>
+         <th style='background-color: #4CAF50; color: white' >Nama Pasien</th>
+         <th style='background-color: #4CAF50; color: white' >Tanggal Periksa</th>
+         <th style='background-color: #4CAF50; color: white' >Nama Dokter</th>
+         <th style='background-color: #4CAF50; color: white' >Poli</th>
 
     </tr>
     </thead>
@@ -126,7 +136,17 @@ include_once 'db.php';
 <script type="text/javascript">
 
 $("#submit").click(function() {
-    $.post($("#formcari").attr("action"), $("#formcari :input").serializeArray(), function(info) { $("#result").html(info); });
+
+    var dari_tanggal = $('#dari_tanggal').val();
+    var sampai_tanggal = $('#sampai_tanggal').val();
+    var cari_berdasarkan  = $('#cari_berdasarkan').val();
+    var pencarian  = $('#pencarian').val();
+    $.post("tampil_rekam_medik.php",{dari_tanggal:dari_tanggal,sampai_tanggal:sampai_tanggal,cari_berdasarkan:cari_berdasarkan,pencarian:pencarian},function(info) { 
+
+      $("#result").html(info); 
+
+
+    });
     clearInput();
 });
 
@@ -150,7 +170,7 @@ function clearInput(){
             $(document).on('click', '.rekam-medik', function (e) {
                 var id = $(this).attr('data-no');
 
-               $.post("tampil-data-rekam-medik.php",{id:id},function(info){
+               $.post("tampil_data_rekam_medik.php",{id:id},function(info){
                	$("#result1").html(info);
 
                });

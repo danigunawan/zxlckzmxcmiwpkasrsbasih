@@ -15,12 +15,12 @@ if ($tipe == 'barang') {
 
     if ($kategori == 'semua' AND $tipe = 'barang') {
     
-    $perintah = $db->query("SELECT s.nama,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang FROM barang b INNER JOIN satuan s ON b.satuan = s.id WHERE b.berkaitan_dgn_stok = '$tipe' ORDER BY b.id DESC");
+    $perintah = $db->query("SELECT s.nama,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.harga_jual4,b.harga_jual5,b.harga_jual6,b.harga_jual7,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang FROM barang b INNER JOIN satuan s ON b.satuan = s.id WHERE b.berkaitan_dgn_stok = '$tipe' ORDER BY b.id DESC");
     
     }
 
     else{
-    $perintah = $db->query("SELECT s.nama,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang FROM barang b INNER JOIN satuan s ON b.satuan = s.id WHERE b.kategori = '$kategori' AND b.berkaitan_dgn_stok = '$tipe' ORDER BY b.id DESC");
+    $perintah = $db->query("SELECT s.nama,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.harga_jual4,b.harga_jual5,b.harga_jual6,b.harga_jual7,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang FROM barang b INNER JOIN satuan s ON b.satuan = s.id WHERE b.kategori = '$kategori' AND b.berkaitan_dgn_stok = '$tipe' ORDER BY b.id DESC");
     }
 
     
@@ -31,12 +31,12 @@ else{
 
     if ($kategori == 'semua') {
     
-    $perintah = $db->query("SELECT s.nama,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang FROM barang b INNER JOIN satuan s ON b.satuan = s.id ORDER BY b.id DESC");
+    $perintah = $db->query("SELECT s.nama,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.harga_jual4,b.harga_jual5,b.harga_jual6,b.harga_jual7,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang FROM barang b INNER JOIN satuan s ON b.satuan = s.id ORDER BY b.id DESC");
     
     }
     
     else{
-    $perintah = $db->query("SELECT s.nama,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang FROM barang b INNER JOIN satuan s ON b.satuan = s.id WHERE b.kategori = '$kategori' ORDER BY b.id DESC");
+    $perintah = $db->query("SELECT s.nama,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.harga_jual4,b.harga_jual5,b.harga_jual6,b.harga_jual7,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang FROM barang b INNER JOIN satuan s ON b.satuan = s.id WHERE b.kategori = '$kategori' ORDER BY b.id DESC");
     }
 
 }
@@ -129,12 +129,6 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
 
                     <form enctype="multipart/form-data" role="form" action="prosesbarang.php" method="post">
 
-                        <div class="form-group">
-                            <label> Kode Barang </label>
-                            <br>
-                            <input type="text" placeholder="Kode Barang" name="kode_barang" id="kode_barang" class="form-control" autocomplete="off" required="">
-                        </div>
-
 
 
                         <div class="form-group">
@@ -142,10 +136,86 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
                             <br>
                             <input type="text" placeholder="Nama Barang" name="nama_barang" id="nama_barang" class="form-control" autocomplete="off" required="">
                         </div>
+
+
+                            <div class="form-group">
+                            <label> Golongan Produk </label>
+                            <br>
+                            <select type="text" name="golongan_produk" class="form-control" required="">
+                            <option value=""> -- SILAHKAN PILIH -- </option>
+                            <option> Barang </option>
+                            <option> Jasa </option>
+                            </select>
+                            </div>
+
+
+                            <div class="form-group">
+                            <label> Tipe Produk </label>
+                            <br>
+                            <select type="text" id="tipe_produk" name="tipe" class="form-control" required="">
+                            <option value=""> -- SILAHKAN PILIH -- </option>
+                            <option value="Barang"> Barang </option>
+                            <option value="Jasa"> Jasa </option>
+                            <option value="Alat"> Alat </option>
+                            <option value="BHP"> BHP </option>
+                            <option value="Obat Obatan"> Obat-obatan </option>
+                            </select>
+                            </div>
+
+
+                            <div class="form-group">
+                            <label for="sel1">Jenis Obat</label>
+                            <select class="form-control" id="jenis_obat" name="jenis_obat" autocomplete="off">
+                            <option value="">Silakan Pilih</option>
+                            <?php
+                            $query = $db->query("SELECT * FROM jenis");       
+                            while ( $data = mysqli_fetch_array($query)) {
+                            echo "<option value='".$data['nama']."'>".$data['nama']."</option>";
+                            }
+                            ?>
+                            </select>
+                            </div>
+
+
+                                    <div class="form-group">
+                                    <label> Kategori Obat </label>
+                                    <br>
+                                    <select type="text" name="kategori_obat" id="kategori_obat" class="form-control" required="">
+                                    <option value=""> -- SILAHKAN PILIH -- </option>
+                                    <?php 
+                                    
+                                    $ambil_kategori = $db->query("SELECT * FROM kategori");
+                                    
+                                    while($data_kategori = mysqli_fetch_array($ambil_kategori))
+                                    {
+                                    
+                                    echo "<option>".$data_kategori['nama_kategori'] ."</option>";
+                                    
+                                    }
+                                    
+                                    ?>
+                                    </select>
+                                    </div>
+
+                            <div class="form-group">
+                            <label> Golongan Obat </label>
+                            <br>
+                            <select type="text" id="golongan_obat" name="golongan_obat" class="form-control">
+                            <option value=""> -- SILAHKAN PILIH -- </option>
+                            <option value="Obat Keras"> Obat Keras </option>
+                            <option value="Obat Bebas"> Obat Bebas </option>
+                            <option value="Obat Bebas"> Obat Bebas Terbatas </option>
+                            <option value="Obat Psikotropika"> Obat Psikotropika </option>
+                            <option value="Narkotika"> Narkotika </option>
+                            </select>
+                            </div>
+
+
+
                         <div class="form-group">
                             <label> Harga Beli </label>
                             <br>
-                            <input type="text" placeholder="Harga Beli" name="harga_beli" id="harga_beli" class="form-control" autocomplete="off" required="">
+                            <input type="text" placeholder="Harga Beli" name="harga_beli" id="harga_beli" class="form-control" autocomplete="off">
                         </div>
                         <div class="form-group">
                             <label> Harga Jual Level 1</label>
@@ -157,18 +227,39 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
                             <br>
                             <input type="text" placeholder="Harga Jual Level 2" name="harga_jual_2" id="harga_jual2" class="form-control" autocomplete="off">
                         </div>
+
                         <div class="form-group">
                             <label> Harga Jual Level 3</label>
                             <br>
                             <input type="text" placeholder="Harga Jual Level 3" name="harga_jual_3" id="harga_jual3" class="form-control" autocomplete="off">
                         </div>
+
                         <div class="form-group">
+                            <label> Harga Jual Level 4</label>
+                            <br>
+                            <input type="text" placeholder="Harga Jual Level 4" name="harga_jual_4" id="harga_jual4" class="form-control" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label> Harga Jual Level 5</label>
+                            <br>
+                            <input type="text" placeholder="Harga Jual Level 5" name="harga_jual_5" id="harga_jual5" class="form-control" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label> Harga Jual Level 6</label>
+                            <br>
+                            <input type="text" placeholder="Harga Jual Level 6" name="harga_jual_6" id="harga_jual6" class="form-control" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label> Harga Jual Level 7</label>
+                            <br>
+                            <input type="text" placeholder="Harga Jual Level 7" name="harga_jual_7" id="harga_jual7" class="form-control" autocomplete="off">
+                        </div>
+
+                   <div class="form-group">
                             <label> Satuan </label>
                             <br>
                             <select type="text" name="satuan" class="form-control" required="">
-					
                             <?php 
-                            
                             // memasukan file db.php
                             include 'db.php';
                             
@@ -179,7 +270,7 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
                             while($data = mysqli_fetch_array($query))
                             {
                             
-                            echo "<option value='".$data['id'] ."'>".$data['nama'] ."</option>";
+                            echo "<option value='".$data['id']."'>".$data['nama'] ."</option>";
                             }
                             
                             
@@ -187,25 +278,7 @@ echo '<br><button type="button" class="btn btn-info" data-toggle="modal" data-ta
                             </select>
                             </div>
 
- <div class="form-group">
-                            <label> Kategori </label>
-                            <br>
-                            <select type="text" name="kategori" class="form-control" required="">
-                            <option value=""> -- SILAHKAN PILIH -- </option>
-<?php 
-
-$ambil_kategori = $db->query("SELECT * FROM kategori");
-
-    while($data_kategori = mysqli_fetch_array($ambil_kategori))
-    {
-    
-    echo "<option>".$data_kategori['nama_kategori'] ."</option>";
-
-    }
-
- ?>
-                            </select>
-                            </div>
+                            
 
                         <div class="form-group" style="display: none">
                             <label> Gudang </label>
@@ -245,15 +318,10 @@ $ambil_kategori = $db->query("SELECT * FROM kategori");
                             </select>
                             </div>
 
-                            <div class="form-group">
-                            <label> Tipe </label>
-                            <br>
-                            <select type="text" name="tipe" class="form-control" required="">
-                            <option value=""> -- SILAHKAN PILIH -- </option>
-                            <option> Barang </option>
-                            <option> Jasa </option>
-                            </select>
-                            </div>
+                       
+
+
+
 
                             <div class="form-group">
                             <label> Suplier </label>
@@ -287,7 +355,6 @@ $ambil_kategori = $db->query("SELECT * FROM kategori");
                             <br>
                             <input type="text" placeholder="Over Stok" name="over_stok" id="over_stok" class="form-control" autocomplete="off">
                         </div>
-
                             
                             
                             
@@ -297,7 +364,7 @@ $ambil_kategori = $db->query("SELECT * FROM kategori");
 
 
 <!-- membuat tombol submit -->
-<button type="submit" name="submit" value="submit" class="btn btn-info">Tambah</button>
+<button type="submit" name="submit" value="submit" id="tambah" class="btn btn-info">Tambah</button>
 </form>
 </div>
 
@@ -331,10 +398,10 @@ $ambil_kategori = $db->query("SELECT * FROM kategori");
    
    <form enctype="multipart/form-data" action="proses_import.php?" method="post" >
     <div class="form-group">
-        <label> Import Data Excell</label>
+        <label> Import Data Excell</label><br>
         <input type="file" id="file_import" name="import_excell" required=""> 
         <br>
-        <br>
+        
 
         <!-- membuat tombol submit -->
         
@@ -425,13 +492,14 @@ th {
 
           <li class="nav-item"><a class="nav-link active" href='barang.php?kategori=semua&tipe=barang'> Umum </a></li>
           <li class="nav-item"><a class="nav-link" href='barang_2.php?kategori=semua&tipe=barang' > Lain - lain </a></li>
-
+          <li class="nav-item"><a class="nav-link" href='persediaan_filter.php?kategori=semua&tipe=barang'>Filter Limit Stok</a></li>
+          <li class="nav-item"><a class="nav-link" href='persediaan_filter_over.php?kategori=semua&tipe=barang'>Filter Over Stok</a></li>
           <?php else: ?>
-
 
           <li class="nav-item"><a class="nav-link active" href='barang.php?kategori=semua&tipe=barang_jasa'> Umum </a></li>
           <li class="nav-item"><a class="nav-link" href='barang_2.php?kategori=semua&tipe=barang_jasa' > Lain - lain </a></li>
-              
+          <li class="nav-item"><a class="nav-link" href='persediaan_filter.php?kategori=semua&tipe=barang_jasa'>Filter Limit Stok</a></li>
+          <li class="nav-item"><a class="nav-link" href='persediaan_filter_over.php?kategori=semua&tipe=barang_jasa'>Filter Over Stok</a></li>   
           <?php endif ?>
           
           
@@ -441,29 +509,11 @@ th {
 <div class="table-responsive">
           
 <span id="table_baru">
-    <table id="tableuser" class="table table-bordered">
+    <table id="tableuser" class="table table-bordered table-sm">
 
         <!-- membuat nama kolom tabel -->
         <thead>
-
-            <th> Kode Barang </th>
-            <th> Nama Barang </th>
-            <th> Harga Beli </th>
-            <th> Harga Jual Level 1</th>
-            <th> Harga Jual Level 2</th>
-            <th> Harga Jual Level 3</th>
-            <th> HPP</th>
-            <th> Jumlah Barang </th>
-            <th> Satuan </th>
-            <th> Satuan Konversi </th>
-            <th> Kategori </th>
-            <!--
-            <th> Gudang </th>
-            -->
-            
-     
 <?php  
-include 'db.php';
 
 $pilih_akses_barang_hapus = $db->query("SELECT item_hapus FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND item_hapus = '1'");
 $barang_hapus = mysqli_num_rows($pilih_akses_barang_hapus);
@@ -476,18 +526,36 @@ $barang_hapus = mysqli_num_rows($pilih_akses_barang_hapus);
     ?>
 
 <?php  
-include 'db.php';
 
 $pilih_akses_barang_edit = $db->query("SELECT item_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND item_edit = '1'");
 $barang_edit = mysqli_num_rows($pilih_akses_barang_edit);
 
 
     if ($barang_edit > 0){
-							echo	"<th> Edit </th>";
+                            echo    "<th> Edit </th>";
 
-						}
-			 ?>
-			
+                        }
+             ?>
+            <th> Kode Barang </th>
+            <th> Nama Barang </th>
+            <th> Harga Beli </th>
+            <th> Margin</th>
+            <th> Harga Jual Level 1</th>
+            <th> Harga Jual Level 2</th>
+            <th> Harga Jual Level 3</th>
+            <th> Harga Jual Level 4</th>
+            <th> Harga Jual Level 5</th>
+            <th> Harga Jual Level 6</th>
+            <th> Harga Jual Level 7</th>
+            <th> HPP</th>
+            <th> Jumlah Barang </th>
+            <th> Satuan </th>
+            <th> Satuan Konversi </th>
+            <th> Kategori </th>
+            <!--
+            <th> Gudang </th>
+            -->
+		
 		   </thead>
 
         <tbody>
@@ -499,15 +567,36 @@ $total_akhir_hpp = 0;
     while ($data1 = mysqli_fetch_array($perintah))
     {
 
+        if ($data1['berkaitan_dgn_stok'] == 'Jasa')
+        {
+            $f = 0;
+        } 
 
+        else
+        {
 
+        $a = $data1['harga_beli'];
+        $b = $data1['harga_jual'];
 
+          if ($b == '') {
+              $f = 0;
+          }
+          else{
+            $c = $b - $a;
+            $d = $c;
 
-        $select_gudang = $db->query("SELECT nama_gudang FROM gudang WHERE kode_gudang = '$data1[gudang]'");
-        $ambil_gudang = mysqli_fetch_array($select_gudang);
+            //Gross Profit Margin itu rumusnya (harga jual-harga beli)/Harga jual x 100
+            $e =  ($d / $b) * 100;
 
-        $select = $db->query("SELECT SUM(sisa) AS jumlah_barang FROM hpp_masuk WHERE kode_barang = '$data1[kode_barang]'");
-        $ambil_sisa = mysqli_fetch_array($select);
+            $f = round($e,2);
+          }
+
+        }
+            $select_gudang = $db->query("SELECT nama_gudang FROM gudang WHERE kode_gudang = '$data1[gudang]'");
+            $ambil_gudang = mysqli_fetch_array($select_gudang);
+
+            $select = $db->query("SELECT SUM(sisa) AS jumlah_barang FROM hpp_masuk WHERE kode_barang = '$data1[kode_barang]'");
+            $ambil_sisa = mysqli_fetch_array($select);
 
             $hpp_masuk = $db->query("SELECT SUM(total_nilai) AS total_hpp FROM hpp_masuk WHERE kode_barang = '$data1[kode_barang]'");
             $cek_awal_masuk = mysqli_fetch_array($hpp_masuk);
@@ -515,21 +604,82 @@ $total_akhir_hpp = 0;
             $hpp_keluar = $db->query("SELECT SUM(total_nilai) AS total_hpp FROM hpp_keluar WHERE kode_barang = '$data1[kode_barang]'");
             $cek_awal_keluar = mysqli_fetch_array($hpp_keluar);
 
+
             $total_hpp = $cek_awal_masuk['total_hpp'] - $cek_awal_keluar['total_hpp'];
 
-$total_akhir_hpp = $total_akhir_hpp + $total_hpp;
+        $total_akhir_hpp = $total_akhir_hpp + $total_hpp;
 
-        echo "<tr>
-			<td>". $data1['kode_barang'] ."</td>
+                echo "<tr>";
+                $pilih_akses_barang_hapus = $db->query("SELECT item_hapus FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND item_hapus = '1'");
+$barang_hapus = mysqli_num_rows($pilih_akses_barang_hapus);
+
+
+    if ($barang_hapus > 0  AND ($ambil_sisa['jumlah_barang'] == '0' OR $ambil_sisa['jumlah_barang'] == ''))  
+
+            {
+         
+            echo "
+            <td> <button class='btn btn-danger btn-hapus' data-id='". $data1['id'] ."'  data-nama='". $data1['nama_barang'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>";
+        }
+        else
+        {
+            echo "<td></td>";
+        }
+
+
+
+include 'db.php';
+
+$pilih_akses_barang_edit = $db->query("SELECT item_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND item_edit = '1'");
+$barang_edit = mysqli_num_rows($pilih_akses_barang_edit);
+
+
+    if ($barang_edit > 0) {
+
+           if ($ambil_sisa['jumlah_barang'] == '0') 
+
+             {
+            echo "<td> <a href='editbarang.php?id=". $data1['id']."' class='btn btn-success'><span class='glyphicon glyphicon-edit'></span> Edit</a> </td>
+            </tr>";
+            
+            }
+
+
+    }
+
+
+include 'db.php';
+
+$pilih_akses_barang_edit = $db->query("SELECT item_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND item_edit = '1'");
+$barang_edit = mysqli_num_rows($pilih_akses_barang_edit);
+
+
+    if ($barang_edit > 0 AND $ambil_sisa['jumlah_barang'] != '0')
+            {
+
+            echo "<td> <a href='editbarang.php?id=". $data1['id']."' class='btn btn-success'><span class='glyphicon glyphicon-edit'></span> Edit</a> </td>";
+            }
+
+			echo"<td>". $data1['kode_barang'] ."</td>
 			<td>". $data1['nama_barang'] ."</td>
+
 			<td class='edit-beli' data-id='".$data1['id']."'><span id='text-beli-".$data1['id']."'>". rp($data1['harga_beli']) ."</span> <input type='hidden' id='input-beli-".$data1['id']."' value='".$data1['harga_beli']."' class='input_beli' data-id='".$data1['id']."' autofocus=''> </td>
 
+            <td>". persen($f)."</td>
+			<td class='edit-jual' data-toggle='tooltip' data-placement='top' title='Klik 2x untuk melakukan edit harga jual 1' data-id='".$data1['id']."'><span id='text-jual-".$data1['id']."'>". rp($data1['harga_jual']) ."</span> <input type='hidden' id='input-jual-".$data1['id']."' value='".$data1['harga_jual']."' class='input_jual' data-id='".$data1['id']."' autofocus=''></td>
 
-			<td class='edit-jual' data-id='".$data1['id']."'><span id='text-jual-".$data1['id']."'>". rp($data1['harga_jual']) ."</span> <input type='hidden' id='input-jual-".$data1['id']."' value='".$data1['harga_jual']."' class='input_jual' data-id='".$data1['id']."' autofocus=''></td>
+           <td class='edit-jual-2' data-toggle='tooltip' data-placement='top' title='Klik 2x untuk melakukan edit harga jual 2' data-id-2='".$data1['id']."'><span id='text-jual-2-".$data1['id']."'>". rp($data1['harga_jual2']) ."</span> <input type='hidden' id='input-jual-2-".$data1['id']."' value='".$data1['harga_jual2']."' class='input_jual_2' data-id-2='".$data1['id']."' autofocus=''></td>
 
-                                            <td class='edit-jual-2' data-id-2='".$data1['id']."'><span id='text-jual-2-".$data1['id']."'>". rp($data1['harga_jual2']) ."</span> <input type='hidden' id='input-jual-2-".$data1['id']."' value='".$data1['harga_jual2']."' class='input_jual_2' data-id-2='".$data1['id']."' autofocus=''></td>
+           <td class='edit-jual-3' data-toggle='tooltip' data-placement='top' title='Klik 2x untuk melakukan edit harga jual 3' data-id-3='".$data1['id']."'><span id='text-jual-3-".$data1['id']."'>". rp($data1['harga_jual3']) ."</span> <input type='hidden' id='input-jual-3-".$data1['id']."' value='".$data1['harga_jual3']."' class='input_jual_3' data-id-3='".$data1['id']."' autofocus=''></td>
 
-                                            <td class='edit-jual-3' data-id-3='".$data1['id']."'><span id='text-jual-3-".$data1['id']."'>". rp($data1['harga_jual3']) ."</span> <input type='hidden' id='input-jual-3-".$data1['id']."' value='".$data1['harga_jual3']."' class='input_jual_3' data-id-3='".$data1['id']."' autofocus=''></td>";
+           <td class='edit-jual-4' data-toggle='tooltip' data-placement='top' title='Klik 2x untuk melakukan edit harga jual 4' data-id-4='".$data1['id']."'><span id='text-jual-4-".$data1['id']."'>". rp($data1['harga_jual4']) ."</span> <input type='hidden' id='input-jual-4-".$data1['id']."' value='".$data1['harga_jual4']."' class='input_jual_4' data-id-4='".$data1['id']."' autofocus=''></td>
+
+           <td class='edit-jual-5' data-toggle='tooltip' data-placement='top' title='Klik 2x untuk melakukan edit harga jual 5' data-id-5='".$data1['id']."'><span id='text-jual-5-".$data1['id']."'>". rp($data1['harga_jual5']) ."</span> <input type='hidden' id='input-jual-5-".$data1['id']."' value='".$data1['harga_jual5']."' class='input_jual_5' data-id-5='".$data1['id']."' autofocus=''></td>
+
+           <td class='edit-jual-6' data-toggle='tooltip' data-placement='top' title='Klik 2x untuk melakukan edit harga jual 6' data-id-6='".$data1['id']."'><span id='text-jual-6-".$data1['id']."'>". rp($data1['harga_jual6']) ."</span> <input type='hidden' id='input-jual-6-".$data1['id']."' value='".$data1['harga_jual6']."' class='input_jual_6' data-id-6='".$data1['id']."' autofocus=''></td>
+
+           <td class='edit-jual-7' data-toggle='tooltip' data-placement='top' title='Klik 2x untuk melakukan edit harga jual 7' data-id-7='".$data1['id']."'><span id='text-jual-7-".$data1['id']."'>". rp($data1['harga_jual7']) ."</span> <input type='hidden' id='input-jual-7-".$data1['id']."' value='".$data1['harga_jual7']."' class='input_jual_7' data-id-7='".$data1['id']."' autofocus=''></td>";
+
 
             echo "<td>". $total_hpp ."</td>";
 
@@ -537,50 +687,50 @@ $total_akhir_hpp = $total_akhir_hpp + $total_hpp;
 
 
 
-if ($data1['berkaitan_dgn_stok'] == 'Jasa') {
+            if ($data1['berkaitan_dgn_stok'] == 'Jasa') {
 
-    echo "<td>0</td>";
-}
-else {
-    echo "<td>". $ambil_sisa['jumlah_barang'] ."</td>";
-}
+                echo "<td>0</td>";
+            }
+            else {
+                echo "<td>". $ambil_sisa['jumlah_barang'] ."</td>";
+            }
 
-// SATUAN
-			echo "<td class='edit-satuan' data-id='".$data1['id']."'><span id='text-satuan-".$data1['id']."'>". $data1['nama'] ."</span> <select style='display:none' id='select-satuan-".$data1['id']."' value='".$data1['id']."' class='select-satuan' data-id='".$data1['id']."' autofocus=''>";
-
-
-echo '<option value="'. $data1['satuan'] .'"> '. $data1['nama'] .'</option>';
-
-     $query2 = $db->query("SELECT * FROM satuan");
-
-    while($data2 = mysqli_fetch_array($query2))
-    {
-    
-   echo ' <option value="'.$data2['id'] .'">'.$data2["nama"] .'</option>';
-    }
+            // SATUAN
+            			echo "<td class='edit-satuan'  data-id='".$data1['id']."'><span id='text-satuan-".$data1['id']."' data-toggle='tooltip' data-placement='top' title='Klik 2x untuk melakukan edit satuan'>". $data1['nama'] ."</span> <select style='display:none' id='select-satuan-".$data1['id']."' value='".$data1['id']."' class='select-satuan' data-id='".$data1['id']."' autofocus=''>";
 
 
-          echo  '</select>
-            </td>';
+            echo '<option value="'. $data1['satuan'] .'"> '. $data1['nama'] .'</option>';
+
+                 $query2 = $db->query("SELECT * FROM satuan");
+
+                while($data2 = mysqli_fetch_array($query2))
+                {
+                
+               echo ' <option value="'.$data2['id'] .'">'.$data2["nama"] .'</option>';
+                }
 
 
-echo "<td> <a href='satuan_konversi.php?id=". $data1['id']."&satuan=". $data1['satuan']."&harga=". $data1['harga_beli']."&kode_barang=". $data1['kode_barang']."' class='btn btn-secondary'>Konversi</a> </td>";
+                      echo  '</select>
+                        </td>';
+
+
+            echo "<td> <a href='satuan_konversi.php?id=". $data1['id']."&nama=". $data1['nama']."&satuan=". $data1['satuan']."&harga=". $data1['harga_beli']."&kode_barang=". $data1['kode_barang']."'    class='btn btn-secondary'>Konversi</a> </td>";
 
 
 
-//KATEGORI
-		echo "<td class='edit-kategori' data-id='".$data1['id']."'><span id='text-kategori-".$data1['id']."'>". $data1['kategori'] ."</span> <select style='display:none' id='select-kategori-".$data1['id']."' value='".$data1['kategori']."' class='select-kategori' data-id='".$data1['id']."' autofocus=''>";
+            //KATEGORI
+            		echo "<td class='edit-kategori' data-id='".$data1['id']."'><span id='text-kategori-".$data1['id']."' data-toggle='tooltip' data-placement='top' title='Klik 2x untuk melakukan edit kategori' >". $data1['kategori'] ."</span> <select style='display:none' id='select-kategori-".$data1['id']."' value='".$data1['kategori']."' class='select-kategori' data-id='".$data1['id']."' autofocus=''>";
 
 
-echo '<option value="'. $data1['kategori'] .'"> '. $data1['kategori'] .'</option>';
+            echo '<option value="'. $data1['kategori'] .'"> '. $data1['kategori'] .'</option>';
 
-     $query2 = $db->query("SELECT * FROM kategori");
+                 $query2 = $db->query("SELECT * FROM kategori");
 
-    while($data2 = mysqli_fetch_array($query2))
-    {
-    
-   echo ' <option>'.$data2["nama_kategori"] .'</option>';
-    }
+                while($data2 = mysqli_fetch_array($query2))
+                {
+                
+               echo ' <option>'.$data2["nama_kategori"] .'</option>';
+                }
 
 
           echo  '</select>
@@ -606,63 +756,6 @@ echo '<option value="'. $data1['gudang'] .'"> '. $ambil_gudang['nama_gudang'] .'
           echo  '</select>
             </td>';
             */
-
-
-
-
-
-include 'db.php';
-
-$pilih_akses_barang_hapus = $db->query("SELECT item_hapus FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND item_hapus = '1'");
-$barang_hapus = mysqli_num_rows($pilih_akses_barang_hapus);
-
-
-    if ($barang_hapus > 0 AND $ambil_sisa['jumlah_barang'] == '0')        
-
-            {
-         
-            echo "
-			<td> <button class='btn btn-danger btn-hapus' data-id='". $data1['id'] ."'  data-nama='". $data1['nama_barang'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>";
-        }
-
-
-
-include 'db.php';
-
-$pilih_akses_barang_edit = $db->query("SELECT item_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND item_edit = '1'");
-$barang_edit = mysqli_num_rows($pilih_akses_barang_edit);
-
-
-    if ($barang_edit > 0) {
-
-           if ($ambil_sisa['jumlah_barang'] == '0') 
-
-             {
-            echo "<td> <a href='editbarang.php?id=". $data1['id']."' class='btn btn-success'><span class='glyphicon glyphicon-edit'></span> Edit</a> </td>
-            </tr>";
-            
-            }
-            
-        else{
-
-                echo "<td> </td>";
-
-            }
-
-    }
-
-
-include 'db.php';
-
-$pilih_akses_barang_edit = $db->query("SELECT item_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND item_edit = '1'");
-$barang_edit = mysqli_num_rows($pilih_akses_barang_edit);
-
-
-    if ($barang_edit > 0 AND $ambil_sisa['jumlah_barang'] != '0')
-            {
-
-            echo "<td> <a href='editbarang.php?id=". $data1['id']."' class='btn btn-success'><span class='glyphicon glyphicon-edit'></span> Edit</a> </td>";
-            }
 
             "</tr>";
          
@@ -692,6 +785,37 @@ $(document).ready(function() {
 
 </script>
 
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#tipe_produk').change(function(){
+            var tipe_produk = $('#tipe_produk').val();
+
+            
+             if(tipe_produk == 'Jasa')
+             {
+                $("#golongan_obat").attr("disabled", true);
+                $("#kategori_obat").attr("disabled", true);
+                $("#jenis_obat").attr("disabled", true);
+                $("#harga_beli").attr("disabled", true);
+                $("#limit_stok").attr("disabled", true);
+                $("#over_stok").attr("disabled", true);
+            }
+
+            else{
+
+                $("#golongan_obat").attr("disabled", false);
+                $("#kategori_obat").attr("disabled", false);
+                $("#jenis_obat").attr("disabled", false);
+                $("#harga_beli").attr("disabled", false);
+                $("#limit_stok").attr("disabled", false);
+                $("#over_stok").attr("disabled", false);
+
+            }
+            
+            
+        });
+        });
+</script>
 
 <script type="text/javascript">
 
@@ -756,7 +880,61 @@ $(document).ready(function() {
 
 
 
+<script type="text/javascript">
+    $(document).ready(function(){
+    // Tooltips Initialization
+    $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+    });
+    });
+</script>
 
+
+<script type="text/javascript">
+
+   $("#tambah").click(function(){
+
+var harga_beli = $("#harga_beli").val();
+var harga_jual1 = $("#harga_jual").val();
+var harga_jual2 = $("#harga_jual2").val();
+var harga_jual3 = $("#harga_jual3").val();
+var harga_jual4 = $("#harga_jual4").val();
+var harga_jual5 = $("#harga_jual5").val();
+var harga_jual6 = $("#harga_jual6").val();
+var harga_jual7 = $("#harga_jual7").val();
+
+
+if (harga_jual1 < harga_beli)
+{
+    alert("Harga Jual 1 lebih kecil dari harga beli");
+}
+else if (harga_jual2 < harga_beli)
+{
+    alert("Harga Jual 2 lebih kecil dari harga beli");
+}
+else if (harga_jual3 < harga_beli)
+{
+    alert("Harga Jual 3 lebih kecil dari harga beli");
+}
+else if (harga_jual4 < harga_beli)
+{
+    alert("Harga Jual 4 lebih kecil dari harga beli");
+}
+else if (harga_jual5 < harga_beli)
+{
+    alert("Harga Jual 5 lebih kecil dari harga beli");
+}
+else if (harga_jual6 < harga_beli)
+{
+    alert("Harga Jual 6 lebih kecil dari harga beli");
+}
+else if (harga_jual7 < harga_beli)
+{
+    alert("Harga Jual 7 lebih kecil dari harga beli");
+}
+   
+   });
+</script>
 
 
                              <script type="text/javascript">
@@ -793,7 +971,7 @@ $(document).ready(function() {
 
 
                              <script type="text/javascript">
-                                 
+                                 //edit harga jual 1
                                  $(".edit-jual").dblclick(function(){
 
                                     var id = $(this).attr("data-id");
@@ -824,7 +1002,7 @@ $(document).ready(function() {
                              </script>
 
                              <script type="text/javascript">
-                                 
+                                 //edit harga jual 2
                                  $(".edit-jual-2").dblclick(function(){
 
                                     var id = $(this).attr("data-id-2");
@@ -855,7 +1033,7 @@ $(document).ready(function() {
                              </script>
 
                             <script type="text/javascript">
-                                 
+                                 //edit harga jual 3
                                  $(".edit-jual-3").dblclick(function(){
 
                                     var id = $(this).attr("data-id-3");
@@ -883,6 +1061,126 @@ $(document).ready(function() {
                                     });
                                  });
 
+                             </script>
+
+                             <script type="text/javascript">
+                                 //edit harga jual 4
+                                 $(".edit-jual-4").dblclick(function(){
+
+                                    var id = $(this).attr("data-id-4");
+
+                                    $("#text-jual-4-"+id+"").hide();
+
+                                    $("#input-jual-4-"+id+"").attr("type", "text");
+
+                                 });
+
+                                 $(".input_jual_4").blur(function(){
+
+                                    var id = $(this).attr("data-id-4");
+
+                                    var input_jual_4 = $(this).val();
+
+
+                                    $.post("update_barang.php",{id:id, input_jual_4:input_jual_4,jenis_edit_4:"harga_jual_4"},function(data){
+
+                                    $("#text-jual-4-"+id+"").show();
+                                    $("#text-jual-4-"+id+"").text(input_jual_4);
+
+                                    $("#input-jual-4-"+id+"").attr("type", "hidden");           
+
+                                    });
+                                 });
+                             </script>
+
+                             <script type="text/javascript">
+                                 //edit harga jual 5
+                                 $(".edit-jual-5").dblclick(function(){
+
+                                    var id = $(this).attr("data-id-5");
+
+                                    $("#text-jual-5-"+id+"").hide();
+
+                                    $("#input-jual-5-"+id+"").attr("type", "text");
+
+                                 });
+
+                                 $(".input_jual_5").blur(function(){
+
+                                    var id = $(this).attr("data-id-5");
+
+                                    var input_jual_5 = $(this).val();
+
+
+                                    $.post("update_barang.php",{id:id, input_jual_5:input_jual_5,jenis_edit_5:"harga_jual_5"},function(data){
+
+                                    $("#text-jual-5-"+id+"").show();
+                                    $("#text-jual-5-"+id+"").text(input_jual_5);
+
+                                    $("#input-jual-5-"+id+"").attr("type", "hidden");           
+
+                                    });
+                                 });
+                             </script>
+
+                             <script type="text/javascript">
+                                 //edit harga jual 6
+                                 $(".edit-jual-6").dblclick(function(){
+
+                                    var id = $(this).attr("data-id-6");
+
+                                    $("#text-jual-6-"+id+"").hide();
+
+                                    $("#input-jual-6-"+id+"").attr("type", "text");
+
+                                 });
+
+                                 $(".input_jual_6").blur(function(){
+
+                                    var id = $(this).attr("data-id-6");
+
+                                    var input_jual_6 = $(this).val();
+
+
+                                    $.post("update_barang.php",{id:id, input_jual_6:input_jual_6,jenis_edit_6:"harga_jual_6"},function(data){
+
+                                    $("#text-jual-6-"+id+"").show();
+                                    $("#text-jual-6-"+id+"").text(input_jual_6);
+
+                                    $("#input-jual-6-"+id+"").attr("type", "hidden");           
+
+                                    });
+                                 });
+                             </script>
+
+                             <script type="text/javascript">
+                                 //edit harga jual 7
+                                 $(".edit-jual-7").dblclick(function(){
+
+                                    var id = $(this).attr("data-id-7");
+
+                                    $("#text-jual-7-"+id+"").hide();
+
+                                    $("#input-jual-7-"+id+"").attr("type", "text");
+
+                                 });
+
+                                 $(".input_jual_7").blur(function(){
+
+                                    var id = $(this).attr("data-id-7");
+
+                                    var input_jual_7 = $(this).val();
+
+
+                                    $.post("update_barang.php",{id:id, input_jual_7:input_jual_7,jenis_edit_7:"harga_jual_7"},function(data){
+
+                                    $("#text-jual-7-"+id+"").show();
+                                    $("#text-jual-7-"+id+"").text(input_jual_7);
+
+                                    $("#input-jual-7-"+id+"").attr("type", "hidden");           
+
+                                    });
+                                 });
                              </script>
 
 

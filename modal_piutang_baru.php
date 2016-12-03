@@ -29,16 +29,18 @@ include 'db.php';
     <tbody> <!-- tag pembuka tbody, yang digunakan untuk menampilkan data yang ada di database --> 
     <?php
 
-    $kode_pelanggan = $_POST['kode_pelanggan'];
-    
+    echo $kode_pelanggan = $_POST['kode_pelanggan'];
+
     $perintah = $db->query("SELECT * FROM penjualan WHERE kode_pelanggan = '$kode_pelanggan' AND kredit != 0");
 
     //menyimpan data sementara yang ada pada $perintah
       while ($data1 = mysqli_fetch_array($perintah))
       {
-          $query00 = $db->query("SELECT no_faktur_penjualan FROM tbs_pembayaran_piutang WHERE no_faktur_penjualan = '$data1[no_faktur]'");
+         $query00 = $db->query("SELECT jumlah_bayar,no_faktur_penjualan FROM tbs_pembayaran_piutang WHERE no_faktur_penjualan = '$data1[no_faktur]'");
           $data00 = mysqli_num_rows($query00);
-        if ($data00 > 0) {
+          
+
+    if ($data00 > 0) {   
 
           
         }

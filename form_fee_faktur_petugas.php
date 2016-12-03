@@ -56,7 +56,7 @@
       $perintah0 = $db->query("SELECT * FROM user");
       while ($data1 = mysqli_fetch_array($perintah0))
       {
-      echo "<tr  class='pilih' data-petugas='". $data1['nama'] ."'>
+      echo "<tr  class='pilih' data-petugas='". $data1['id'] ." / ". $data1['nama'] ."'>
       <td>". $data1['username'] ."</td>
       <td>". $data1['nama'] ."</td>
       <td>". $data1['alamat'] ."</td>
@@ -161,6 +161,7 @@ $(document).ready(function(){
   $("#tambah_fee").click(function(){
 
        var nama_petugas = $("#nama_petugas").val();
+       var nama_petugas = nama_petugas.substr(0, nama_petugas.indexOf('/'));
        var jumlah_prosentase = $("#jumlah_prosentase").val();
        var jumlah_nominal = $("#jumlah_nominal").val();
        

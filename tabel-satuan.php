@@ -11,12 +11,10 @@ $query = $db->query("SELECT * FROM satuan");
  ?>
 
 
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
 		<thead>
 			<th> Satuan </th>
-			<th> Nama Cetak </th>
-			<th> Dari Satuan </th>
-			<th> Quantity </th>
+			
 
 <?php 
 include 'db.php';
@@ -52,10 +50,8 @@ $satuan_edit = mysqli_num_rows($pilih_akses_satuan_edit);
 			while ($data = mysqli_fetch_array($query))
 			{
 			echo "<tr class='tr-id-".$data['id']."'>
-			<td>". $data['nama'] ."</td>
-			<td>". $data['nama_cetak'] ."</td>
-			<td>". $data['dari_satuan'] ."</td>
-			<td>". $data['qty'] ."</td>";
+			<td>". $data['nama'] ."</td>";
+			
 
 
 include 'db.php';
@@ -138,17 +134,16 @@ $(document).on('click', '#btn_jadi_hapus', function (e) {
 		$("#submit_edit").click(function(){
 		var nama = $("#nama_edit").val();
 		var id = $("#id_edit").val();
+
+		$("#modal_edit").modal('hide');
 		$.post("updatesatuan.php",{id:id,nama:nama},function(data){
-		if (data == 'sukses') {
-		$(".alert").show('fast');
+
 		$("#table-baru").load('tabel-satuan.php');
-		setTimeout(tutupmodal, 2000);
-		setTimeout(tutupalert, 2000);
 		
-		}
+		
+		
 		});
 		});
-		
 
 
 //end function edit data

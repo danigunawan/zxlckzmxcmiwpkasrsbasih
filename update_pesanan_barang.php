@@ -21,8 +21,8 @@ $id = stringdoang($_POST['id']);
 
 $query00 = $db->query("SELECT * FROM tbs_penjualan WHERE id = '$id'");
 $data = mysqli_fetch_array($query00);
-$kode = $data['kode_barang'];
 $nomor = $data['no_faktur'];
+$no_reg = $data['no_reg'];
 
 $query = $db->prepare("UPDATE tbs_penjualan SET jumlah_barang = ?, subtotal = ?, tax = ? WHERE id = ?");
 
@@ -42,21 +42,29 @@ $query->execute();
 
     }
 
-    
-    $query9 = $db->query("SELECT * FROM fee_produk WHERE nama_petugas = '$user' AND kode_produk = '$kode'");
-    $cek9 = mysqli_fetch_array($query9);
-    $prosentase = $cek9['jumlah_prosentase'];
-    $nominal = $cek9['jumlah_uang'];
+    $query9 = $db->query("SELECT * FROM tbs_fee_produk WHERE no_reg = '$no_reg' AND kode_produk = '$kode_barang' ");
+    while($cek9 = mysqli_fetch_array($query9))
+    {
+
+$select_fee = $db->query("SELECT jumlah_uang,jumlah_prosentase FROM fee_produk WHERE nama_petugas = '$cek9[nama_petugas]' AND kode_produk = '$cek9[kode_produk]' ");
+
+
+$ff = mysqli_fetch_array($select_fee);
+
+    $nominal = $ff['jumlah_uang'];
+    $prosentase = $ff['jumlah_prosentase'];
+    $nm_pet = $cek9['nama_petugas'];
+
+
 
         if ($prosentase != 0)
 
             {
-            
+
             $fee_prosentase_produk = $prosentase * $subtotal / 100;
-            
-            $query1 = $db->query("UPDATE tbs_fee_produk SET jumlah_fee = '$fee_prosentase_produk' WHERE nama_petugas = '$user' AND kode_produk = '$kode' AND no_faktur = '$nomor'");
-                 
-            
+            $query1 = $db->query("UPDATE tbs_fee_produk SET jumlah_fee = '$fee_prosentase_produk' WHERE nama_petugas = '$nm_pet' AND kode_produk = '$kode_barang' AND no_reg = '$no_reg'");
+
+
             }
 
    elseif ($nominal != 0) 
@@ -64,11 +72,10 @@ $query->execute();
             {
             
             $fee_nominal_produk = $nominal * $jumlah_baru;
-
-            $query01 = $db->query("UPDATE tbs_fee_produk SET jumlah_fee = '$fee_nominal_produk' WHERE nama_petugas = '$user' AND kode_produk = '$kode' AND no_faktur = '$nomor'");
+            $query01 = $db->query("UPDATE tbs_fee_produk SET jumlah_fee = '$fee_nominal_produk' WHERE nama_petugas = '$nm_pet' AND kode_produk = '$kode_barang' AND no_reg = '$no_reg' ");
 
             }
-
+  }
                 //Untuk Memutuskan Koneksi Ke Database
 mysqli_close($db);   
 

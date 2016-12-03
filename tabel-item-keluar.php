@@ -6,7 +6,7 @@ include 'db.php';
 include 'sanitasi.php';
 
 //menampilkan seluruh data yang ada pada tabel penjualan
-$perintah = $db->query("SELECT * FROM item_keluar");
+$perintah = $db->query("SELECT *,s.nama FROM item_keluar ik INNER JOIN satuan s ON ik.satuan = s.nama");
 
  ?>
 

@@ -184,7 +184,7 @@ echo '<button type="button" class="btn btn-info" data-toggle="modal" data-target
 
 <div class="table-responsive"><!-- membuat agar ada garis pada tabel, disetiap kolom -->
 <span id="table_baru">
-		<table id="tableuser" class="table table-bordered">
+		<table id="tableuser" class="table table-bordered table-sm">
 		<thead>
 			<th style='background-color: #4CAF50; color: white'> ID Otoritas </th>
 

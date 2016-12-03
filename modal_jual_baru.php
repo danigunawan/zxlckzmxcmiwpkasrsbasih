@@ -13,10 +13,13 @@
         
         <th> Kode Barang </th>
             <th> Nama Barang </th>
-            <th> Harga Beli </th>
             <th> Harga Jual Level 1</th>
             <th> Harga Jual Level 2</th>
             <th> Harga Jual Level 3</th>
+            <th> Harga Jual Level 4 </th>
+            <th> Harga Jual Level 5</th>
+            <th> Harga Jual Level 6</th>
+            <th> Harga Jual Level 7</th>
             <th> Jumlah Barang </th>
             <th> Satuan </th>
             <th> Kategori </th>
@@ -29,7 +32,7 @@
         <tbody> <!-- tag pembuka tbody, yang digunakan untuk menampilkan data yang ada di database --> 
 <?php
  
-        $perintah = $db->query("SELECT s.nama,b.kode_barang,b.nama_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.harga_jual3,b.kategori,b.status,b.suplier,b.limit_stok,b.satuan,b.id,b.berkaitan_dgn_stok FROM barang b INNER JOIN satuan s ON b.satuan = s.id ");
+        $perintah = $db->query("SELECT s.nama,b.kode_barang,b.tipe_barang,b.nama_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.harga_jual3,b.harga_jual4,b.harga_jual5,b.harga_jual6,b.harga_jual7,b.kategori,b.status,b.suplier,b.limit_stok,b.satuan,b.id,b.berkaitan_dgn_stok FROM barang b INNER JOIN satuan s ON b.satuan = s.id ");
         
         //menyimpan data sementara yang ada pada $perintah
         while ($data1 = mysqli_fetch_array($perintah))
@@ -85,18 +88,57 @@
 
 
             $stok_barang = $total_1 - $total_2;
+
+            $harga1 = $data1['harga_jual'];
+            if ($harga1 == '') {
+                $harga1 =0;
+            }
+            $harga2 = $data1['harga_jual2'];
+            if ($harga2 == '') {
+                $harga2 =0;
+            }
+            $harga3 = $data1['harga_jual3'];
+            if ($harga3 == '') {
+                $harga3 =0;
+            }
+            $harga4 = $data1['harga_jual4'];
+            if ($harga4 == '') {
+                $harga4 =0;
+            }
+            $harga5 = $data1['harga_jual5'];
+            if ($harga5 == '') {
+                $harga5 =0;
+            }
+            $harga6 = $data1['harga_jual6'];
+            if ($harga6 == '') {
+                $harga6 =0;
+            }
+            $harga7 = $data1['harga_jual7'];
+            if ($harga7 == '') {
+                $harga7 =0;
+            }
         
         // menampilkan data
-        echo "<tr class='pilih' data-kode='". $data1['kode_barang'] ."' nama-barang='". $data1['nama_barang'] ."' limit_stok='". $data1['limit_stok'] ."'
-        satuan='". $data1['satuan'] ."' harga='". $data1['harga_jual'] ."' harga_level_2='". $data1['harga_jual2'] ."'  harga_level_3='". $data1['harga_jual3'] ."'  jumlah-barang='". $stok_barang ."' ber-stok='". $data1['berkaitan_dgn_stok'] ."' id-barang='". $data1['id'] ."'>
+        echo "<tr class='pilih' data-kode-x='". $data1['kode_barang'] ."' data-kode='". $data1['kode_barang'] ."(". $data1['nama_barang'] .")' nama-barang='". $data1['nama_barang'] ."' limit_stok='". $data1['limit_stok'] ."'
+        satuan='". $data1['satuan'] ."' harga='".  $harga1 ."' harga_level_2='".$harga2."'  harga_level_3='".$harga3."' harga_level_4='".$harga4."'  harga_level_5='".$harga5."' harga_level_6='".$harga6 ."'  harga_level_7='".$harga7."'  jumlah-barang='". $stok_barang ."' ber-stok='". $data1['tipe_barang'] ."' id-barang='". $data1['id'] ."'>
         
             <td>". $data1['kode_barang'] ."</td>
             <td>". $data1['nama_barang'] ."</td>
-            <td>". rp($data1['harga_beli']) ."</td>
             <td>". rp($data1['harga_jual']) ."</td>
             <td>". rp($data1['harga_jual2']) ."</td>
             <td>". rp($data1['harga_jual3']) ."</td>
-            <td>". $stok_barang ."</td>
+            <td>". rp($data1['harga_jual4']) ."</td>
+            <td>". rp($data1['harga_jual5']) ."</td>
+            <td>". rp($data1['harga_jual6']) ."</td>
+            <td>". rp($data1['harga_jual7']) ."</td>";
+
+            if ($data1['berkaitan_dgn_stok'] == 'Jasa') {
+                echo "<td> 0 </td>";
+            }
+            else{
+                echo "<td>". $stok_barang ."</td>";
+            }
+            echo "
             <td>". $data1['nama'] ."</td>
             <td>". $data1['kategori'] ."</td>
             <td>". $data1['status'] ."</td>

@@ -105,8 +105,8 @@ $ambil_setting = mysqli_fetch_array($select_setting_akun);
 
 //</>END JURNAL TRANSAKSI
 
-    $query3 = $db->query("DELETE  FROM tbs_item_masuk WHERE session_id = '$session_id'");
-    echo "Success";
+    $query3 = $db->query("DELETE FROM tbs_item_masuk WHERE session_id = '$session_id'");
+     "Success";
 
 //Untuk Memutuskan Koneksi Ke Database
 mysqli_close($db);   

@@ -63,14 +63,7 @@ mysqli_close($db);
     </tbody>
 
   </table>
-      
-      <script type="text/javascript">
-      
-      $(document).ready(function(){
-      $('.table').DataTable();
-      });
-      
-      </script>
+
 
 
                              <script type="text/javascript">

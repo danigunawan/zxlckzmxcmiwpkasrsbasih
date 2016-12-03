@@ -57,24 +57,7 @@ echo '<button type="button" class="btn btn-info " data-toggle="modal" data-targe
 					<input type="text" name="nama" id="nama_satuan" class="form-control" autocomplete="off" required="" >
 					</div>
 
-					<div class="form-group">
-					<label> Nama Cetak </label>
-					<br>
-					<input type="text" id="nama_cetak" name="nama_cetak" class="form-control" required="">
-
-					</div>
-
-
-					<div class="form-group">
-					<label> Dari Satuan </label><br>
-					<input type="text" name="dari_satuan" id="dari_satuan" class="form-control" autocomplete="off" required="" >
-					</div>
-
-
-					<div class="form-group">
-					<label> Quantity </label><br>
-					<input type="text" name="qty" id="qty" autocomplete="off" class="form-control" required="" >
-					</div>
+					
 
      
    </div>
@@ -160,7 +143,7 @@ echo '<button type="button" class="btn btn-info " data-toggle="modal" data-targe
    </div>
    
    
-   <button type="submit" id="submit_edit" class="btn btn-default">Submit</button>
+   <button type="submit" id="submit_edit" data-nama ="" class="btn btn-default">Submit</button>
   </form>
   <div class="alert alert-success" style="display:none">
    <strong>Berhasil!</strong> Data Berhasil Di Edit
@@ -197,12 +180,10 @@ th {
 
 <div class="table-responsive">
 <span id="table-baru">
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
 		<thead>
 			<th> Satuan </th>
-			<th> Nama Cetak </th>
-			<th> Dari Satuan </th>
-			<th> Quantity </th>
+
 
 <?php 
 include 'db.php';
@@ -238,10 +219,7 @@ $satuan_edit = mysqli_num_rows($pilih_akses_satuan_edit);
 			while ($data = mysqli_fetch_array($query))
 			{
 			echo "<tr class='tr-id-".$data['id']."'>
-			<td>". $data['nama'] ."</td>
-			<td>". $data['nama_cetak'] ."</td>
-			<td>". $data['dari_satuan'] ."</td>
-			<td>". $data['qty'] ."</td>";
+			<td>". $data['nama'] ."</td>";
 
 
 include 'db.php';
@@ -277,45 +255,50 @@ $satuan_edit = mysqli_num_rows($pilih_akses_satuan_edit);
 </div>
 
 
-							 
+	
+<script type="text/javascript">
+$("#nama_satuan").blur(function(){
+
+var nama = $("#nama_satuan").val();
+// cek namanya
+ $.post('cek_nama_satuan.php',{nama:nama}, function(data){
+
+        if(data == 1){
+          alert('Nama Satuan Sudah Ada!');
+          $("#nama_satuan").val('');
+          $("#nama_satuan").focus();
+        }
+        else{
+
+// Finish Proses
+        }
+
+      }); // end post dari cek nama
+
+});
+</script>						 
 
 
 <script>
-    $(document).ready(function(){
-
+$(document).ready(function(){
 
 //fungsi untuk menambahkan data
-		$("#submit_tambah").click(function(){
-		var nama = $("#nama_satuan").val();
-		var nama_cetak = $("#nama_cetak").val();
-		var dari_satuan = $("#dari_satuan").val();
-		var qty = $("#qty").val();
+$(document).on('click','#submit_tambah',function(e){
 
-		$("#nama_satuan").val('');
-		$("#nama_cetak").val('');
-		$("#dari_satuan").val('');
+		var nama = $("#nama_satuan").val();
+
 
 		if (nama == ""){
 			alert("Nama Harus Diisi");
 		}
-		else if (nama_cetak == ""){
-			alert("Nama Cetak Harus Diisi");
-		}
-		else if (dari_satuan == ""){
-			alert("Dari Satuan Harus Diisi");
-		}
-		else if (qty == ""){
-			alert("Quantity Harus Diisi");
-		}
+		
 		else{
 
-		$.post('prosessatuan.php',{nama:nama,nama_cetak:nama_cetak,dari_satuan:dari_satuan,qty:qty},function(data){
+		$.post('prosessatuan.php',{nama:nama},function(data){
 
 		if (data != '') {
 		$("#nama_satuan").val('');
-		$("#nama_cetak").val('');
-		$("#dari_satuan").val('');
-		$("#qty").val('');
+		
 		$(".alert").show('fast');
 		$("#table-baru").load('tabel-satuan.php');
 		
@@ -374,43 +357,61 @@ $(document).on('click', '#btn_jadi_hapus', function (e) {
 		var id  = $(this).attr("data-id");
 		$("#nama_edit").val(nama);
 		$("#id_edit").val(id);
-		
+		$("#submit_edit").attr("data-nama",nama); // ambil data-nama di tombol edit (isinya nama yang sebenarnya)
+
 		
 		});
 		
 		$("#submit_edit").click(function(){
 		var nama = $("#nama_edit").val();
 		var id = $("#id_edit").val();
+    	var show_name = $(this).attr("data-nama"); // send nama  sebenarnya
 
-		$.post("updatesatuan.php",{id:id,nama:nama},function(data){
-		if (data == 'sukses') {
-		$(".alert").show('fast');
+
+if (nama == '')
+{
+	alert("Nama Harus Terisi");
+}
+else
+{
+// cek namanya
+ $.post('cek_nama_satuan.php',{nama:nama}, function(data){
+        if(data == 1){
+          alert('Nama Bidang Laboratorium yang anda masukkan sudah ada!');
+          $("#nama_edit").val(show_name); // menampilkan NAMA yang sebelumnya
+          $("#nama_edit").focus();
+        }
+        else{
+
+// mulai proses edit
+$.post("updatesatuan.php",{id:id,nama:nama},function(data){
+
 		$("#table-baru").load('tabel-satuan.php');
-		setTimeout(tutupmodal, 2000);
-		setTimeout(tutupalert, 2000);
-		
-		}
+				$("#modal_edit").modal('hide');
+
 		});
+// end proses edit
+        }
+
+      }); // end post dari cek nama
+}
+
+
 		});
 		
 
 
 //end function edit data
-
-		$('form').submit(function(){
-		
+		$('form').submit(function(){	
 		return false;
 		});
 		
 		});
 		
-		
-		
-		
-		function tutupalert() {
-		$(".alert").hide("fast");
 
-		}
+function tutupalert() {
+$(".alert").hide("fast");
+}
 		
 
 

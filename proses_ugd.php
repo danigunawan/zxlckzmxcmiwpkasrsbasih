@@ -1,9 +1,17 @@
-<?php 
+<?php include 'session_login.php';
 include 'db.php';
 include 'sanitasi.php';
-session_start();
 
 $token = stringdoang($_POST['token']);
+
+$pilih_akses_registrasi_ugd = $db->query("SELECT registrasi_ugd_lihat, registrasi_ugd_tambah, registrasi_ugd_edit, registrasi_ugd_hapus FROM otoritas_registrasi WHERE id_otoritas = '$_SESSION[otoritas_id]'");
+$registrasi_ugd = mysqli_fetch_array($pilih_akses_registrasi_ugd);
+
+$pilih_akses_penjualan = $db->query("SELECT penjualan_tambah FROM otoritas_penjualan WHERE id_otoritas = '$_SESSION[otoritas_id]'");
+$penjualan = mysqli_fetch_array($pilih_akses_penjualan);
+
+$pilih_akses_rekam_medik = $db->query("SELECT rekam_medik_ugd_lihat FROM otoritas_rekam_medik WHERE id_otoritas = '$_SESSION[otoritas_id]'");
+$rekam_medik = mysqli_fetch_array($pilih_akses_rekam_medik);
 
 
 // start data agar tetap masuk 
@@ -16,7 +24,7 @@ $db->begin_transaction();
 if ($token == '')
 {
   
-header("location:form_ugd.php");
+  echo '<META HTTP-EQUIV="Refresh" Content="0; URL=registrasi_ugd.php">';
 
 }
 else
@@ -171,8 +179,50 @@ $query7 = $db->query("SELECT * FROM registrasi WHERE jenis_pasien = 'UGD' AND st
 
   $data = mysqli_fetch_array($query7);
 
-     echo "<tr  class='tr-id-".$data['id']."'  >
-                    <td>". $data['no_reg']."</td>
+      echo "<tr  class='tr-id-".$data['id']."'>";
+
+if ($registrasi_ugd['registrasi_ugd_hapus'] > 0) {
+  echo "<td> <button type='button' data-reg='".$data['no_reg']."'  data-id='".$data['id']."'  class='btn btn-floating btn-small btn-info pulang_rumah' ><b> X </b></button></td>";
+}
+else{
+  echo "<td> </td>";
+}
+      
+if ($penjualan['penjualan_tambah'] > 0) {
+
+      if ($data_z['status'] == 'Simpan Sementara') {
+
+       echo "<td> <a href='proses_pesanan_barang_ugd.php?no_faktur=".$data_z['no_faktur']."&no_reg=".$data['no_reg']."&no_rm=".$data['no_rm']."&nama_pasien=".$data_z['nama']."&kode_gudang=".$data_z['kode_gudang']."'class='btn btn-floating btn-small btn btn-danger'><i class='fa fa-credit-card'></i></a> </td>"; 
+      }
+      else
+      {
+      echo "<td> <a href='form_penjualan_ugd.php?no_reg=". $data['no_reg']."' class='btn btn-floating btn-small btn-info penjualan' ><i class='fa fa-shopping-cart'></a></td>";
+
+      }
+
+}
+else{
+  echo "<td> </td>";
+}
+
+if ($registrasi_ugd['registrasi_ugd_lihat'] > 0) {
+    echo "<td> <button  type='button' data-reg='".$data['no_reg']."' data-id='".$data['id']."'  class='btn btn-floating btn-small btn-info rujuk' ><i class='fa fa-bus'></i>   </button>
+        </td>
+
+        <td> <button  type='button' data-reg='".$data['no_reg']."' class='btn btn-floating btn-small btn-info rujuk_ri' ><i class='fa fa-hotel'></i>   </button></td>";
+}
+else{
+  echo "<td> </td>";
+  echo "<td> </td>";
+}  
+                                     
+if ($rekam_medik['rekam_medik_ugd_lihat']) {
+  echo "<td> <a href='rekam_medik_ugd.php' class='btn btn-floating btn-small btn-info penjualan' ><i class='fa fa-medkit'></i></a></td>";
+}
+else{
+  echo "<td> </td>";
+}  
+                    echo "<td>". $data['no_reg']."</td>
                     <td>". $data['no_rm']."</td>
                     <td>". $data['penjamin']."</td>                           
                     <td>". $data['nama_pasien']."</td>
@@ -186,15 +236,9 @@ $query7 = $db->query("SELECT * FROM registrasi WHERE jenis_pasien = 'UGD' AND st
                     <td>". $data['hp_pengantar']."</td>
                     <td>". tanggal($data['tanggal'])."</td>
                     <td>". $data['alamat_pengantar']."</td>
-                    <td>". $data['hubungan_dengan_pasien']."</td>                 
-  <td> <button  style='width:200px;' type='button' data-reg='".$data['no_reg']."' data-id='".$data['id']."'  class='btn btn-success rujuk' ><i class='fa fa-send'></i> Rujuk Tempat Lain</button></td>
-
-  <td> <button style='width:200px;' type='button' data-reg='".$data['no_reg']."' class='btn btn-info rujuk_ri' ><i class='fa fa-send'></i> Rujuk Rawat Inap</button></td>
-
-  <td> <button style='width:100px;' type='button' data-reg='".$data['no_reg']."'  data-id='".$data['id']."'  class='btn btn-danger pulang_rumah' ><i class='fa fa-remove'></i> Batal</button></td>
+                    <td>". $data['hubungan_dengan_pasien']."</td>";
 
 
-                    ";
       echo "</tr>";
       mysqli_close($db);
 

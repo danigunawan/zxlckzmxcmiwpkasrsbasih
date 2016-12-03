@@ -44,7 +44,8 @@ $perintah1 = $db->query("INSERT INTO tbs_penjualan (no_faktur, kode_barang, nama
 
 }
 
- header ('location:edit_penjualan.php?no_faktur='.$no_faktur.'&kode_pelanggan='.$kode_pelanggan.'&nama_gudang='.$nama_gudang.'&kode_gudang='.$kode_gudang.'');
+
+   echo '<META HTTP-EQUIV="Refresh" Content="0; URL=edit_penjualan.php?no_faktur='.$no_faktur.'&kode_pelanggan='.$kode_pelanggan.'&nama_gudang='.$nama_gudang.'&kode_gudang='.$kode_gudang.'">';
 
 
 //Untuk Memutuskan Koneksi Ke Database

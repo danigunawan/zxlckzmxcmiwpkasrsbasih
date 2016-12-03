@@ -5,14 +5,15 @@ include 'sanitasi.php';
 include 'db.php';
 $session_id = session_id();
 
-$perintah = $db->query("SELECT * FROM user");
+$perintah = $db->query("SELECT u.status, u.username, u.password, u.nama, u.alamat, u.jabatan, u.otoritas, u.tipe, u.status_sales, u.id, j.nama AS nama_jabatan FROM user u INNER JOIN jabatan j ON u.jabatan = j.id");
+
 
 
 
  ?>
 <div class="table-responsive">
 <span id="table-baru">
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
 		<thead>
 
 			<th style='background-color: #4CAF50; color: white'> Reset Password </th>
@@ -22,6 +23,7 @@ $perintah = $db->query("SELECT * FROM user");
 			<th style='background-color: #4CAF50; color: white'> Alamat </th>
 			<th style='background-color: #4CAF50; color: white'> Jabatan </th>
 			<th style='background-color: #4CAF50; color: white'> Otoritas </th>
+			<th style='background-color: #4CAF50; color: white'> Tipe User </th>
 			<th style='background-color: #4CAF50; color: white'> Status </th>
 			<th style='background-color: #4CAF50; color: white'> Status Sales </th>
 <?php 
@@ -65,16 +67,38 @@ $user_edit= mysqli_num_rows($pilih_akses_user_edit);
 			<td>". $data1['password'] ."</td>
 			<td>". $data1['nama'] ."</td>
 			<td>". $data1['alamat'] ."</td>
-			<td>". $data1['jabatan'] ."</td>
+			<td>". $data1['nama_jabatan'] ."</td>
 			<td>". $data1['otoritas'] ."</td>
-			<td>". $data1['status'] ."</td>";
+			";
+
+			if ($data1['tipe'] == '1')
+			{
+			echo "<td> Dokter </td>";
+			}
+			elseif ($data1['tipe'] == '2')
+			{
+			echo "<td> Paramedik </td>";
+			}
+			elseif ($data1['tipe'] == '3')
+			{
+			echo "<td> Farmasi </td>";
+			}
+			elseif ($data1['tipe'] == '4')
+			{
+			echo "<td> Admin </td>";
+			}
+			elseif ($data1['tipe'] == '5')
+			{
+			echo "<td> Lain Lain </td>";
+			}
+			echo "<td>". $data1['status'] ."</td>";
 
       if ($data1['status_sales'] == "Iya") {
         
-        echo "<td> <span class='glyphicon glyphicon-ok'> </span> </td>";
+        echo "<td> <i class='fa fa-check'> </i> </td>";
       }
       else{
-         echo "<td> <span class='glyphicon glyphicon-remove'> </span> </td>";
+         echo "<td> <i class='fa fa-close'> </i> </td>";
       }
 
 

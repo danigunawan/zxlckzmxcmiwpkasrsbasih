@@ -23,11 +23,8 @@ $satuan = stringdoang($_POST['satuan']);
 $select_hpp = $db->query("SELECT SUM(sisa_barang) AS sisa_barang FROM hpp_keluar WHERE kode_barang = '$kode_barang' AND no_faktur = '$no_faktur'");
 $data = mysqli_fetch_array($select_hpp);
 
-$a = $data['sisa_barang'] - $abc;
+echo$a = $data['sisa_barang'] - $abc;
 
-if ($a  < 0) {
-      echo "ya";
-}
 
         //Untuk Memutuskan Koneksi Ke Database
 

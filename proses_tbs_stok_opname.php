@@ -148,9 +148,20 @@ include 'db.php';
         
         $cek = $db->query("SELECT * FROM stok_awal WHERE kode_barang = '$kode_barang' ");
         $data = mysqli_fetch_array($cek);
-        $stok_awal = $data['jumlah_awal'];
-        
-        
+        $num = mysqli_num_rows($cek);
+
+        if ($num > 0 )
+        {
+                  $stok_awal = $data['jumlah_awal'];
+
+        }
+        else {
+          $stok_awal = 0;
+        }
+  
+
+
+
         $query = "INSERT INTO tbs_stok_opname (no_faktur, kode_barang, nama_barang, satuan, awal, masuk, keluar, stok_sekarang, fisik, selisih_fisik, selisih_harga, harga, hpp) 
         VALUES ('$no_faktur', '$kode_barang','$nama_barang','$satuan','$stok_awal','$hasil_masuk','$hasil_keluar','$jumlah_stok_komputer','$jumlah_fisik','$selisih_fisik','$selisih_harga','$jumlah_hpp','$jumlah_hpp')";
       
@@ -167,7 +178,7 @@ include 'db.php';
   
     ?>
 <!-- membuat agar ada garis pada tabel, disetiap kolom -->
-                  <table id="tableuser" class="table table-bordered">
+                  <table id="tableuser" class="table table-bordered table-sm">
                   <thead>
                   
                   <th> Nomor Faktur </th>
@@ -188,19 +199,19 @@ include 'db.php';
                   <?php
                   
                   
-      $perintah = $db->query("SELECT * FROM tbs_stok_opname");
+      $perintah = $db->query("SELECT  tio.no_faktur,tio.kode_barang,tio.nama_barang,s.nama,tio.id,tio.stok_sekarang,tio.fisik,tio.selisih_fisik,tio.harga,tio.selisih_harga,tio.hpp FROM tbs_stok_opname tio INNER JOIN satuan s ON tio.satuan = s.id ORDER BY tio.id DESC");
                   
                   //menyimpan data sementara yang ada pada $perintah
                   while ($data1 = mysqli_fetch_array($perintah))
                   {
                   
                   
-                  echo "<tr>
+                  echo "<tr class='tr-id-".$data1['id']."'>
                   
                   <td>". $data1['no_faktur'] ."</td>
                   <td>". $data1['kode_barang'] ."</td>
                   <td>". $data1['nama_barang'] ."</td>
-                  <td>". $data1['satuan'] ."</td>
+                  <td>". $data1['nama'] ."</td>
                   <td><span id='text-stok-sekarang-".$data1['id']."'>". rp($data1['stok_sekarang']) ."</span></td>
 
                   <td class='edit-jumlah' data-id='".$data1['id']."'><span id='text-jumlah-".$data1['id']."'>". $data1['fisik'] ."</span> <input type='hidden' id='input-jumlah-".$data1['id']."' value='".$data1['fisik']."' class='input_jumlah' data-id='".$data1['id']."' autofocus='' data-faktur='".$data1['no_faktur']."' data-harga='".$data1['harga']."' data-kode='".$data1['kode_barang']."' data-selisih-fisik='".$data1['selisih_fisik']."' data-stok-sekarang='".$data1['stok_sekarang']."'> </td>
@@ -222,3 +233,81 @@ include 'db.php';
                   </tbody>
                   
                   </table>
+
+
+<script type="text/javascript">
+                               
+//fungsi hapus data 
+    $(".btn-hapus").click(function(){
+    var nama_barang = $(this).attr("data-nama-barang");
+    var kode_barang = $(this).attr("data-kode-barang");
+    var id = $(this).attr("data-id");
+    var no_faktur = $("#nomorfaktur").val();
+                  
+                  $.post("cek_total_selisih_harga.php",
+                  {
+                  no_faktur:no_faktur
+                  },
+                  function(data){
+                  $("#total_selisih_harga").val(data);
+                  });
+
+    $(".tr-id-"+id).remove();
+    $.post("hapus_tbs_stok_opname.php",{kode_barang:kode_barang},function(data){
+   
+    
+    });
+    
+    });
+// end fungsi hapus data
+                                  
+
+                             </script>
+                              <script type="text/javascript">
+                                 
+                                 $(".edit-jumlah").dblclick(function(){
+
+                                    var id = $(this).attr("data-id");
+
+                                    $("#text-jumlah-"+id+"").hide();
+
+                                    $("#input-jumlah-"+id+"").attr("type", "text");
+
+                                 });
+
+
+                                 $(".input_jumlah").blur(function(){
+
+                                    var id = $(this).attr("data-id");
+                                    var jumlah_baru = $(this).val();
+                                    var harga = $(this).attr("data-harga");
+                                    var kode_barang = $(this).attr("data-kode");
+
+                                    var stok_sekarang = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-stok-sekarang-"+id+"").text()))));
+                                    var hpp = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#text-hpp-"+id+"").text()))));
+
+                                    var selisih_fisik = parseInt(jumlah_baru,10) - parseInt(stok_sekarang,10);
+                                    var selisih_harga = parseInt(selisih_fisik,10) * parseInt(hpp,10);
+
+
+                              
+                                  $.post("update_tbs_stok_opname.php", {jumlah_baru:jumlah_baru,id:id,kode_barang:kode_barang,selisih_harga:selisih_harga,selisih_fisik:selisih_fisik}, function(info){
+
+
+                                    $("#text-jumlah-"+id+"").show();
+                                    $("#text-jumlah-"+id+"").text(jumlah_baru);
+                                    $("#text-selisih-"+id+"").text(tandaPemisahTitik(selisih_harga));
+                                    $("#text-selisih-fisik-"+id+"").text(tandaPemisahTitik(selisih_fisik));
+                                    $("#input-jumlah-"+id+"").attr("type", "hidden");        
+                                    
+                                    
+                                    });
+                                    
+                           
+
+                                   
+                                   $("#kode_barang").focus();
+
+                                 });
+
+                             </script>

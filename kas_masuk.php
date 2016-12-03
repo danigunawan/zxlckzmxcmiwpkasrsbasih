@@ -20,7 +20,7 @@ $perintah = $db->query("SELECT km.id, km.no_faktur, km.keterangan, km.ke_akun, k
 tr:nth-child(even){background-color: #f2f2f2}
 </style>
 
-<div class="container"> <!--start of container-->
+<div style="padding-left: 5%; padding-right: 5%"> <!--start of container-->
 
 <!-- Modal Hapus data -->
 <div id="modal_hapus" class="modal fade" role="dialog">
@@ -154,7 +154,7 @@ echo '<a href="form_kas_masuk.php"  class="btn btn-info"><i class="fa fa-plus"> 
 
 <div class="table-responsive"><!--membuat agar ada garis pada tabel disetiap kolom-->
 <span id="tabel-baru">
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
 		<thead>
 			<th style='background-color: #4CAF50; color:white'> Nomor Faktur </th>
 			<th style='background-color: #4CAF50; color:white'> Ke Akun </th>

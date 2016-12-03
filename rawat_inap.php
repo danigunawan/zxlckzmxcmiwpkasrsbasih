@@ -10,13 +10,24 @@ $waktu = date("Y-m-d H:i:s");
 $bulan_php = date('m');
 $tahun_php = date('Y');
 
-$query7 = $db->query("SELECT * FROM registrasi WHERE jenis_pasien = 'Rawat Inap' AND status = 'menginap' AND status != 'Batal Rawat Inap' AND tanggal = '$tanggal_sekarang'ORDER BY id DESC ");
+$query7 = $db->query("SELECT * FROM registrasi WHERE jenis_pasien = 'Rawat Inap' AND status = 'menginap' AND status != 'Batal Rawat Inap' AND TO_DAYS(NOW()) - TO_DAYS(tanggal) <= 7 ORDER BY id DESC ");
 
 $qertu= $db->query("SELECT nama_dokter,nama_paramedik,nama_farmasi FROM penetapan_petugas ");
 $ss = mysqli_fetch_array($qertu);
 
 $q = $db->query("SELECT * FROM setting_registrasi");
 $dq = mysqli_fetch_array($q);
+
+$pilih_akses_registrasi_ri = $db->query("SELECT registrasi_ri_lihat, registrasi_ri_tambah, registrasi_ri_edit, registrasi_ri_hapus FROM otoritas_registrasi WHERE id_otoritas = '$_SESSION[otoritas_id]'");
+$registrasi_ri = mysqli_fetch_array($pilih_akses_registrasi_ri);
+
+$pilih_akses_penjualan = $db->query("SELECT penjualan_tambah FROM otoritas_penjualan WHERE id_otoritas = '$_SESSION[otoritas_id]'");
+$penjualan = mysqli_fetch_array($pilih_akses_penjualan);
+
+$pilih_akses_rekam_medik = $db->query("SELECT rekam_medik_ri_lihat FROM otoritas_rekam_medik WHERE id_otoritas = '$_SESSION[otoritas_id]'");
+$rekam_medik = mysqli_fetch_array($pilih_akses_rekam_medik);
+
+
 ?>
 
 <style>
@@ -52,7 +63,21 @@ opacity: 0.9;
 }
 
 </style>
-<div class="container">
+
+
+<script type="text/javascript">
+  function isNumberKey(evt)
+      {
+         var charCode = (evt.which) ? evt.which : event.keyCode
+         if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+
+         return true;
+      }
+</script>
+
+
+<div style="padding-left:5%; padding-right:5%;">
 
 <!-- Modal Untuk Confirm LAYANAN PERUSAHAAN-->
 <div id="detail" class="modal fade" role="dialog">
@@ -88,19 +113,41 @@ opacity: 0.9;
     </div>
     <div class="modal-body">
 
+
       <span id="tampil_kamar">
       </span>
       <form role="form" method="POST">
+<div class="row">
 
-      <div class="form-group" >
-        <label for="bed">Kamar :</label>
-        <input style="height: 20px" type="text" class="form-control" id="bed2" name="bed2" required="" readonly="" >
+  <div class="col-sm-6">
+
+     <div class="form-group" >
+        <label for="bed">Nama Kamar Lama</label>
+        <input style="height: 20px" type="text" class="form-control" id="kamar_lama" name="kamar_lama" readonly="">
       </div>
 
       <div class="form-group" >
-        <label for="bed">Group Bed:</label>
-        <input style="height: 20px" type="text" class="form-control" id="group_bed2" name="group_bed2" required="" readonly="">
+        <label for="bed">Lama Menginap Kamar Lama:</label>
+        <input style="height: 20px" type="text" class="form-control" placeholder="Isi lama menginap di kamar lama" id="lama_inap" name="lama_inap" autocomplete="off">
       </div>
+
+  </div>
+
+  <div class="col-sm-6">
+     <div class="form-group" >
+        <label for="bed">Kode Kamar Baru:</label>
+        <input style="height: 20px" type="text" class="form-control" id="bed2" name="bed2"  readonly="" >
+      </div>
+
+      <div class="form-group" >
+        <label for="bed">Nama Kamar Baru:</label>
+        <input style="height: 20px" type="text" class="form-control" id="group_bed2" name="group_bed2"  readonly="">
+      </div>
+  </div>
+</div>
+     
+
+     
 
  
        <button style='width:100px;'type='button' class='btn btn-warning pindah' data-id=""  data-reg="" data-bed="" data-group_bed="" id="pindah_kamar"> <i class="fa fa-reply"></i>Pindah</button>
@@ -115,6 +162,7 @@ opacity: 0.9;
 <!--modal end Layanan KAMAR-->
 
 
+
 <!-- Modal Untuk batal ranap-->
 <div id="modal_batal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg">
@@ -122,7 +170,7 @@ opacity: 0.9;
     <div class="modal-content">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <center><h2>Pindah Kamar</h2></center>       
+          <center><h2>Batal Rawat Inap </h2></center>       
     </div>
     <div class="modal-body">
 
@@ -152,14 +200,8 @@ opacity: 0.9;
 <!--modal end batal ranap-->
 
 
-<h3>DATA PASIEN RAWAT INAP</h3>
+<h3>DATA PASIEN RAWAT INAP </h3>
 <hr>
-
-<button data-toggle="collapse" accesskey="r" id="coba" class="btn btn-primary"><i class="fa fa-plus"></i> Daftar <u>R</u>awat Inap</button>
-
-
-<button style="display:none" data-toggle="collapse" accesskey="k" id="kembali" class="btn btn-primary"><i class="fa fa-reply"></i> <u>K</u>embali </button>
-
 
 
   <!-- Modal -->
@@ -170,14 +212,14 @@ opacity: 0.9;
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Pencarian Pasien </h4>
+        <h4 class="modal-title"><center><b>Pencarian Pasien </b></center></h4>
       </div>
       <div class="modal-body">
       <span id="hasil_migrasi"></span>
       
       </div>
       <div class="modal-footer">
-        <button type="button" accesskey="e" class="btn btn-danger" data-dismiss="modal">Clos<u>e</u></button>
+      <center> <button type="button" accesskey="e" class="btn btn-danger" data-dismiss="modal">Clos<u>e</u></button></center> 
       </div>
     </div>
 
@@ -217,12 +259,20 @@ opacity: 0.9;
           $hasil = $db->query("SELECT * FROM bed WHERE sisa_bed != 0 ");
                                         
           while ($data =  $hasil->fetch_assoc()) {
+             $select_kelas = $db->query("SELECT id,nama FROM kelas_kamar");
+        while($out_kelas = mysqli_fetch_array($select_kelas))
+        {
+          if($data['kelas'] == $out_kelas['id'])
+          {
+            $kelas = $out_kelas['nama'];
+          }
+        }
           ?>
           <tr class="pilih2" 
           data-nama="<?php echo $data['nama_kamar']; ?>" 
           data-group-bed ="<?php echo $data['group_bed']; ?>" >
           
-          <td><?php echo $data['kelas']; ?></td>
+          <td><?php echo $kelas; ?></td>
           <td><?php echo $data['nama_kamar']; ?></td>
           <td><?php echo $data['group_bed']; ?></td>
           <td><?php echo $data['fasilitas']; ?></td>
@@ -272,7 +322,20 @@ opacity: 0.9;
 <!-- akhir modal3-->
 
 
-<a href="rawat_inap_pasien_baru.php" accesskey="b" class="btn btn-info"> <i class="fa fa-plus"></i> Pasien <u>B</u>aru Rawat Inap</a>
+<ul class="nav nav-tabs yellow darken-4" role="tablist">
+        <li class="nav-item"><a class="nav-link active" href='rawat_inap.php' data-placement='top' >Daftar Pasien <u>R</u>awat Inap</a></li>
+        <li class="nav-item"><a class="nav-link" href='daftar_pasien_rawat_inap_batal.php' data-placement='top' title='Klik untuk melihat pasien batal rawat inap.'>  Pasien Batal Rawat Inap </a></li>
+        <li class="nav-item"><a class="nav-link" href='daftar_pasien_rawat_inap_pulang.php' data-placement='top' title='Klik untuk melihat pasien sudah pulang dari rawat inap.'> Pasien Rawat Inap Pulang </a></li>
+</ul>
+
+<br><br>
+<?php if ($registrasi_ri['registrasi_ri_tambah'] > 0): ?>
+  <button id="coba" type="submit" class="btn btn-primary" data-toggle="collapse" accesskey="r" ><i class='fa fa-plus'> </i>&nbsp;Tambah</button>
+
+<button style="display:none" data-toggle="collapse tooltip" accesskey="k" id="kembali" class="btn btn-primary" data-placement='top' title='Klik untuk kembali ke utama.'><i class="fa fa-reply"></i> <u>K</u>embali </button>
+
+<a href="rawat_inap_pasien_baru.php" accesskey="b" class="btn btn-info"><i class="fa fa-plus"></i> Pasien <u>B</u>aru </a>
+<?php endif ?>
 
 
 
@@ -284,21 +347,24 @@ opacity: 0.9;
 
 <form role="form" method="POST">
 
-<button type="button" accesskey="c" class="btn btn-success" data-toggle="modal" data-target="#myModal1"> <i class="fa fa-search"></i> <u>C</u>ari kamar</button>
+<button type="button" accesskey="c" class="btn btn-success" data-toggle="modal" data-target="#myModal1" data-placement='top' title='Klik untuk cari kamar.'> <i class="fa fa-search"></i> <u>C</u>ari kamar</button>
  <br>
  <br>
 
 <div class="card card-block">
 
+  <input style="height: 20px;" type="hidden" class="form-control" id="token" name="token" value="Kosasih" autocomplete="off"> 
+
+
 <div class="form-group" >
   <label for="bed">Kamar:</label>
-  <input style="height: 20px;" type="text" class="form-control disable" id="group_bed" name="group_bed" required="" >
+  <input style="height: 20px;" type="text" class="form-control disable" id="group_bed" name="group_bed" autocomplete="off" >
 </div>
 
 
 <div class="form-group" >
   <label for="bed">Bed:</label>
-  <input style="height: 20px;" type="text" class="form-control disable" id="bed" name="bed" required="" >
+  <input style="height: 20px;" type="text" class="form-control disable" id="bed" name="bed" autocomplete="off" >
 </div>
 
 </div>
@@ -307,7 +373,7 @@ opacity: 0.9;
    
 <div class="form-group">
   <label for="sel1">Perujuk:</label>
-  <select class="form-control" id="rujukan" name="rujukan" required="" autocomplete="off">
+  <select class="form-control" id="rujukan" name="rujukan"  autocomplete="off">
    <option value="Non Rujukan">Non Rujukan</option>
       <?php 
       $query = $db->query("SELECT nama FROM perujuk ");
@@ -323,17 +389,18 @@ opacity: 0.9;
   
   <div class="form-group">
     <label for=""><u>C</u>ari Pasien Lama</label>
-    <input style="height: 20px;" type="text" accesskey="c" class="form-control" name="cari" autocomplete="off" id="cari_migrasi" placeholder="Cari Nama Pasien Lama">
+    <input style="height: 20px;" type="text" accesskey="c" class="form-control" name="cari" autocomplete="off" id="cari_migrasi" placeholder="Ketikkan Nama Pasien Lama">
 
   </div>
-<button id="submit_cari" accesskey="a" type="button" class="btn btn-success"><i class="fa fa-search"></i> C<u>a</u>ri</button>
+<button id="submit_cari" accesskey="a" type="button" class="btn btn-success" data-toggle='tooltip' data-placement='top' title='Pastikan anda telah mengetikkan nama pasien di kolom cari pasien  sebelum klik tombol cari.'><i class="fa fa-search"></i> C<u>a</u>ri</button>
   <br>
 <br>
 
 
 <div class="form-group" >
  <label for="penjamin">Penjamin:</label>
- <select class="form-control" id="penjamin" name="penjamin" required="" autocomplete="off">
+ <select class="form-control" id="penjamin" name="penjamin"  autocomplete="off">
+ <option value=""> --SILAKAN PILIH--</option>
  <?php 
   $query = $db->query("SELECT nama FROM penjamin ");
   while ( $data = mysqli_fetch_array($query)) {
@@ -349,40 +416,38 @@ opacity: 0.9;
   <br>
 <div class="form-group">
     <label for="no_rm">No RM:</label>
-    <input style="height: 20px;" type="text" class="form-control" id="no_rm" name="no_rm" required="" readonly="" >
+    <input style="height: 20px;" type="text" class="form-control" id="no_rm" name="no_rm"  readonly="" >
 </div>
 
 <div class="form-group">
     <label for="nama_lengkap">Nama Lengkap Pasien:</label>
-    <input style="height: 20px;" type="text" class="form-control" id="nama_lengkap" name="nama_lengkap" required="" readonly="">
+    <input style="height: 20px;" type="text" class="form-control" id="nama_lengkap" name="nama_lengkap"  readonly="">
 </div>
 
 <div class="form-group" >
   <label for="umur">Jenis Kelamin:</label>
-<input style="height: 20px;" type="text" class="form-control" id="jenis_kelamin" name="jenis_kelamin" required="" readonly="" >
+<input style="height: 20px;" type="text" class="form-control" id="jenis_kelamin" name="jenis_kelamin"  readonly="" >
 </div>
 
   
 <div class="form-group" style="display: none">
-    <input style="height: 20px;" type="text" class="form-control" id="tanggal_lahir" name="tanggal_lahir" required="" autocomplete="off">
+    <input style="height: 20px;" type="text" class="form-control" id="tanggal_lahir" name="tanggal_lahir"  autocomplete="off">
 </div>
 
 <div class="form-group">
     <label for="nama_lengkap">Umur:</label>
-    <input style="height: 20px;" type="text" class="form-control" id="umur" name="umur" required="" readonly="" >
+    <input style="height: 20px;" type="text" class="form-control" id="umur" name="umur"  readonly="" >
 </div>
 
 
 <div class="form-group">
     <label for="alamat">Alamat:</label>
-    <textarea class="form-control" id="alamat" name="alamat"required="" ></textarea>
+    <textarea class="form-control" id="alamat" name="alamat" ></textarea>
 </div>
 
 
-
 <div class="form-group">
-    <label for="alamat">No Hp:</label>
-    <input style="height: 20px;" type="text" class="form-control" id="hp_pasien" name="hp_pasien" required="" >
+    <label for="alamat">No Hp:</label><input style="height: 20px;" type="text" onkeypress="return isNumberKey(event)"  class="form-control" id="hp_pasien" name="hp_pasien"  >
 </div>
 
 </div>
@@ -400,37 +465,37 @@ opacity: 0.9;
 <br>
 
 <!-- SPAN untuk TTV -->
-<div class="card card-block">
+
+
   
 
 <?php if ($dq['tampil_data_pasien_umum'] == 1): ?>
-
-
+<div class="card card-block">
 <div class="form-group" >
   <label for="umur">Penanggung Jawab Pasien:</label>
-  <input style="height: 20px;" type="text" class="form-control" id="penanggung_jawab" name="penanggung_jawab" required="" autocomplete="off">
+  <input style="height: 20px;" type="text" class="form-control" id="penanggung_jawab" name="penanggung_jawab"  autocomplete="off">
 </div>
 
 <div class="form-group" >
   <label for="umur">Alamat Penanggung Jawab:</label>
-  <input style="height: 20px;" type="text" class="form-control" id="alamat_penanggung" name="alamat_penanggung" required="" autocomplete="off">
+  <input style="height: 20px;" type="text" class="form-control" id="alamat_penanggung" name="alamat_penanggung"  autocomplete="off">
 </div> 
 
 <div class="form-group" >
   <label for="umur">No Telp / HP Penanggung  :</label>
-  <input style="height: 20px;" type="text" class="form-control" id="no_hp_penanggung" name="no_hp_penanggung" maxlenght="12" required="" autocomplete="off">
+  <input style="height: 20px;" type="text" class="form-control" onkeypress="return isNumberKey(event)" id="no_hp_penanggung" name="no_hp_penanggung" maxlenght="12"  autocomplete="off">
 </div>
 
 <div class="form-group" >
  <label for="umur">Pekerjaan Penanggung Jawab:</label>
- <input style="height: 20px;" type="text" class="form-control" id="pekerjaan_penanggung" name="pekerjaan_penanggung" required="" autocomplete="off">
+ <input style="height: 20px;" type="text" class="form-control" id="pekerjaan_penanggung" name="pekerjaan_penanggung" autocomplete="off">
 </div>
 
 
 
 <div class="form-group" >
   <label for="umur">Hubungan Dengan Pasien:</label>
-  <select id="hubungan_dengan_pasien" class="form-control " name="hubungan_dengan_pasien" required="" autocomplete="off">
+  <select id="hubungan_dengan_pasien" class="form-control " name="hubungan_dengan_pasien"  autocomplete="off">
       
       <option value="Orang Tua">Orang Tua</option>
       <option value="Suami/Istri">Suami/Istri</option>
@@ -441,10 +506,10 @@ opacity: 0.9;
   </select>  
 </div>
 
-  
+  </div>
 <?php endif ?>
 
-</div>
+
 
 
 <div class="card card-block">
@@ -452,12 +517,12 @@ opacity: 0.9;
 
 <div class="form-group" >
   <label for="umur">Perkiraan Menginap:</label>
-  <input style="height: 20px;" type="text" class="form-control" id="perkiraan_menginap" name="perkiraan_menginap" required=""  autocomplete="off">
+  <input style="height: 20px;" type="text" class="form-control" onkeypress="return isNumberKey(event)"  id="perkiraan_menginap" name="perkiraan_menginap"   autocomplete="off">
 </div>
 
 <div class="form-group" >
     <label for="umur">Surat Jaminan:</label>
-    <input style="height: 20px;" type="text" class="form-control" id="surat_jaminan"  name="surat_jaminan" required="" autocomplete="off">
+    <input style="height: 20px;" type="text" class="form-control" id="surat_jaminan"  name="surat_jaminan"  autocomplete="off">
 </div>
 
 
@@ -469,7 +534,7 @@ opacity: 0.9;
 
 <div class="form-group">
           <label for="alamat">Dokter Penanggung Jawab:</label>
-          <select class="form-control" id="dokter_pengirim" name="dokter_pengirim" required="" autocomplete="off">
+          <select class="form-control" id="dokter_pengirim" name="dokter_pengirim"  autocomplete="off">
            <option value="<?php echo $ss['nama_dokter'];?>"><?php echo $ss['nama_dokter'];?></option>
                    <option value="Tidak Ada">Tidak Ada</option>
                   <?php 
@@ -483,7 +548,7 @@ opacity: 0.9;
 
 <div class="form-group">
     <label for="alamat">Asal Poli :</label>
-    <select class="form-control" id="poli" name="poli" required="" autocomplete="off">
+    <select class="form-control" id="poli" name="poli"  autocomplete="off">
      
           <?php 
           $query = $db->query("SELECT nama FROM poli ");
@@ -497,7 +562,7 @@ opacity: 0.9;
 
 <div class="form-group">
     <label for="alamat">Dokter Pelaksana:</label>
-    <select class="form-control" id="dokter_penanggung_jawab" name="dokter_penanggung_jawab" required="" autocomplete="off">
+    <select class="form-control" id="dokter_penanggung_jawab" name="dokter_penanggung_jawab"  autocomplete="off">
           <option value="<?php echo $ss['nama_dokter'];?>"><?php echo $ss['nama_dokter'];?></option>
                   <option value="Tidak Ada">Tidak Ada</option>
     <?php 
@@ -511,7 +576,7 @@ opacity: 0.9;
 
 <div class="form-group">
   <label for="sel1">Keadaan Umum Pasien:</label>
-  <select class="form-control" id="kondisi" name="kondisi" required="" autocomplete="off">
+  <select class="form-control" id="kondisi" name="kondisi"  autocomplete="off">
  
     <option value="Tampak Normal">Tampak Normal</option>
     <option value="Pucat dan Lemas">Pucat dan Lemas</option>
@@ -525,7 +590,7 @@ opacity: 0.9;
 
 <div class="form-group ">
   <label >Alergi Obat *</label>
-  <input style="height: 20px;" type="text" class="form-control" id="alergi" name="alergi" value="Tidak Ada" required="" placeholder="Wajib Isi" autocomplete="off"> 
+  <input style="height: 20px;" type="text" class="form-control" id="alergi" name="alergi" value="Tidak Ada"  placeholder="Wajib Isi" autocomplete="off"> 
 </div>
 
 </div>
@@ -544,46 +609,45 @@ opacity: 0.9;
 <!-- PANEL DATA DIRI AKHIR -->
 <br><br><br>
 
+  <div class="col-sm-4">
 
-<div class="col-sm-4">
+
 
 <?php if ($dq['tampil_ttv'] == 1): ?>
-  
 <div class="card card-block">
 
 <center><h4>Tanda Tanda Vital</h4></center>
 <div class="form-group">
  <label >Sistole /Diastole (mmHg):</label>
- <input style="height: 20px;" type="text" class="form-control" id="sistole_distole" required="" name="sistole_distole"  autocomplete="off" >
+ <input style="height: 20px;" type="text" onkeypress="return isNumberKey(event)" class="form-control" id="sistole_distole"  name="sistole_distole"  autocomplete="off" >
 </div>
 
 <div class="form-group ">
   <label >Frekuensi Pernapasan (kali/menit):</label>
-  <input style="height: 20px;" type="text" class="form-control" id="respiratory_rate" required="" name="respiratory_rate"  autocomplete="off" > 
+  <input style="height: 20px;" type="text" onkeypress="return isNumberKey(event)" class="form-control" id="respiratory_rate"  name="respiratory_rate"  autocomplete="off" > 
 </div>
 
 <div class="form-group">
   <label >Suhu  (°C):</label>
-  <input style="height: 20px;" type="text" class="form-control" id="suhu" name="suhu" required="" autocomplete="off"  > 
+  <input style="height: 20px;" type="text" onkeypress="return isNumberKey(event)" class="form-control" id="suhu" name="suhu"  autocomplete="off"  > 
 </div>   
 
 <div class="form-group ">
  <label >Nadi (kali/menit):</label>
- <input style="height: 20px;" type="text" class="form-control" id="nadi" name="nadi" required="" autocomplete="off"> 
+ <input style="height: 20px;" type="text" onkeypress="return isNumberKey(event)" class="form-control" id="nadi" name="nadi"  autocomplete="off"> 
 </div>
 
 <div class="form-group ">
   <label >Berat Badan (kg):</label>
-  <input style="height: 20px;" type="text" class="form-control" id="berat_badan" required="" name="berat_badan" autocomplete="off"> 
+  <input style="height: 20px;" type="text" onkeypress="return isNumberKey(event)" class="form-control" id="berat_badan"  name="berat_badan" autocomplete="off"> 
 </div>
 
 <div class="form-group ">
  <label >Tinggi Badan (cm):</label>
- <input style="height: 20px;" type="text" class="form-control" id="tinggi_badan" required="" name="tinggi_badan"autocomplete="off"> 
+ <input style="height: 20px;" type="text" onkeypress="return isNumberKey(event)" class="form-control" id="tinggi_badan"  name="tinggi_badan"autocomplete="off"> 
 </div>
 
 <br>
-  <input style="height: 20px;" type="hidden" class="form-control" id="token" name="token" value="Kosasih" autocomplete="off"> 
 
   <button accesskey="d" style="width:100px" class="btn btn-info" id="daftar"><i class="fa fa-plus">
 </i>  <u>D</u>aftar</button>
@@ -610,10 +674,15 @@ tr:nth-child(even){background-color: #f2f2f2}
 
 <span id="table_baru">
 <div class="table-responsive">
-<table id="table_rawat_inap" class="table table-bordered">
+<table id="table_rawat_inap" class="table table-bordered table-sm">
  
     <thead>
       <tr>
+          <th style='background-color: #4CAF50; color: white'>Batal</th>
+          <th style='background-color: #4CAF50; color: white'>Transaksi Penjualan</th>
+          <th style='background-color: #4CAF50; color: white'>Pindah Kamar</th>
+          <th style='background-color: #4CAF50; color: white'>Operasi</th>
+          <th style='background-color:#4CAF50; color: white'>Rekam Medik</th>
           <th style='background-color: #4CAF50; color: white'>No RM</th>
           <th style='background-color: #4CAF50; color: white'>No REG </th>
           <th style='background-color: #4CAF50; color: white'>Status</th>
@@ -628,9 +697,7 @@ tr:nth-child(even){background-color: #f2f2f2}
           <th style='background-color: #4CAF50; color: white'>Tanggal Masuk</th>
           <th style='background-color: #4CAF50; color: white'>Penanggung Jawab</th>    
           <th style='background-color: #4CAF50; color: white'>Umur</th>
-          <th style='background-color: #4CAF50; color: white'> Rujuk Laboratium </th>
-          <th style='background-color: #4CAF50; color: white'>Pindah Kamar</th>
-          <th style='background-color: #4CAF50; color: white'>Batal</th>
+          
     </tr>
     </thead>
     <tbody id="tbody">
@@ -638,8 +705,52 @@ tr:nth-child(even){background-color: #f2f2f2}
    <?php while($data = mysqli_fetch_array($query7))
       
       {
-      echo "<tr class='tr-id-".$data['id']."'>
-            <td>". $data['no_rm']."</td>
+      echo "<tr class='tr-id-".$data['id']."'>";
+
+        if ($registrasi_ri['registrasi_ri_hapus']) {
+          echo "<td><button  class='btn btn-floating btn-small btn-info' id='batal_ranap' data-reg='". $data['no_reg']. "' data-id='". $data['id']. "'><i class='fa fa-remove'></i> </button></td>";
+        }
+        else{
+          echo "<td> </td>";
+        }
+
+        if ($penjualan['penjualan_tambah'] > 0) {
+                 
+                 $query_z = $db->query("SELECT status,no_faktur,nama,kode_gudang FROM penjualan WHERE no_reg = '$data[no_reg]' ");
+                 $data_z = mysqli_fetch_array($query_z);
+                 
+                 if ($data_z['status'] == 'Simpan Sementara') {
+                 
+                 echo "<td> <a href='proses_pesanan_barang_ranap.php?no_faktur=".$data_z['no_faktur']."&no_reg=".$data['no_reg']."&kode_pelanggan=".$data['no_rm']."&nama_pelanggan=".$data_z['nama']."&kode_gudang=".$data_z['kode_gudang']."'class='btn btn-floating btn-small btn btn-danger'><i class='fa fa-credit-card'></i></a> </td>"; 
+                 }
+                 
+                 else {
+                 echo "<td><a href='form_penjualan_kasir_ranap.php?no_reg=". $data['no_reg']. "' ' class='btn btn-floating btn-small btn-info'><i class='fa fa-shopping-cart'></i></a></td>";
+                 }
+
+        }
+        else{
+          echo "<td> </td>";
+        }
+
+        if ($registrasi_ri['registrasi_ri_lihat']) {
+          echo "<td> <button type='button' data-reg='".$data['no_reg']."' data-bed='".$data['bed']."' data-group-bed='".$data['group_bed']."' data-id='".$data['id']."' data-reg='".$data['no_reg']."'  class='btn btn-floating btn-small btn-info pindah'><i class='fa fa-reply'></i></button></td>
+
+          <td><a href='registrasi_operasi.php?no_reg=".$data['no_reg']."&no_rm=".$data['no_rm']."&bed=".$data['bed']."&kamar=".$data['group_bed']."' class='btn btn-floating btn-small btn-danger'><i class='fa fa-plus-circle'></i></a></td>";
+        }
+        else{
+          echo "<td> </td>";
+          echo "<td> </td>";
+        }          
+
+        if ($rekam_medik['rekam_medik_ri_lihat']) {
+          echo "<td><a href='rekam_medik_ranap.php' class='btn btn-floating btn-small btn-danger'><i class='fa fa-medkit'></i></a></td>";
+        }
+        else{          
+          echo "<td> </td>";
+        }
+
+            echo "<td>". $data['no_rm']."</td>
             <td>". $data['no_reg']."</td>
             <td>". $data['status']."</td>           
             <td>". $data['nama_pasien']."</td>
@@ -654,11 +765,7 @@ tr:nth-child(even){background-color: #f2f2f2}
             <td>". $data['penanggung_jawab']."</td>
             <td>". $data['umur_pasien']."</td> 
 
-            <td><a href='form-rujuk-lab-ri.php?no_reg=".$data['no_reg']."' class='btn btn-floating btn-small btn-success'><i class='fa fa-hand-pointer-o'></i> </a></td>
-
-          <td> <button type='button' data-reg='".$data['no_reg']."' data-bed='".$data['bed']."' data-group-bed='".$data['group_bed']."' data-id='".$data['id']."' data-reg='".$data['no_reg']."'  class='btn btn-floating btn-small btn-warning pindah'><i class='fa fa-reply'></i>  </button></td>
-
-          <td><button style='width:55px;' class='btn btn-floating btn-small btn-danger' id='batal_ranap' data-reg='". $data['no_reg']. "' data-id='". $data['id']. "'><i class='fa fa-remove'></i> </button></td>
+            
 
       </tr>";
       
@@ -694,7 +801,7 @@ tr:nth-child(even){background-color: #f2f2f2}
     {
             $("#myModal").modal('show');
       $("#hasil_migrasi").html('Loading..');
-   $.post("cek_data_pasien_lama.php",{cari:cari},function(data){
+   $.post("show_data_pasien.php",{cari:cari},function(data){
       $("#hasil_migrasi").html(data);
   
     });
@@ -707,6 +814,21 @@ tr:nth-child(even){background-color: #f2f2f2}
 
 
 
+ <script type="text/javascript">
+          $("#alamat").focus(function(){
+            var cari_migrasi = $("#cari_migrasi").val();
+            var no_rm = $("#no_rm").val();
+if(no_rm == '')
+{
+            $("#cari_migrasi").focus();    
+
+}
+else
+{
+  
+}
+        });
+</script>
 
    <script>
    //untuk menampilkan data yang diambil pada form tbs penjualan berdasarkan id=formtambahproduk
@@ -715,7 +837,6 @@ tr:nth-child(even){background-color: #f2f2f2}
     var group_bed = $("#group_bed").val();
     var bed = $("#bed").val();
     var rujukan = $("#rujukan").val();
-    var penjamin = $("#penjamin").val();
     var no_rm = $("#no_rm").val();
     var nama_lengkap = $("#nama_lengkap").val();
     var jenis_kelamin = $("#jenis_kelamin").val();
@@ -723,37 +844,107 @@ tr:nth-child(even){background-color: #f2f2f2}
     var umur = $("#umur").val();
     var alamat = $("#alamat").val();
     var hp_pasien = $("#hp_pasien").val();
+    var kondisi = $("#kondisi").val();
+    var penjamin = $("#penjamin").val();
+    var surat_jaminan = $("#surat_jaminan").val();
+    var perkiraan_menginap = $("#perkiraan_menginap").val();
     var penanggung_jawab = $("#penanggung_jawab").val();
     var alamat_penanggung = $("#alamat_penanggung").val();
     var no_hp_penanggung = $("#no_hp_penanggung").val();
     var pekerjaan_penanggung = $("#pekerjaan_penanggung").val();
     var hubungan_dengan_pasien = $("#hubungan_dengan_pasien").val();
-    var perkiraan_menginap = $("#perkiraan_menginap").val();
-    var surat_jaminan = $("#surat_jaminan").val();
     var dokter_pengirim = $("#dokter_pengirim").val();
     var poli = $("#poli").val();
-    var dokter_penanggung_jawab = $("#dokter_penanggung_jawab").val();
-    var kondisi = $("#kondisi").val();
+    var dokter_penanggung_jawab = $("#dokter_penanggung_jawab").val(); 
     var sistole_distole = $("#sistole_distole").val();
+   
     var respiratory_rate = $("#respiratory_rate").val();
-    var suhu = $("#suhu").val();
-    var nadi = $("#nadi").val();
-    var berat_badan = $("#berat_badan").val();
-    var tinggi_badan = $("#tinggi_badan").val();
-    var alergi = $("#alergi").val();
-    var token = $("#token").val();
     
+    var suhu = $("#suhu").val();
+    
+    var nadi = $("#nadi").val();
+     
+    var berat_badan = $("#berat_badan").val();
+     
+    var tinggi_badan = $("#tinggi_badan").val();
+   
+    var alergi = $("#alergi").val();
+   
+
+    var token = $("#token").val();
+    var cari_migrasi = $("#cari_migrasi").val();
+
     $("#kembali").hide();
     $("#daftar").show();
 
+
+if (group_bed == '')
+{
+
+alert("Kamar Masih Kosong");
+  $("#group_bed").focus();
+
+}
+
+  else if(bed == '')
+{
+  alert("Bed Masih Kosong");
+  $("#bed").focus();
+}
+  else if(penjamin == '')
+{
+  alert("Penjamin Masih Kosong");
+  $("#penjamin").focus();
+}
+else if (no_rm == '')
+{
+    alert("Pasien Belum Ada!!");
+  $("#cari_migrasi").focus();
+}
+else if (penanggung_jawab == '')
+{
+  alert("Isi Nama Penanggung Jawab Pasien!!");
+ $("#penanggung_jawab").focus();
+   
+}
+else if (alamat_penanggung == '')
+{
+    alert("Isi Alamat Penanggung Jawab Pasien!!");
+    $("#alamat_penanggung").focus();
+
+}
+else if (no_hp_penanggung == '') 
+{
+    alert("Isi No Handphone Penanggung Jawab Pasien!!");
+     $("#no_hp_penanggung").focus();
+
+}
+else if (pekerjaan_penanggung == '')
+{
+      alert("Isi Pekerjaan Penanggung Jawab Pasien!!");
+      $("#pekerjaan_penanggung").focus();
+}
+else if (perkiraan_menginap == '')
+ {
+  alert("Perkiraan Menginap Harus Di isi");
+  $("#perkiraan_menginap").focus();
+ }
+else if (surat_jaminan == '') {
+alert("Surat jaminan Harus Di isi");
+$("#surat_jaminan").focus();
+
+} 
+
+else{
+  $("#coba").show();
  $.post("proses_rawat_inap.php",{group_bed:group_bed,bed:bed,rujukan:rujukan,penjamin:penjamin,no_rm:no_rm,nama_lengkap:nama_lengkap,jenis_kelamin:jenis_kelamin,tanggal_lahir:tanggal_lahir,umur:umur,alamat:alamat,hp_pasien:hp_pasien,penanggung_jawab:penanggung_jawab,alamat_penanggung:alamat_penanggung,no_hp_penanggung:no_hp_penanggung,pekerjaan_penanggung:pekerjaan_penanggung,hubungan_dengan_pasien:hubungan_dengan_pasien,perkiraan_menginap:perkiraan_menginap,surat_jaminan:surat_jaminan,dokter_pengirim:dokter_pengirim,poli:poli,dokter_penanggung_jawab:dokter_penanggung_jawab,kondisi:kondisi,sistole_distole:sistole_distole,respiratory_rate:respiratory_rate,suhu:suhu,nadi:nadi,berat_badan:berat_badan,tinggi_badan:tinggi_badan,alergi:alergi,token:token},function(data){
      
      $("#demo").hide();
-     $("#tbody").prepend(data);
+     $("#litombol").show();
+    $("#tbody").prepend(data);
      $("#group_bed").val('');
      $("#bed").val('');
      $("#rujukan").val('');
-     $("#penjamin").val('');
      $("#no_rm").val('');
      $("#nama_lengkap").val('');
      $("#jenis_kelamin").val('');
@@ -783,7 +974,7 @@ tr:nth-child(even){background-color: #f2f2f2}
      
      });
 
-      
+      }
   });
 
     $("form").submit(function(){
@@ -797,19 +988,15 @@ tr:nth-child(even){background-color: #f2f2f2}
 
 
 
-<!-- cari untuk pegy natio -->
-<script type="text/javascript">
-  $("#cari").keyup(function(){
-var q = $(this).val();
 
-$.post('table_baru_rawat_inap.php',{q:q},function(data)
-{
-  $("#table_baru").html(data);
-  
-});
-});
+<script type="text/javascript">
+    $(document).ready(function(){
+    // Tooltips Initialization
+    $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+    });
+    });
 </script>
-<!-- END script cari untuk pegy natio -->
 
 <!-- data ambil dari pasien  -->
 <script type="text/javascript">
@@ -832,10 +1019,10 @@ function hitung_umur(tanggal_input){
 
 var now = new Date(); //Todays Date   
 var birthday = tanggal_input;
-birthday=birthday.split("/");   
+birthday=birthday.split("-");   
 
-var dobMonth= birthday[0]; 
-var dobDay= birthday[1];
+var dobDay = birthday[0]; 
+var dobMonth= birthday[1];
 var dobYear= birthday[2];
 
 var nowDay= now.getDate();
@@ -940,7 +1127,7 @@ return val;
                 $.post("pindah_kamar.php",{reg:reg,bed:bed,group_bed:group_bed},function(data){
                 $("#tampil_kamar").html(data);
                 $("#modal_kamar").modal('show');
-          
+            $("#kamar_lama").val(group_bed);
                 });
             });
 //            tabel lookup mahasiswa         
@@ -952,10 +1139,13 @@ return val;
     var group_bed_before = $(this).attr("data-group_bed");
     var group_bed2 = $("#group_bed2").val();
     var bed2 = $("#bed2").val();
+    var lama_inap = $("#lama_inap").val();
     var id = $(this).attr("data-id");
 
+  
+
       $(".tr-id-"+id+"").remove();
-      $.post("update_pindah_kamar.php",{reg_before:reg_before,bed_before:bed_before,group_bed_before:group_bed_before,group_bed2:group_bed2,bed2:bed2,id:id},function(data){
+      $.post("update_pindah_kamar.php",{lama_inap:lama_inap,reg_before:reg_before,bed_before:bed_before,group_bed_before:group_bed_before,group_bed2:group_bed2,bed2:bed2,id:id},function(data){
       
       $("#modal_kamar").modal('hide');
       $("#tbody").prepend(data);
@@ -1001,17 +1191,18 @@ return val;
   $("#coba").click(function(){
   $("#demo").show();
   $("#kembali").show();
+  $("#litombol").hide();
    $("#coba").hide();
   });
     $("#kembali").click(function(){
   $("#demo").hide();
   $("#coba").show();
   $("#kembali").hide();
+  $("#litombol").show();
 
   });
 
 </script>
-
 
 
 <script>
@@ -1022,10 +1213,10 @@ function hitung_umur(tanggal_input){
 
 var now = new Date(); //Todays Date   
 var birthday = tanggal_input;
-birthday=birthday.split("/");   
+birthday=birthday.split("-");   
 
-var dobMonth= birthday[0]; 
-var dobDay= birthday[1];
+var dobDay = birthday[0]; 
+var dobMonth= birthday[1];
 var dobYear= birthday[2];
 
 var nowDay= now.getDate();
@@ -1074,10 +1265,10 @@ else
 
 <script>
   $(function() {
-  $( "#tanggal_lahir" ).pickadate({ selectYears: 100, format: 'dd/mm/yyyy'});
+  $( "#tanggal_lahir" ).pickadate({ selectYears: 100, format: 'yy-mm-dd'});
   });
   </script>
-<!--end script datepicker-->
+
 
 
 <!-- modal ambil data dari table RI  -->

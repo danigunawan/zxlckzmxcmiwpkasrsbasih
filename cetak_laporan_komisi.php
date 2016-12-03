@@ -28,17 +28,15 @@ $sampai_tanggal = $_GET['sampai_tanggal'];
     
  ?>
 
-<div class="container">
+<div style="padding-right: 5%; padding-left: 5%;">
     
+                 <h3> <b><center> BUKTI TOTAL KOMISI</center> </b></h3><hr>
     <div class="row"><!--row1-->
         <div class="col-sm-2">
-        <br><br>
                 <img src='save_picture/<?php echo $data1['foto']; ?>' class='img-rounded' alt='Cinque Terre' width='160' height='140`'> 
         </div><!--penutup colsm2-->
 
         <div class="col-sm-4">
-                 <h3> <b> BUKTI TOTAL KOMISI </b></h3>
-                 <hr>
                  <h4> <b> <?php echo $data1['nama_perusahaan']; ?> </b> </h4> 
                  <p> <?php echo $data1['alamat_perusahaan']; ?> </p> 
                  <p> No.Telp:<?php echo $data1['no_telp']; ?> </p> 
@@ -46,7 +44,6 @@ $sampai_tanggal = $_GET['sampai_tanggal'];
         </div><!--penutup colsm4-->
 
         <div class="col-sm-5">
-                          <br><br><br><br><br>
 <table>
   <tbody>
   
@@ -68,7 +65,7 @@ $sampai_tanggal = $_GET['sampai_tanggal'];
 
 <br>
 <h4><b><center>Tabel Komisi Produk</center></b></h4><br>
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
             <thead>
                   <th> Nama Petugas </th>
                   <th> Nomor Faktur </th>
@@ -78,11 +75,6 @@ $sampai_tanggal = $_GET['sampai_tanggal'];
                   <th> Tanggal </th>
                   <th> Jam </th>
 
-
-                  <?php 
-
-                  
-                  ?>
                   
             </thead>
             
@@ -105,7 +97,7 @@ $sampai_tanggal = $_GET['sampai_tanggal'];
 
 //Untuk Memutuskan Koneksi Ke Database
 
-mysqli_close($db); 
+
 
             ?>
             </tbody>
@@ -113,7 +105,7 @@ mysqli_close($db);
       </table>
       <br>
 <h4><b><center>Tabel Komisi Faktur</center></b></h4><br>
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
             <thead>
                  <th> Nama Petugas </th>
                   <th> Nomor Faktur </th>
@@ -121,28 +113,23 @@ mysqli_close($db);
                   <th> Tanggal </th>
                   <th> Jam </th>
 
-
-                  <?php 
-
-                  
-                  ?>
-                  
             </thead>
             
             <tbody>
             <?php
-                $query10 = $db->query("SELECT * FROM laporan_fee_faktur WHERE nama_petugas = '$nama_petugas' ");
-                while ($data10 = mysqli_fetch_array($query10))
+                $query13 = $db->query("SELECT * FROM laporan_fee_faktur WHERE nama_petugas = '$nama_petugas' ");
+                while ($data13 = mysqli_fetch_array($query13))
                 {
                   
                   echo "<tr>
-                  <td>". $data10['nama_petugas'] ."</td>
-                  <td>". $data10['no_faktur'] ."</td>
-                  <td>". $data10['jumlah_fee'] ."</td>
-                  <td>". tanggal($data10['tanggal']) ."</td>
-                  <td>". $data10['jam'] ."</td>
+                  <td>". $data13['nama_petugas'] ."</td>
+                  <td>". $data13['no_faktur'] ."</td>
+                  <td>". $data13['jumlah_fee'] ."</td>
+                  <td>". tanggal($data13['tanggal']) ."</td>
+                  <td>". $data13['jam'] ."</td>
                   </tr>";
                 }
+                mysqli_close($db); 
             ?>
             </tbody>
 

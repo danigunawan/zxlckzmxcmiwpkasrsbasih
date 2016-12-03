@@ -11,7 +11,7 @@ $sampai_tanggal = stringdoang($_GET['sampai_tanggal']);
     $data1 = mysqli_fetch_array($query1);
 
 //menampilkan seluruh data yang ada pada tabel pembayaran_piutang
-$perintah = $db->query("SELECT p.nama_pelanggan,pp.nama_suplier,pp.no_faktur_pembayaran,pp.tanggal,pp.dari_kas,pp.total FROM pembayaran_piutang pp LEFT JOIN pelanggan p ON pp.nama_suplier = p.kode_pelanggan WHERE pp.tanggal >= '$dari_tanggal' AND pp.tanggal <= '$sampai_tanggal'");
+$perintah = $db->query("SELECT dpp.id, dpp.no_faktur_pembayaran, dpp.no_faktur_penjualan, dpp.tanggal, dpp.tanggal_jt, dpp.kredit, dpp.potongan, dpp.total, dpp.jumlah_bayar, dpp.kode_pelanggan, p.nama_pelanggan, pp.dari_kas, pp.total, da.nama_daftar_akun FROM detail_pembayaran_piutang dpp INNER JOIN pelanggan p ON dpp.kode_pelanggan = p.kode_pelanggan INNER JOIN pembayaran_piutang pp ON dpp.no_faktur_pembayaran = pp.no_faktur_pembayaran INNER JOIN daftar_akun da ON pp.dari_kas = da.kode_daftar_akun WHERE dpp.tanggal >= '$dari_tanggal' AND dpp.tanggal <= '$sampai_tanggal'");
 
 
 //menampilkan seluruh data yang ada pada tabel pembayaran_piutang
@@ -68,47 +68,45 @@ $total_akhir = $cek02['total_akhir'];
     <br>
 
 
- <table id="tableuser" class="table table-bordered">
-            <thead>
-      <th> Nomor Faktur </th>
+<table id="tableuser" class="table table-bordered table-sm">
+    <thead>
+      <th> Nomor Faktur Pembayaran</th>
+      <th> Nomor Faktur Penjualan</th>
       <th> Tanggal </th>
       <th> Kode Pelanggan </th>
       <th> Cara Bayar </th>
       <th> Potongan </th>
       <th> Jumlah Bayar </th>
-                                    
-            </thead>
-            
-            <tbody>
-            <?php
-
-               
-                  while ($data11 = mysqli_fetch_array($perintah))
-
-                  {
-
-                    $perintah0 = $db->query("SELECT * FROM detail_pembayaran_piutang WHERE no_faktur_pembayaran = '$data11[no_faktur_pembayaran]'");
-                    $data0 = mysqli_fetch_array($perintah0);
       
-                  echo "<tr>
-                  <td>". $data11['no_faktur_pembayaran'] ."</td>
-                  <td>". $data11['tanggal'] ."</td>
-                  <td>". $data11['nama_suplier'] ." ". $data11['nama_pelanggan'] ."</td>
-                  <td>". $data11['dari_kas'] ."</td>
-                  <td>". rp($data0['potongan']) ."</td>
-                  <td>". rp($data11['total']) ."</td>
-                  </tr>";
+      
+    </thead>
+    
+    <tbody>
+    <?php
 
-
-                  }
-
-                          //Untuk Memutuskan Koneksi Ke Database
-                          
-                          mysqli_close($db); 
+      //menyimpan data sementara yang ada pada $perintah
+      while ($data1 = mysqli_fetch_array($perintah))
+      {
         
-        
-            ?>
-            </tbody>
+      echo "<tr>
+      <td>". $data1['no_faktur_pembayaran'] ."</td>
+      <td>". $data1['no_faktur_penjualan'] ."</td>
+      <td>". $data1['tanggal'] ."</td>
+      <td> ". $data1['kode_pelanggan'] ." - ". $data1['nama_pelanggan'] ."</td>
+      <td>". $data1['nama_daftar_akun'] ."</td>
+      <td>". $data1['potongan'] ."</td>
+      <td>". rp($data1['jumlah_bayar']) ."</td>
+
+      
+      </tr>";
+      }
+
+      //Untuk Memutuskan Koneksi Ke Database
+      mysqli_close($db);   
+    ?>
+    </tbody>
+
+  </table>
 
       </table>
       <hr>

@@ -8,7 +8,7 @@ include 'sanitasi.php';
 include 'db.php';
 
 //menampilkan seluruh data yang ada pada tabel penjualan
-$perintah = $db->query("SELECT * FROM laporan_fee_faktur");
+$perintah = $db->query("SELECT f.nama_petugas, f.no_faktur, f.jumlah_fee, f.tanggal, f.jam, u.nama FROM laporan_fee_faktur f INNER JOIN user u ON f.nama_petugas = u.id ORDER BY f.id DESC");
 
  ?>
 
@@ -42,7 +42,7 @@ $perintah = $db->query("SELECT * FROM laporan_fee_faktur");
                   {
                   
                   echo "<tr>
-                  <td>". $data1['nama_petugas'] ."</td>
+                  <td>". $data1['nama'] ."</td>
                   <td>". $data1['no_faktur'] ."</td>
                   <td>". rp($data1['jumlah_fee']) ."</td>
                   <td>". tanggal($data1['tanggal']) ."</td>
@@ -63,7 +63,8 @@ $perintah = $db->query("SELECT * FROM laporan_fee_faktur");
             <script>
             
             $(document).ready(function(){
-            $('#tableuser').DataTable();
+            $('#tableuser').DataTable(
+                  {"ordering": false});
             });
             </script>
 

@@ -56,9 +56,12 @@ $_SESSION['nama_petugas'] = $nama_petugas ;
                   while ($data1 = mysqli_fetch_array($perintah))
 
                   {
+
+                  $userr = $db->query("SELECT nama FROM user WHERE id = '$nama_petugas'");
+                  $data_user = mysqli_fetch_array($userr);
                   
                   echo "<tr class='pilih' data-petugas='". $data1['nama_petugas'] ."'>
-                  <td>". $data1['nama_petugas'] ."</td>
+                  <td>". $data_user['nama'] ."</td>
                   <td>". $data1['no_faktur'] ."</td>
                   <td>". $data1['kode_produk'] ."</td>
                   <td>". $data1['nama_produk'] ."</td>
@@ -76,7 +79,7 @@ $_SESSION['nama_petugas'] = $nama_petugas ;
       </table>
 </div>
 
-  <a href='cetak_lap_jumlah_fee_produk.php?nama_petugas=<?php echo $nama_petugas; ?>&dari_tanggal=<?php echo $dari_tanggal; ?>&sampai_tanggal=<?php echo $sampai_tanggal; ?>' class='btn btn-success'><i class='fa fa-print'> </i> Cetak Komisi / Petugas</a>
+  <a href='cetak_lap_jumlah_fee_produk.php?nama_petugas=<?php echo urlencode($nama_petugas); ?>&dari_tanggal=<?php echo $dari_tanggal; ?>&sampai_tanggal=<?php echo $sampai_tanggal; ?>' class='btn btn-success'><i class='fa fa-print'> </i> Cetak Komisi / Petugas</a>
 
 </div>
 

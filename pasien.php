@@ -31,7 +31,7 @@ include 'db.php';
 <!--modal end Confirm Delete-->
 
 
-<div class="container">
+<div style="padding-left:5%; padding-right:5%; ">
 
 
  <!-- Modal Untuk Upload Excell-->
@@ -86,7 +86,7 @@ include 'db.php';
 
 <!--   script modal confirmasi delete -->
 <script type="text/javascript">
-$(".delete").click(function(){
+$(document).on('click', '.delete', function (e) {
 
   var id = $(this).attr('data-id');
 
@@ -101,7 +101,7 @@ $("#id2").val(id);
 
 <!--  script modal  lanjkutan confiormasi delete -->
 <script type="text/javascript">
-$("#yesss").click(function(){
+$(document).on('click', '#yesss', function (e) {
 
 var id = $("#id2").val();
 

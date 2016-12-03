@@ -5,6 +5,9 @@ include 'navbar.php';
 include 'db.php';
 include 'sanitasi.php';
 
+$pilih_akses_perujuk = $db->query("SELECT perujuk_tambah, perujuk_edit, perujuk_hapus FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]'");
+$perujuk = mysqli_fetch_array($pilih_akses_perujuk);
+
 
 // AKHIR untuk FEGY NATION
 ?>
@@ -38,15 +41,19 @@ tr:nth-child(even){background-color: #f2f2f2}
 
 
 <h3><b> DATA PERUJUK </b></h3> <hr>
-   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal"><i class="fa fa-plus"></i> PERUJUK </button>
+
+<?php if ($perujuk['perujuk_tambah'] > 0): ?>
+     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal"><i class="fa fa-plus"></i> PERUJUK </button>
  <br>
 <br>
+<?php endif ?>
+
 
 
 <span id="table_baru"> 
 <div class="table-responsive">
 
-<table id="table-pelamar" class="table table-bordered">
+<table id="table-pelamar" class="table table-bordered table-sm">
     <thead>
       <tr class='tr-idp'>
          <th style="background-color: #4CAF50; color: white;" >Nama </th>
@@ -67,12 +74,25 @@ $query = $db->query("SELECT * FROM perujuk ORDER BY id DESC ");
       echo "<tr class='tr-id-".$data['id']."'>
       <td >". $data['nama']."</td>
       <td>". $data['alamat']."</td>
-      <td>". $data['no_telp']."</td>
-      <td><a href='edit_perujuk.php?id=".$data['id']."'class='btn btn-warning'><span class='glyphicon glyphicon-wrench'></span> Edit </a>
-      </td>
-      <td><button data-id='".$data['id']."' class='btn btn-danger delete'><span class='glyphicon glyphicon-trash'></span> Hapus </button>
-      </td>
-      </tr>";
+      <td>". $data['no_telp']."</td>";
+      if ($perujuk['perujuk_edit']) {
+        echo "<td><a href='edit_perujuk.php?id=".$data['id']."'class='btn btn-warning'><span class='glyphicon glyphicon-wrench'></span> Edit </a>
+      </td>";
+      }
+      else{
+        echo "<td> </td>";
+      }
+
+      if ($perujuk['perujuk_hapus']) {
+        echo "<td><button data-id='".$data['id']."' class='btn btn-danger delete'><span class='glyphicon glyphicon-trash'></span> Hapus </button>
+      </td>";
+      }
+      else{
+        echo "<td> </td>";
+      }
+      
+      
+      echo "</tr>";
       }
     ?>
   </tbody>

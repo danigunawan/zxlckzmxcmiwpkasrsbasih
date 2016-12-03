@@ -15,7 +15,17 @@ $ss = mysqli_fetch_array($qertu);
 
 
 ?>
- 
+
+ <script type="text/javascript">
+  function isNumberKey(evt)
+      {
+         var charCode = (evt.which) ? evt.which : event.keyCode
+         if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+
+         return true;
+      }
+</script>
 
 
 <!-- Modal Untuk Confirm LAYANAN PERUSAHAAN-->
@@ -129,7 +139,7 @@ $ss = mysqli_fetch_array($qertu);
 
 <div class="form-group">
     <label for="umur">Umur:</label>
-    <input style="height: 20px;" type="text" class="form-control" id="umur" name="umur" autocomplete="off">
+    <input style="height: 20px;" type="text" required="" class="form-control" id="umur" name="umur" autocomplete="off">
 </div>
 
 <div class="form-group">
@@ -160,13 +170,13 @@ $ss = mysqli_fetch_array($qertu);
  
 <div class="form-group">
     <label for="no_telepon">No Telpon / HP:</label>
-    <input style="height: 20px;" type="text" class="form-control" id="no_telepon" name="no_telepon"  autocomplete="off">
+    <input style="height: 20px;" onkeypress="return isNumberKey(event)" type="text" class="form-control" id="no_telepon" name="no_telepon"  autocomplete="off">
 </div>
 
 
 <div class="form-group">
     <label for="no_ktp">No Keluarga:</label>
-    <input style="height: 20px;" type="text" class="form-control" id="no_kk" name="no_kk" autocomplete="off">
+    <input style="height: 20px;" onkeypress="return isNumberKey(event)" type="text" class="form-control" id="no_kk" name="no_kk" autocomplete="off">
   </div>
 
   <div class="form-group">
@@ -175,7 +185,7 @@ $ss = mysqli_fetch_array($qertu);
   </div>
 <div class="form-group">
     <label for="no_ktp">No KTP:</label>
-    <input style="height: 20px;" type="text" class="form-control" id="no_ktp" name="no_ktp"  autocomplete="off">
+    <input style="height: 20px;" onkeypress="return isNumberKey(event)" type="text" class="form-control" id="no_ktp" name="no_ktp"  autocomplete="off">
 </div>
 
 <div class="form-group">
@@ -296,7 +306,7 @@ $ss = mysqli_fetch_array($qertu);
 
 <div class="form-group" >
   <label for="umur">No Telphone / HP Pengantar</label>
-  <input style="height: 20px;" type="text" class="form-control" id="hp_pengantar" name="hp_pengantar" autocomplete="off">
+  <input style="height: 20px;" onkeypress="return isNumberKey(event)" type="text" class="form-control" id="hp_pengantar" name="hp_pengantar" autocomplete="off">
 </div>
 
 </div>
@@ -342,7 +352,7 @@ $ss = mysqli_fetch_array($qertu);
       <option value="<?php echo $ss['nama_dokter'];?>"><?php echo $ss['nama_dokter'];?></option>
               <option value="Tidak Ada">Tidak Ada</option>
         <?php 
-        $query = $db->query("SELECT nama FROM user WHERE otoritas = 'Dokter' ORDER BY status_pakai DESC ");
+        $query = $db->query("SELECT nama FROM user WHERE otoritas = 'Dokter' ");
         while ( $data = mysqli_fetch_array($query)) 
         {
           echo "<option value='".$data['nama']."'>".$data['nama']."</option>";
@@ -413,26 +423,16 @@ $("select").chosen({no_results_text: "Oops, Tidak Ada !"});
 <!--script end chossen-->
 
 
-
-
-<!-- hitung tanggal lahir dengan tahun -->
 <script type="text/javascript">
-
-$(document).ready(function(){
-  $("#umur").blur(function(){
-    var umur = $(this).val();
-    $.post("hitung_tanggal_lahir.php",{umur:umur},function(data){
-      if (data != '') {
-         $("#tanggal_lahir").val(data);
-      };
-     
-    });
-  });
-
-});
-
+          $("#daftar_ugd").click(function(){
+         var jenis_kelamin = $("#jenis_kelamin").val();
+          if (jenis_kelamin == '')
+          {
+            alert("Pilih Dahulu Jenis Kelamin");
+          }    
+        });
 </script>
-<!--datatable-->
+
 
 
 <!--script disable hubungan pasien-->
@@ -508,14 +508,14 @@ $("#hubungan_dengan_pasien").attr("readonly", true);
 <!--script disable hubungan pasien-->
 
 
-<!--  open datepicker  -->
+<!--script datepicker-->
 <script>
   $(function() {
-  $( "#tanggal_lahir" ).pickadate({ selectYears: 100, format: 'dd/mm/yyyy'});
+  $( "#tanggal_lahir" ).pickadate({ selectYears: 100, format: 'dd-mm-yyyy'});
   });
   </script>
+
 <!--end script datepicker-->
-<!--  closed script datepicker  -->
 
 
 <!--   script untuk detail layanan PERUSAHAAN PENJAMIN-->
@@ -556,10 +556,10 @@ function hitung_umur(tanggal_input){
 
 var now = new Date(); //Todays Date   
 var birthday = tanggal_input;
-birthday=birthday.split("/");   
+birthday=birthday.split("-");   
 
-var dobMonth= birthday[0]; 
-var dobDay= birthday[1];
+var dobDay= birthday[0]; 
+var dobMonth= birthday[1];
 var dobYear= birthday[2];
 
 var nowDay= now.getDate();
@@ -580,11 +580,11 @@ if (nowDay < dobDay) {
 
 
 if (ageyear <= 0) {
- var val = agemonth + " Bulan";
+ var val = agemonth + "Bulan";
 }
 else {
 
- var val = ageyear + " Tahun";
+ var val = ageyear + "Tahun";
 }
 return val;
 }
@@ -604,9 +604,18 @@ else
 
   });
 
-
 // tabel lookup mahasiswa
 </script>
+
+
+<script type="text/javascript">
+          $("#umur").focus(function(){
+          $("#tanggal_lahir").focus();    
+        });
+</script>
+
+
+
 <!--end script ambil data pasien lama modal-->
 <script type="text/javascript">
 
@@ -644,10 +653,10 @@ function hitung_umur(tanggal_input){
 
 var now = new Date(); //Todays Date   
 var birthday = tanggal_input;
-birthday=birthday.split("/");   
+birthday=birthday.split("-");   
 
-var dobMonth= birthday[0]; 
-var dobDay= birthday[1];
+var dobDay = birthday[0]; 
+var dobMonth = birthday[1];
 var dobYear= birthday[2];
 
 var nowDay= now.getDate();

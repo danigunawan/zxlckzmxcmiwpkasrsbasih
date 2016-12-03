@@ -20,10 +20,10 @@ $perintah = $db->query("SELECT p.id,p.no_faktur,p.total,p.suplier,p.tanggal,p.ta
 <div class="dropdown">
              <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="width:150px"> Jenis Laporan <span class="caret"></span></button>
 
-             <ul class="dropdown-menu">
-				<li><a href="lap_pembelian_rekap.php"> Laporan Pembelian Rekap </a></li> 
-				<li><a href="lap_pembelian_detail.php"> Laporan Pembelian Detail </a></li>
-				<li><a href="lap_pembelian_harian.php"> Laporan Pembelian Harian </a></li>
+             <ul class="dropdown-menu dropdown-ins">
+		<li><a class="dropdown-item" href="lap_pembelian_rekap.php"> Laporan Pembelian Rekap </a></li> 
+		<li><a class="dropdown-item" href="lap_pembelian_detail.php"> Laporan Pembelian Detail </a></li>
+		<li><a class="dropdown-item" href="lap_pembelian_harian.php"> Laporan Pembelian Harian </a></li>
 				<!--
 				<li><a href="lap_pelanggan_detail.php"> Laporan Jual Per Pelanggan Detail </a></li>
 				<li><a href="lap_pelanggan_rekap.php"> Laporan Jual Per Pelanggan Rekap </a></li>

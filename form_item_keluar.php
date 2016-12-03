@@ -35,11 +35,11 @@ $session_id = session_id();
           <input type="hidden" name="session_id" id="session_id" class="form-control" readonly="" value="<?php echo $session_id; ?>" required="" >
           
          </form>
-         <div class="col-sm-8">
+   
 
 <!-- membuat tombol agar menampilkan modal -->
 <button type="button" class="btn btn-info" id="cari_item_keluar1" data-toggle="modal" data-target="#myModal"> <i class='fa fa-search'> </i> Cari</button>
-<br><br>
+<br>
 <!-- Tampilan Modal -->
 <div id="myModal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg">
@@ -69,23 +69,24 @@ $session_id = session_id();
 </div>
 
 
+      <div class="col-sm-9">
 <!-- membuat form -->
  <form class="form-inline" action="proses_tbs_item_keluar.php" role="form" id="formtambahproduk">
   
 
   <!-- agar tampilan berada pada satu group -->
   <!-- memasukan teks pada kolom kode barang -->
-  <div class="form-group"> 
-    <input type="text" class="form-control" name="kode_barang" id="kode_barang" autocomplete="off" placeholder="Kode Produk">
-  </div>
-
-<div class="form-group">
-  <input type="text" class="form-control" name="nama_barang" id="nama_barang" readonly="" placeholder="Nama Barang">
+  <div class="col-sm-3"> 
+    <input style="height: 20px" type="text" class="form-control"  name="kode_barang" id="kode_barang" autocomplete="off" placeholder="Ketikkan Kode Produk">
   </div>
 
 
-  <div class="form-group">
-    <input type="text" class="form-control" name="jumlah_barang" id="jumlah_barang" autocomplete="off" placeholder="Jumlah Barang" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);">
+  <input type="hidden" class="form-control" name="nama_barang" id="nama_barang" readonly="" >
+
+
+
+  <div class="col-sm-2">
+    <input style="height: 20px; width: 70px" type="text" class="form-control" name="jumlah_barang" id="jumlah_barang" autocomplete="off" placeholder="Jumlah " onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);">
   </div>
 
   
@@ -98,11 +99,66 @@ $session_id = session_id();
   <!-- membuat tombol submit-->
   <button type="submit" id="submit_produk" class="btn btn-success"> <i class='fa fa-plus'> </i> Tambah Produk</button>
 </form>
+
+
+      <!--untuk mendefinisikan sebuah bagian dalam dokumen-->  
+      <span id="result">  
+
+        <div class="table-responsive">
+      <!--tag untuk membuat garis pada tabel-->     
+  <table id="tableuser" class="table table-bordered table-sm">
+    <thead>
+      <th> Kode Barang </th>
+      <th> Nama Barang </th>
+      <th> Jumlah </th>
+      <th> Satuan </th>
+      <th> Harga </th>
+      <th> Subtotal </th>
+    
+      <th> Hapus </th>
+      
+    </thead>
+    
+    <tbody id="tbody">
+    <?php
+
+    //menampilkan semua data yang ada pada tabel tbs penjualan dalam DB
+     $perintah = $db->query("SELECT tik.id,tik.no_faktur,tik.kode_barang,tik.nama_barang,tik.jumlah,tik.harga,tik.subtotal,s.nama FROM tbs_item_keluar tik INNER JOIN satuan s ON tik.satuan = s.id WHERE session_id = '$session_id'");
+
+      //menyimpan data sementara yang ada pada $perintah
+
+      while ($data1 = mysqli_fetch_array($perintah))
+      {
+        //menampilkan data
+      echo "<tr class='tr-id-".$data1['id']."'>
+      <td>". $data1['kode_barang'] ."</td>
+      <td>". $data1['nama_barang'] ."</td>
+
+      <td class='edit-jumlah' data-id='".$data1['id']."'><span id='text-jumlah-".$data1['id']."'>". $data1['jumlah'] ."</span> <input type='hidden' id='input-jumlah-".$data1['id']."'  value='".$data1['jumlah']."' class='input_jumlah' data-subtotal='".$data1['subtotal']."' data-id='".$data1['id']."' autofocus='' data-harga='".$data1['harga']."' data-faktur='".$data1['no_faktur']."' data-kode='".$data1['kode_barang']."' > </td>
+
+      <td>". $data1['nama'] ."</td>
+      <td>". rp($data1['harga']) ."</td>
+      <td><span id='text-subtotal-".$data1['id']."'>". rp($data1['subtotal']) ."</span></td>
+
+      <td> <button class='btn btn-sm btn-danger btn-hapus' id='btn-hapus-".$data1['id']."' data-subtotal='".$data1['subtotal']."' data-id='". $data1['id'] ."' data-nama-barang='". $data1['nama_barang'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td> 
+      </tr>";
+      }
+
+//Untuk Memutuskan Koneksi Ke Database
+
+mysqli_close($db); 
+      
+    ?>
+    </tbody>
+
+  </table>
+  </div>
+        </span>
                   
 
   </div><!-- end of col sm 8 --> <!--tag penutup col sm 8-->
 
- <div class="col-sm-4" id="col_sm_4"> <!--tag pembuka col sm 4-->
+ <div class="col-sm-3" id="col_sm_4"> <!--tag pembuka col sm 4-->
 
   <form action="proses_bayar_item_keluar.php" id="form_item_keluar" method="POST"><!--tag pembuka form-->
 
@@ -111,9 +167,7 @@ $session_id = session_id();
       <input type="text" name="total" id="total_item_keluar" class="form-control" placeholder="Total" readonly=""  >
 
       <label>Keterangan </label><br>
-      <textarea name="keterangan" id="keterangan" class="form-control"></textarea>
-
-      <br>
+      <textarea name="keterangan" style="height: 80px" id="keterangan" class="form-control"></textarea>
 
 <input type="hidden" name="session_id" id="nomorfaktur" class="form-control" value="<?php echo $session_id; ?>">
 
@@ -181,7 +235,7 @@ $session_id = session_id();
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Edit Data Item Masuk</h4>
+        <h4 class="modal-title">Edit Data Item Keluar</h4>
       </div>
       <div class="modal-body">
   <form role="form">
@@ -220,61 +274,6 @@ $session_id = session_id();
 </div><!-- end of modal edit data  -->
 
 
-      <!--untuk mendefinisikan sebuah bagian dalam dokumen-->  
-      <span id="result">  
-
-        <div class="table-responsive">
-      <!--tag untuk membuat garis pada tabel-->     
-  <table id="tableuser" class="table table-bordered">
-    <thead>
-      <th> Kode Barang </th>
-      <th> Nama Barang </th>
-      <th> Jumlah </th>
-      <th> Satuan </th>
-      <th> Harga </th>
-      <th> Subtotal </th>
-    
-      <th> Hapus </th>
-      
-    </thead>
-    
-    <tbody>
-    <?php
-
-    //menampilkan semua data yang ada pada tabel tbs penjualan dalam DB
-     $perintah = $db->query("SELECT * FROM tbs_item_keluar
-                WHERE session_id = '$session_id'");
-
-      //menyimpan data sementara yang ada pada $perintah
-
-      while ($data1 = mysqli_fetch_array($perintah))
-      {
-        //menampilkan data
-      echo "<tr class='tr-id-".$data1['id']."'>
-      <td>". $data1['kode_barang'] ."</td>
-      <td>". $data1['nama_barang'] ."</td>
-
-      <td class='edit-jumlah' data-id='".$data1['id']."'><span id='text-jumlah-".$data1['id']."'>". $data1['jumlah'] ."</span> <input type='hidden' id='input-jumlah-".$data1['id']."'  value='".$data1['jumlah']."' class='input_jumlah' data-subtotal='".$data1['subtotal']."' data-id='".$data1['id']."' autofocus='' data-harga='".$data1['harga']."' data-faktur='".$data1['no_faktur']."' data-kode='".$data1['kode_barang']."' > </td>
-
-      <td>". $data1['satuan'] ."</td>
-      <td>". rp($data1['harga']) ."</td>
-      <td><span id='text-subtotal-".$data1['id']."'>". rp($data1['subtotal']) ."</span></td>
-
-      <td> <button class='btn btn-danger btn-hapus' id='btn-hapus-".$data1['id']."' data-subtotal='".$data1['subtotal']."' data-id='". $data1['id'] ."' data-nama-barang='". $data1['nama_barang'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td> 
-      
-      </tr>";
-      }
-
-//Untuk Memutuskan Koneksi Ke Database
-
-mysqli_close($db); 
-      
-    ?>
-    </tbody>
-
-  </table>
-  </div>
-        </span>
 
 
       <span id="demo"> </span>
@@ -315,12 +314,20 @@ $(document).ready(function(){
 
   </script>
 
+<script>
+$(function() {
+    $( "#kode_barang" ).autocomplete({
+        source: 'kode_barang_autocomplete.php'
+    });
+});
+</script>
 
    <script>
    //untuk menampilkan data yang diambil pada form tbs penjualan berdasarkan id=formtambahproduk
   $("#submit_produk").click(function(){
 
     var kode_barang = $("#kode_barang").val();
+          var kode_barang = kode_barang.substr(0, kode_barang.indexOf('('));
     var nama_barang = $("#nama_barang").val();
     var jumlah_barang = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#jumlah_barang").val()))));
     var jml_barang = $("#jml_barang").val();
@@ -330,7 +337,6 @@ $(document).ready(function(){
     var stok = jml_barang - jumlah_barang;
 
     var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#total_item_keluar").val()))));
-
                                           
     if (total == '') 
     {
@@ -340,7 +346,6 @@ $(document).ready(function(){
                                           
                                           
     var sub_tbs = parseInt(harga,10) * parseInt(jumlah_barang,10);
-                                          
     var subtotal = parseInt(total,10) + parseInt(sub_tbs,10);
                                           
                                           
@@ -364,13 +369,10 @@ $(document).ready(function(){
       else
       {
 
-        $("#total_item_keluar").val(tandaPemisahTitik(subtotal));
-                                    
+        $("#total_item_keluar").val(tandaPemisahTitik(subtotal));     
  $.post("proses_tbs_item_keluar.php",{session_id:session_id,kode_barang:kode_barang,jumlah_barang:jumlah_barang,satuan:satuan,nama_barang:nama_barang,harga:harga},function(info) {
 
-
-     $("#result").html(info);
-     $("#result").load('tabel_item_keluar.php');
+     $("#tbody").prepend(info);
      $("#kode_barang").val('');
      $("#nama_barang").val('');
      $("#jumlah_barang").val('');
@@ -411,8 +413,7 @@ $(".modal_baru").html(data);
    </script>
 
 
-<script>
-
+<script type="text/javascript">
 
    //perintah javascript yang diambil dari form proses_bayar_beli.php dengan id=form_beli
   $("#pembayaran_item_keluar").click(function(){
@@ -469,7 +470,7 @@ $("#demo").html(info);
 
 
   
-  <script>
+  <script type="text/javascript">
 
 $(document).ready(function(){
 
@@ -480,6 +481,7 @@ $.post("cek_total_item_keluar.php",
         session_id: session_id
     },
     function(data){
+      data = data.replace(/\s+/g, '');
         $("#total_item_keluar"). val(data);
     });
 
@@ -493,7 +495,6 @@ $.post("cek_total_item_keluar.php",
 
             <script type="text/javascript">
             $(document).ready(function(){
-            
             
             //fungsi hapus data 
             $(document).on('click', '.btn-hapus', function (e) {
@@ -511,19 +512,17 @@ $.post("cek_total_item_keluar.php",
                 sub_total = 0;
               }
 
-
-            
             var total_akhir = parseInt(total,10) - parseInt(sub_total,10);
 
             $("#total_item_keluar").val(tandaPemisahTitik(total_akhir));
 
 
-
-
             $.post("hapus_tbs_item_keluar.php",{id:id},function(data){
-            if (data == "sukses") {
+            if (data != "") {
+            
             $(".tr-id-"+id).remove();
-          }
+            
+            }
             });
             });
       
@@ -533,8 +532,6 @@ $.post("cek_total_item_keluar.php",
               return false;
               });
         });
-
- 
 
    </script> 
 
@@ -561,20 +558,17 @@ $.post("cek_total_item_keluar.php",
         $(document).ready(function(){
         $("#kode_barang").blur(function(){
 
-          var kode_barang = $(this).val();
-          var session_id = $("#session_id").val();
-
-          $.post("cek_barang_item_masuk.php",
-          {
-          kode_barang: $(this).val()
-          },
-          function(data){
+           var session_id = $("#session_id").val();
+          var kode_barang = $('#kode_barang').val();
+          var kode_barang = kode_barang.substr(0, kode_barang.indexOf('('));
+          
+          $.post("cek_barang_item_masuk.php",{kode_barang:kode_barang},function(data){
           $("#jml_barang"). val(data);
           });
           
     $.post('cek_kode_barang_tbs_item_keluar.php',{kode_barang:kode_barang,session_id:session_id}, function(data){
     
-    if(data == 1){
+    if(data != ''){
     alert("Anda Tidak Bisa Menambahkan Barang Yang Sudah Ada, Silakan Edit atau Pilih Barang Yang Lain !");
     $("#kode_barang").val('');
     $("#nama_barang").val('');
@@ -582,7 +576,7 @@ $.post("cek_total_item_keluar.php",
     
     });////penutup function(data)
 
-      $.getJSON('lihat_item_keluar.php',{kode_barang:$(this).val()}, function(json){
+      $.getJSON('lihat_item_keluar.php',{kode_barang:kode_barang}, function(json){
       
       if (json == null)
       {
@@ -596,7 +590,7 @@ $.post("cek_total_item_keluar.php",
       {
         $('#nama_barang').val(json.nama_barang);
         $('#satuan_produk').val(json.satuan);
-        $('#harga_produk').val(json.harga_jual);
+        $('#harga_produk').val(json.harga_jual);     
       }
                                               
         });

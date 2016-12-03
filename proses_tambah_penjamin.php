@@ -12,7 +12,7 @@
         $alamat = stringdoang($_POST['alamat']);
         $no_telp = angkadoang($_POST['no_telp']);
         $harga = stringdoang($_POST['level_harga']);
-        $cakupan_layanan= stringdoang($_POST['layanan']);
+        $cakupan_layanan = $_POST['layanan'];
         $jatuh_tempo = stringdoang($_POST['jatuh_tempo']);
   
     $perintah->execute();
@@ -24,7 +24,7 @@
     }
     else 
     {  
-            header('location:penjamin.php');
+      echo'<META HTTP-EQUIV="Refresh" Content="0; URL=penjamin.php">';
     }
 
 

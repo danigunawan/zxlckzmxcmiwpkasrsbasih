@@ -10,7 +10,7 @@
  $cara_bayar = $_GET['cara_bayar'];
  
 
-$query = $db->query("SELECT tanggal,nama_suplier FROM pembayaran_hutang WHERE no_faktur_pembayaran = '$nomor_faktur_pembayaran'");
+$query = $db->query("SELECT tanggal,nama_suplier,keterangan FROM pembayaran_hutang WHERE no_faktur_pembayaran = '$nomor_faktur_pembayaran'");
 $ambil_tanggal = mysqli_fetch_array($query);
 
  
@@ -22,6 +22,10 @@ $no_faktur_pembelian = $data50['no_faktur_pembelian'];
 
 
  ?>
+
+<!-- js untuk tombol shortcut -->
+ <script src="shortcut.js"></script>
+<!-- js untuk tombol shortcut -->
 
 <style type="text/css">
   .disabled {
@@ -43,7 +47,7 @@ $no_faktur_pembelian = $data50['no_faktur_pembelian'];
  <div class="container">
  
 <h3><u>FORM EDIT PEMBAYARAN HUTANG</u> </h3>
-<br><br>
+<br>
 
 <!-- Modal Hapus data -->
 <div id="modal_hapus" class="modal fade" role="dialog">
@@ -137,49 +141,25 @@ $no_faktur_pembelian = $data50['no_faktur_pembelian'];
 <div class="row">
 
 
-
-
-          <div class="form-group col-sm-6">
-          <label> Nomor Faktur Pembayaran </label><br>
-          <input type="text" name="no_faktur_pembayaran" id="no_faktur_pembayaran" class="form-control" readonly="" value="<?php echo $nomor_faktur_pembayaran; ?>" required="" >
-          </div>
-
-
-
-
-          <div class="form-group col-sm-6">
-          <label> Tanggal </label><br>
-          <input type="text" value ="<?php echo $ambil_tanggal['tanggal']; ?>" name="tanggal" id="tanggal" placeholder="Tanggal"  class="form-control tanggal" required="" >
-          </div>
-
-          <input type="hidden" class="form-control" id="jumlah1" name="jumlah0" placeholder="jumlah">
-
-
-          <div class="form-group col-sm-8">
+<div class="form-group col-sm-3">
           <label> Suplier </label>
           <br>
-          <select type="text" name="suplier" id="nama_suplier" class="form-control chosen" required="">
-          <option value="<?php echo $ambil_tanggal['nama_suplier']; ?>"><?php echo $nama; ?></option>
+          <select type="text" name="suplier" id="nama_suplier" class="form-control chosen" required=""></option>
           
           <?php 
           include 'db.php';
           
-          // menampilkan data yang ada pada tabel suplier
-          $query = $db->query("SELECT * FROM suplier ");
-          
-          // menyimpan data sementara yang ada pada $query
-          while($data = mysqli_fetch_array($query))
+           $take = $db->query("SELECT id,nama FROM suplier");
+
+          while($data = mysqli_fetch_array($take))
           {
-          
           echo "<option value='".$data['id'] ."'>".$data['nama'] ."</option>";
           }
-          
-          
           ?>
           </select>
           </div>
 
-          <div class="form-group col-sm-4">
+         <div class="form-group col-sm-4">
           <label> Cara Bayar </label><br>
           <select type="text" name="cara_bayar" id="carabayar1" class="form-control">
 
@@ -213,16 +193,25 @@ $no_faktur_pembelian = $data50['no_faktur_pembelian'];
           </select>
           </div>
 
+        <div class="form-group col-sm-3">
+          <label> No Faktur Pembayaran </label><br>
+          <input type="text" name="no_faktur_pembayaran" id="no_faktur_pembayaran" class="form-control" readonly="" value="<?php echo $nomor_faktur_pembayaran; ?>" required="" >
+          </div>
 
+          <div class="form-group col-sm-2">
+          <label> Tanggal </label><br>
+          <input type="text" value ="<?php echo $ambil_tanggal['tanggal']; ?>" name="tanggal" id="tanggal" placeholder="Tanggal"  class="form-control tanggal" required="" >
+          </div>
 
-          
+         
+
+          <input type="hidden" class="form-control" id="jumlah1" name="jumlah0" placeholder="jumlah">
+    
 
 </div> <!-- tag penutup div row -->
 
+<button type="button" class="btn btn-info" id="cari_produk_pembelian" data-toggle="modal" data-target="#myModal"> <i class='fa fa-search'> </i> Cari (F1)</button>
 
-<br>
-<button type="button" class="btn btn-info" id="cari_produk_pembelian" data-toggle="modal" data-target="#myModal"> <i class='fa fa-search'> </i> Cari</button>
-<br><br>
 <!-- Tampilan Modal -->
 <div id="myModal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg">
@@ -240,7 +229,7 @@ $no_faktur_pembelian = $data50['no_faktur_pembelian'];
 
 <div class="table-responsive">
       <!-- membuat agar ada garis pada tabel, disetiap kolom-->
-        <table id="tableuser" class="table table-bordered">
+        <table id="tableuser" class="table table-bordered ">
     <thead> <!-- untuk memberikan nama pada kolom tabel -->
       
       <th> Nomor Faktur </th>
@@ -313,20 +302,20 @@ $no_faktur_pembelian = $data50['no_faktur_pembelian'];
    <!-- agar tampilan berada pada satu group -->
   <!-- memasukan teks pada kolom kode barang -->
 <br>
-<div class="form-group col-sm-3">
+<div class="form-group col-sm-2">
   <input type="text" class="form-control" name="no_faktur_pembelian" id="nomorfakturbeli" placeholder="Nomor Faktur Beli" readonly="">
   </div>
   
-  <div class="form-group col-sm-3">
+  <div class="form-group col-sm-2">
     <input type="text" class="form-control" name="kredit" id="kredit" placeholder="Kredit" readonly="">
   </div>
 
 
-<div class="form-group col-sm-3">
+<div class="form-group col-sm-2">
           <input type="text" name="potongan" id="potongan_penjualan" class="form-control" placeholder="Potongan" autocomplete="off">
 </div>
 
-  <div class="form-group col-sm-3">
+  <div class="form-group col-sm-2">
     <input type="text" class="form-control"  onkeydown="return numbersonly(this, event);" name="jumlah_bayar" id="jumlah_bayar" placeholder="Jumlah Bayar" autocomplete="off">
   </div>
 
@@ -351,19 +340,21 @@ $no_faktur_pembelian = $data50['no_faktur_pembelian'];
 
 
      <!--Mendefinisikan sebuah bagian dalam dokumen-->  
-  <br>   
-  <br> 
+
+<div class="row">
+<div class="col-sm-9">
   <span id="result"> 
 
   <div class="table-responsive">
 
   <!--tag untuk membuat garis pada tabel-->       
-  <table id="tableuser" class="table table-bordered">
+  <table id="tableuser" class="table table-bordered table-sm">
     <thead>
-      <th> Nomor Faktur Pembayaran </th>
-      <th> Nomor Faktur Pembelian </th>
+      <th> No Faktur Bayar </th>
+      <th> No Faktur Beli </th>
+      <th> Suplier</th>
       <th> Tanggal </th>
-      <th> Tanggal JT </th>
+      <th> Jatuh Tempo </th>
       <th> Kredit </th>
       <th> Potongan </th>
       <th> Total</th>
@@ -385,11 +376,17 @@ $no_faktur_pembelian = $data50['no_faktur_pembelian'];
       while ($data1 = mysqli_fetch_array($perintah))
       {
 
-     
+      $suplier = $db->query("SELECT id,nama FROM suplier WHERE id = '$data1[suplier]'");
+        $out = mysqli_fetch_array($suplier);
+        if ($data1['suplier'] == $out['id'])
+        {
+          $out['nama'];
+        }
         // menampilkan data
       echo "<tr>
       <td>". $data1['no_faktur_pembayaran'] ."</td>
       <td>". $data1['no_faktur_pembelian'] ."</td>
+      <td>". $out['nama'] ."</td>
       <td>". $data1['tanggal'] ."</td>
       <td>". $data1['tanggal_jt'] ."</td>
       <td>". rp($data1['kredit']) ."</td>
@@ -413,45 +410,53 @@ mysqli_close($db);
   </table>
   </div>
         </span> <!--tag penutup span-->
+</div><!--col-sm table 9-->
 
-<br>
+
+<div class="col-sm-3">
+
+<div class="card card-block">
 <div class="total">
 <div class="form-group">
-          <label> Total Bayar </label><br>
-          <input type="text" name="total_bayar" id="totalbayar" placeholder="Total Bayar" class="form-control" readonly="" required="">
+          <label> <b>Total Bayar </b></label><br>
+          <b><input style="font-size:30px" type="text" name="total_bayar" id="totalbayar" placeholder="Total Bayar" class="form-control" readonly="" required=""></b>
           </div>
 
-
-
-<div class="form-group">
+          <div class="form-group">
           <label> Keterangan </label><br>
-          <textarea name="keterangan" id="keterangan" class="form-control" ></textarea>  
+          <textarea name="keterangan"  id="keterangan" class="form-control" >
+          <?php echo $ambil_tanggal['keterangan']; ?>
+          </textarea>  
           <br>
 
 
-
 <button type="submit" id="pembayaran" class="btn btn-info"><i class="fa fa-send"></i> Bayar</button>
+
+</div>
+
 <a href="form_pembayaran_hutang.php" class="btn btn-primary" style="display: none" id="transaksi_baru"><i class="fa fa-refresh"></i> Transaksi Baru</a>
 
 <a href='cetak_pembayaran_hutang.php' id="cetak_hutang" style="display: none;" class="btn btn-success" target="blank"><i class="fa fa-print"> </i> Cetak Pembayaran Hutang </a>
 
 
-
-          
-<br>
 <div class="alert alert-success" id="alert_berhasil" style="display:none">
   <strong>Success!</strong> Pembayaran Berhasil
 </div>
 
-<br>
-<br><br>
 
-<label> User : <?php echo $_SESSION['user_name']; ?> </label> 
+<input type="hidden" name="user" id="user" value="<?php echo $_SESSION['user_name']; ?>" class="form-control" readonly="" required="">
+
+
+
           <!-- readonly = digunakan agar teks atau isi hanya bisa dibaca tapi tidak bisa diubah -->
   </div>
 
 <span id="demo"> </span>
 </div>
+
+  
+</div>
+</div><!--row 9 di table-->
 
 </div><!-- end of container -->
 
@@ -534,7 +539,6 @@ $(document).ready(function(){
 
     $.post("proses_tbs_edit_pembayaran_hutang.php", {no_faktur_pembayaran:no_faktur_pembayaran,no_faktur_pembelian:no_faktur_pembelian,tanggal:tanggal,tanggal_jt:tanggal_jt,total:total_kredit,jumlah_bayar:jumlah_bayar,kredit:kredit,suplier:suplier,potongan:potongan},function(info) {
 
-
     $("#result").load('tabel-tbs-edit-pembayaran-hutang.php?no_faktur_pembayaran=<?php echo $nomor_faktur_pembayaran; ?>');
      $("#nomorfakturbeli").val('');
      $("#kredit").val('');
@@ -576,6 +580,7 @@ $(document).ready(function(){
      var no_faktur_pembayaran = $("#no_faktur_pembayaran").val();
 
      $.post("modal_edit_hutang_baru.php", {suplier:suplier,no_faktur_pembayaran:no_faktur_pembayaran}, function(info) {
+
 
       $(".modal_hutang_baru").html(info);
       
@@ -675,23 +680,15 @@ $("#transaksi_baru").show();
 
  $.post("proses_bayar_edit_hutang.php", {tanggal:tanggal,no_faktur_pembayaran:no_faktur_pembayaran,no_faktur_pembelian:no_faktur_pembelian,cara_bayar:cara_bayar,suplier:suplier,keterangan:keterangan,total:total,user_buat:user_buat,dari_kas:dari_kas,kredit:kredit,status:status,total_bayar:total_bayar},function(info) {
 
-
+      
 $("#demo").html(info);
 
     $("#alert_berhasil").show();
     $("#result").load('tabel-tbs-edit-pembayaran-hutang.php?no_faktur_pembayaran=<?php echo $nomor_faktur_pembayaran; ?>');
     $("#cetak_hutang").show();
-     $("#nama_suplier").val('');
-     $("#carabayar1").val('');
-     $("#totalbayar").val('');
-     $("#keterangan").val('');
-    
-  
-    
-       
+        window.location="pembayaran_hutang.php";
+     
    });
-
-
 
  }
 
@@ -718,6 +715,8 @@ $.post("cek_total_edit_pembayaran_hutang.php",
         no_faktur_pembayaran: "<?php echo $nomor_faktur_pembayaran; ?>"
     },
     function(data){
+            data = data.replace(/\s+/g, '');
+
         $("#totalbayar"). val(data);
     });
 
@@ -732,6 +731,8 @@ $.post("cek_total_edit_pembayaran_hutang.php",
         no_faktur_pembayaran: "<?php echo $nomor_faktur_pembayaran; ?>"
     },
     function(data){
+                  data = data.replace(/\s+/g, '');
+
         $("#totalbayar"). val(data);
     });
 
@@ -751,6 +752,8 @@ $.post("cek_total_edit_pembayaran_hutang.php",
         no_faktur_pembayaran: "<?php echo $nomor_faktur_pembayaran; ?>"
     },
     function(data){
+            data = data.replace(/\s+/g, '');
+
         $("#totalbayar"). val(data);
     });
 
@@ -765,6 +768,8 @@ $.post("cek_total_edit_pembayaran_hutang.php",
         no_faktur_pembayaran: "<?php echo $nomor_faktur_pembayaran; ?>"
     },
     function(data){
+            data = data.replace(/\s+/g, '');
+
         $("#totalbayar"). val(data);
     });
 
@@ -860,12 +865,7 @@ $(document).ready(function(){
   });
 </script>
 
-
-
-                             
-
-
-        <script type="text/javascript">
+<script type="text/javascript">
     
     //fungsi hapus data 
     $(".btn-hapus").click(function(){
@@ -888,8 +888,10 @@ $(document).ready(function(){
     var id = $("#id_hapus").val();
     var no_faktur_pembelian = $("#no_faktur_pembelian").val();
     var kredit = $("#jumlah_hutang").val();
+
     $.post("hapus_tbs_edit_pembayaran_hutang.php",{id:id, no_faktur_pembelian:no_faktur_pembelian, kredit:kredit},function(data){
     if (data != "") {
+
     $("#result").load('tabel-tbs-edit-pembayaran-hutang.php?no_faktur_pembayaran=<?php echo $nomor_faktur_pembayaran; ?>');
     $("#totalbayar").val('');
     $("#modal_hapus").modal('hide');
@@ -965,6 +967,14 @@ $(document).ready(function(){
       
       </script>
 
+<script type="text/javascript">
+   shortcut.add("f1", function() {
+        // Do something
+
+        $("#cari_produk_pembelian").click();
+
+    });
+</script>
 
 
 

@@ -1,6 +1,4 @@
 <?php  include 'session_login.php';
-
-
 // memasukkan file
  include 'header.php';
  include 'navbar.php';
@@ -10,10 +8,11 @@
  $id = $_GET['id'];
  
  // perintah untuk menampilkan data yang ada pada tabel barang berdasarkan id
- $query = $db->query("SELECT * FROM barang WHERE id = '$id'");
+ $query = $db->query("SELECT s.nama,b.jenis_barang,b.nama_barang,b.kode_barang,b.harga_beli,b.harga_jual,b.harga_jual2,b.id,b.harga_jual3,b.harga_jual4,b.harga_jual5,b.harga_jual6,b.harga_jual7,b.berkaitan_dgn_stok,b.stok_barang,b.satuan,b.kategori,b.gudang, b.status, b.limit_stok, b.over_stok, b.suplier, b.golongan, b.tipe_barang FROM barang b INNER JOIN satuan s ON b.satuan = s.id WHERE b.id = '$id'");
  
  // perintah untuk menyimpan data sementara yang ada pada $query
  $data = mysqli_fetch_array($query);
+
  ?>
 
 
@@ -22,38 +21,130 @@
 <form enctype="multipart/form-data" action="proseseditbarang.php" method="post">
 <div class="container">
 
-				
 					<!-- membuat agar tampilan form berada dalam satu group-->
 					<div class="form-group">
-					<label>Nama Barang </label><br>
-					<input type="text" name="nama_barang" value="<?php echo $data['nama_barang']; ?>" class="form-control" autocomplete="off" required="" >
+							<label>Nama Barang </label><br>
+							<input type="text" name="nama_barang" value="<?php echo $data['nama_barang']; ?>" class="form-control" autocomplete="off" required="" >
 					</div>
+
+
+					<div class="form-group">
+                            <label> Golongan Produk </label>
+                            <br>
+                            <select type="text" name="golongan_produk" class="form-control" required="">
+                            <option value="<?php echo $data['berkaitan_dgn_stok']; ?>"><?php echo $data['berkaitan_dgn_stok']; ?></option>
+                            <option> Barang </option>
+                            <option> Jasa </option>
+                            </select>
+                     </div>
+
+					<div class="form-group">
+                            <label> Tipe Produk </label>
+                            <br>
+                            <select type="text" id="tipe_produk" name="tipe" class="form-control" required="">
+                            <option value="<?php echo $data['tipe_barang']; ?>"> <?php echo $data['tipe_barang']; ?></option>
+                            <option value="Barang"> Barang </option>
+                            <option value="Jasa"> Jasa </option>
+                            <option value="Alat"> Alat </option>
+                            <option value="BHP"> BHP </option>
+                            <option value="Obat Obatan"> Obat-obatan </option>
+                            </select>
+                            </div>
+
+
+                            <div class="form-group">
+                            <label for="sel1">Jenis Obat</label>
+                            <select class="form-control" id="jenis_obat" name="jenis_obat" autocomplete="off">
+						<option value="<?php echo $data['jenis_barang']; ?>"> <?php echo $data['jenis_barang']; ?>            
+						<?php
+                            $query = $db->query("SELECT * FROM jenis");       
+                            while ( $data = mysqli_fetch_array($query)) {
+                            echo "<option value='".$data['nama']."'>".$data['nama']."</option>";
+                            }
+                            ?>
+                            </select>
+                            </div>
+
+                            	<div class="form-group">
+							<label> Kategori </label>
+							<br>
+							<select type="text" name="kategori_obat" id="kategori_obat" class="form-control" required="">
+							<option value="<?php echo $data['kategori']; ?>"> <?php echo $data['kategori']; ?> </option>
+							<?php 
+							
+							$ambil_kategori = $db->query("SELECT * FROM kategori");
+							
+							while($data_kategori = mysqli_fetch_array($ambil_kategori))
+							{
+							
+							echo "<option>".$data_kategori['nama_kategori'] ."</option>";
+							
+							}
+							
+							?>
+							</select>
+							</div>
+
+
+                            <div class="form-group">
+                            <label> Golongan Obat </label>
+                            <br>
+                            <select type="text" id="golongan_obat" name="golongan_obat" class="form-control">
+                            <option value="<?php echo $data['golongan']; ?>"> <?php echo $data['golongan']; ?> </option>
+                            <option value="Obat Keras"> Obat Keras </option>
+                            <option value="Obat Bebas"> Obat Bebas </option>
+                            <option value="Obat Bebas"> Obat Bebas Terbatas </option>
+                            <option value="Obat Psikotropika"> Obat Psikotropika </option>
+                            <option value="Narkotika"> Narkotika </option>
+                            </select>
+                            </div>
 
 					<div class="form-group">
 					<label> Harga Beli </label><br>
-					<input type="text" name="harga_beli" value="<?php echo $data['harga_beli']; ?>" class="form-control" autocomplete="off" required="" >
+					<input type="text" name="harga_beli" id="harga_beli" value="<?php echo $data['harga_beli']; ?>" class="form-control" autocomplete="off" required="" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" >
 					</div>
 
 							<div class="form-group">
 							<label> Harga Jual Level 1</label>
 							<br>
-							<input type="text" placeholder="Harga Jual Level 1" name="harga_jual" id="harga_jual" value="<?php echo $data['harga_jual'] ?>" class="form-control" autocomplete="off" required="">
+							<input type="text" placeholder="Harga Jual Level 1" name="harga_jual" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" id="harga_jual" value="<?php echo $data['harga_jual'] ?>" class="form-control" autocomplete="off" required="">
 							</div>
 							<div class="form-group">
 							<label> Harga Jual Level 2</label>
 							<br>
-							<input type="text" placeholder="Harga Jual Level 2" name="harga_jual_2" id="harga_jual2" value="<?php echo $data['harga_jual2'] ?>" class="form-control" autocomplete="off" >
+							<input type="text" placeholder="Harga Jual Level 2" name="harga_jual_2" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" id="harga_jual2" value="<?php echo $data['harga_jual2'] ?>" class="form-control" autocomplete="off" >
 							</div>
 							<div class="form-group">
 							<label> Harga Jual Level 3</label>
 							<br>
-							<input type="text" placeholder="Harga Jual Level 3" name="harga_jual_3" id="harga_jual3"  value="<?php echo $data['harga_jual3'] ?>" class="form-control" autocomplete="off" >
+							<input type="text" placeholder="Harga Jual Level 3" name="harga_jual_3" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" id="harga_jual3"  value="<?php echo $data['harga_jual3'] ?>" class="form-control" autocomplete="off" >
 							</div>
+
+							<div class="form-group">
+                            <label> Harga Jual Level 4</label>
+                            <br>
+                            <input type="text" placeholder="Harga Jual Level 4" name="harga_jual_4" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" id="harga_jual4" value="<?php echo $data['harga_jual4'] ?>" class="form-control" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label> Harga Jual Level 5</label>
+                            <br>
+                            <input type="text" placeholder="Harga Jual Level 5" name="harga_jual_5" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" id="harga_jual5" value="<?php echo $data['harga_jual5'] ?>" class="form-control" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label> Harga Jual Level 6</label>
+                            <br>
+                            <input type="text" placeholder="Harga Jual Level 6" name="harga_jual_6" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" id="harga_jual6" value="<?php echo $data['harga_jual6'] ?>" class="form-control" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label> Harga Jual Level 7</label>
+                            <br>
+                            <input type="text" placeholder="Harga Jual Level 7" name="harga_jual_7" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" id="harga_jual7" value="<?php echo $data['harga_jual7'] ?>" class="form-control" autocomplete="off">
+                        </div>
 					
 					<div class="form-group">
 					<label> Satuan </label><br>
 					<select type="text" name="satuan" class="form-control" required="" >
-					
+					<option value="<?php echo $data['satuan'] ?>"><?php echo $data['satuan'] ?></option>
 					
 					<?php 
 					
@@ -68,7 +159,7 @@
 					{
 					
 					//menampilkan data atau isi dari $data
-					echo "<option>".$data1['nama'] ."</option>";
+					echo "<option value='".$data1['id'] ."'>".$data1['nama'] ."</option>";
 					}
 					
 					
@@ -78,10 +169,10 @@
 					</div>
 
 							
-							<div class="form-group">
+							<div class="form-group" style="display: none">
 							<label> Gudang </label>
 							<br>
-							<select type="text" name="gudang" class="form-control" required="">
+							<select type="text" name="gudang" class="form-control" >
 							<option value="<?php echo $data['gudang']; ?>"> <?php echo $data['gudang']; ?> </option>
 							<?php 
 							
@@ -100,25 +191,7 @@
 
 
 							
-							<div class="form-group">
-							<label> Kategori </label>
-							<br>
-							<select type="text" name="kategori" class="form-control" required="">
-							<option value="<?php echo $data['kategori']; ?>"> <?php echo $data['kategori']; ?> </option>
-							<?php 
-							
-							$ambil_kategori = $db->query("SELECT * FROM kategori");
-							
-							while($data_kategori = mysqli_fetch_array($ambil_kategori))
-							{
-							
-							echo "<option>".$data_kategori['nama_kategori'] ."</option>";
-							
-							}
-							
-							?>
-							</select>
-							</div>
+						
 
 							<!-- membuat agar tampilan form berada dalam satu group-->
 							<div class="form-group">
@@ -130,18 +203,9 @@
 							</select>
 							</div>
 							
+						
 							
 							
-							<div class="form-group">
-                            <label> Tipe </label>
-                            <br>
-                            <select type="text" name="tipe" class="form-control" required="">
-                            <option value="<?php echo $data['berkaitan_dgn_stok']; ?>"><?php echo $data['berkaitan_dgn_stok']; ?></option>
-                            <option> Barang </option>
-                            <option> Jasa </option>
-							</select>
-							</div>
-					
 					<div class="form-group">
 					<label> Suplier </label><br>
 					<select type="text" name="suplier" class="form-control" required="" >
@@ -174,12 +238,12 @@
 
 					<div class="form-group">
 					<label> Limit Stok </label><br>
-					<input type="text" name="limit_stok" value="<?php echo $data['limit_stok']; ?>" class="form-control" autocomplete="off"  >
+					<input type="text" name="limit_stok" id="limit_stok" value="<?php echo $data['limit_stok']; ?>" class="form-control" autocomplete="off"  >
 					</div>
 
 					<div class="form-group">
 					<label> Over Stok </label><br>
-					<input type="text" name="over_stok" value="<?php echo $data['over_stok']; ?>" class="form-control" autocomplete="off" >
+					<input type="text" name="over_stok" id="over_stok" value="<?php echo $data['over_stok']; ?>" class="form-control" autocomplete="off" >
 					</div>
 
 
@@ -192,8 +256,66 @@
 </form>
 
 
-<?php 
 
+<script type="text/javascript">
+    $(document).ready(function(){
+    	var tipe_produk = $('#tipe_produk').val();
+
+            
+             if(tipe_produk == 'Jasa'){
+                $("#golongan_obat").attr("disabled", true);
+                $("#kategori_obat").attr("disabled", true);
+                $("#jenis_obat").attr("disabled", true);
+                $("#harga_beli").attr("readonly", true);
+                $("#limit_stok").attr("readonly", true);
+                $("#over_stok").attr("readonly", true);
+            }
+
+            else{
+
+                $("#golongan_obat").attr("disabled", false);
+                $("#kategori_obat").attr("disabled", false);
+                $("#jenis_obat").attr("disabled", false);
+                $("#harga_beli").attr("disabled", false);
+                $("#limit_stok").attr("disabled", false);
+                $("#over_stok").attr("disabled", false);
+
+            }
+            
+        });
+
+</script>
+<script type="text/javascript">
+        $('#tipe_produk').change(function(){
+            var tipe_produk = $('#tipe_produk').val();
+
+            
+             if(tipe_produk == 'Jasa'){
+                $("#golongan_obat").attr("disabled", true);
+                $("#kategori_obat").attr("disabled", true);
+                $("#jenis_obat").attr("disabled", true);
+                $("#harga_beli").attr("disabled", true);
+                $("#limit_stok").attr("disabled", true);
+                $("#over_stok").attr("disabled", true);
+            }
+
+            else{
+
+                $("#golongan_obat").attr("disabled", false);
+                $("#kategori_obat").attr("disabled", false);
+                $("#jenis_obat").attr("disabled", false);
+                $("#harga_beli").attr("disabled", false);
+                $("#limit_stok").attr("disabled", false);
+                $("#over_stok").attr("disabled", false);
+
+            }
+            
+            
+        });
+
+</script>
+
+<?php 
 // memasukan file footer.php
 include 'footer.php'; 
 ?>

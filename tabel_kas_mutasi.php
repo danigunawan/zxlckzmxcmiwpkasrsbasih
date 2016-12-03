@@ -66,6 +66,10 @@ $no_faktur = $nomor."/KMT/".$data_bulan_terakhir."/".$tahun_terakhir;
  }
 
 
+
+$pilih_akses_kas_mutasi = $db->query("SELECT * FROM otoritas_kas_mutasi WHERE id_otoritas = '$_SESSION[otoritas_id]'");
+$kas_mutasi = mysqli_fetch_array($pilih_akses_kas_mutasi);
+
  ?>
 
 <table id="tableuser" class="table table-bordered">

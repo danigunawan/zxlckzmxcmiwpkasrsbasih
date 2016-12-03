@@ -1,5 +1,4 @@
-<?php 
-session_start();
+<?php include 'session_login.php';
 include 'db.php';
 include 'sanitasi.php';
 
@@ -14,8 +13,9 @@ $db->begin_transaction();
 
 if ($token == '')
 {
-  
-header("location:registrasi_ugd.php");
+
+
+echo '<META HTTP-EQUIV="Refresh" Content="0; URL=registrasi_ugd.php">';  
 
 }
 else
@@ -27,6 +27,7 @@ $nama_lengkap = stringdoang($_POST['nama_lengkap']);
 $no_ktp = stringdoang($_POST['no_ktp']);
 $tempat_lahir = stringdoang($_POST['tempat_lahir']);
 $tanggal_lahir = stringdoang($_POST['tanggal_lahir']);
+$tanggal_lahir = tanggal_mysql($tanggal_lahir);
 $umur = stringdoang($_POST['umur']);
 $alamat_sekarang = stringdoang($_POST['alamat_sekarang']);
 $alamat_ktp = stringdoang($_POST['alamat_ktp']);
@@ -59,7 +60,7 @@ $alamat_penanggung = stringdoang($_POST['alamat_penanggung']);
 
 
 $jam =  date("H:i:s");
-$tanggal_sekarang = date("Y-m-d ");
+$tanggal_sekarang = date("Y-m-d");
 $waktu = date("Y-m-d H:i:s");
 $bulan_php = date('m');
 $tahun_php = date('Y');
@@ -69,45 +70,18 @@ $keluar = mysqli_fetch_array($select_to);
 
 if ($keluar['nama_pasien'] == $nama_lengkap AND $keluar['no_rm'] == $no_rm)
 {
-header('location:registrasi_ugd.php');
+  echo '<META HTTP-EQUIV="Refresh" Content="0; URL=registrasi_ugd.php">';
 }
 else{
 
-
-                           // START UNTUK AMBIL NO RM NYA LEWAT PROSES SAJA
-
-//ambil 2 angka terakhir dari tahun sekarang 
-
- $tahun_sekarang = substr($tahun_php, 2);
-// end 
-
-//ambil bulan dari no rm terakhir
-$q_rm_tanggal = $db->query("SELECT MONTH(tanggal) as bulan FROM pelanggan ORDER BY id DESC LIMIT 1");
-$v_rm_tanggal = mysqli_fetch_array($q_rm_tanggal);
- $bulan_terakhir_rm = $v_rm_tanggal['bulan'];
-//end 
+// START NO. RM PASIEN
+$ambil_rm = $db->query("SELECT kode_pelanggan FROM pelanggan ORDER BY kode_pelanggan DESC LIMIT 1 ");
+$no_ter = mysqli_fetch_array($ambil_rm);
+$no_rm = $no_ter['kode_pelanggan'] + 1;
 
 
-//ambil no_rm terkahir dari pasien
-$q_rm = $db->query("SELECT kode_pelanggan FROM pelanggan WHERE kode_pelanggan IS NOT NULL ORDER BY id DESC LIMIT 1");
-$v_rm = mysqli_fetch_array($q_rm);
-$no_rm_terakhir = substr($v_rm['kode_pelanggan'],0,-6);
-//end
 
- if ($bulan_terakhir_rm != $bulan_php) {
-  # code...
-  $no_rm = "1-".$bulan_php."-".$tahun_sekarang;
- }
-
- else
- {
-
-  $nomor = 1 + $no_rm_terakhir;
-  $no_rm = $nomor."-".$bulan_php."-".$tahun_sekarang;
- }
-// ENDING UNTUK AMBIL NO RM NYA LEWAT PROSES SAJA
-
-
+// END NO. RM PASIEN
 
 
 // START UNTUK AMBIL NO REG NYA LEWAT PROSES SAJA
@@ -218,7 +192,7 @@ $query11->execute();
                                       // ENDING UNTUK AMBIL NO FAKTUR (PENJUALAN)
 
 
-header('location:registrasi_ugd.php');
+echo '<META HTTP-EQUIV="Refresh" Content="0; URL=registrasi_ugd.php">';
 
 } // biar gk double 
 } // token
@@ -236,6 +210,8 @@ header('location:registrasi_ugd.php');
 }
 // ending agar data tetep masuk awalau koneksi putus 
 
-mysql_close($db);
+mysqli_close($db);
 
  ?>
+
+ <!---->

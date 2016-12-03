@@ -41,7 +41,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 			</script>
 
 
-<div class="container"> <!--start of container-->
+<div style="padding-left:5%; padding-right:5%"> <!--start of container-->
 
 <h3><b>DATA KAS MUTASI</u></b></h3><hr>
 
@@ -79,18 +79,18 @@ echo '<button type="button" id="tambah" class="btn btn-info" data-toggle="modal"
 				<div class="form-group">
 						<div class="form-group">
 						<label> Tanggal </label><br>
-						<input type="text" name="tanggal" id="tanggal1" placeholder="Tanggal" value="<?php echo date("d-m-Y"); ?>" class="form-control tgl" required="" >
+						<input type="text" name="tanggal" autocomplete="off" id="tanggal1" placeholder="Tanggal" value="<?php echo date("d-m-Y"); ?>" class="form-control tgl" >
 						</div>
 						
 						<div class="form-group">
 						<label> Nomor Faktur </label><br>
-						<input type="text" name="no_faktur" id="tambah_faktur" placeholder="Nomor Faktur" class="form-control" readonly="" value="KMT/<?php echo $nomor_faktur; ?>"  >
+						<input type="text" name="no_faktur" autocomplete="off" id="tambah_faktur" placeholder="Nomor Faktur" class="form-control" readonly="">
 						
 						</div>
 						
 						<div class="form-group">
 						<label> Keterangan </label><br>
-						<input type="text" name="keterangan" placeholder="Keterangan" id="keterangan" class="form-control">
+						<input type="text" name="keterangan" autocomplete="off" placeholder="Keterangan" id="keterangan" class="form-control">
 						</div>
 						
 						<div class="form-group">
@@ -143,13 +143,13 @@ echo '<button type="button" id="tambah" class="btn btn-info" data-toggle="modal"
 						
 						<div class="form-group">
 						<label> Jumlah Nominal</label><br>
-						<input type="text" name="jumlah" id="jumlah2" autocomplete="off" placeholder="Jumlah Nominal" class="form-control" required="" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" >
+						<input type="text" name="jumlah" id="jumlah2" autocomplete="off" placeholder="Jumlah Nominal" class="form-control" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" >
 						</div>
 									
 
 				</div>
 
-					<button type="submit" id="submit_tambah" class="btn btn-success"> Submit</button>
+					<button type="submit" id="submit_tambah" class="btn btn-success"><i class="fa fa-plus"></i> Submit</button>
 			</form>
 				
 				<div class="alert alert-success" style="display:none">
@@ -212,7 +212,7 @@ echo '<button type="button" id="tambah" class="btn btn-info" data-toggle="modal"
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Edit Data Satuan</h4>
+        <h4 class="modal-title">Edit Kas Mutasi</h4>
       </div>
       <div class="modal-body">
   <form role="form">
@@ -220,24 +220,26 @@ echo '<button type="button" id="tambah" class="btn btn-info" data-toggle="modal"
 
    					
 						<label> Nomor Faktur </label><br>
-						<input type="text" name="no_faktur" id="faktur_edit" placeholder="Nomor Faktur" class="form-control" readonly="" required="" >
+						<input type="text" name="no_faktur" id="faktur_edit" placeholder="Nomor Faktur" class="form-control" readonly="" >
 						
 					
 
 					<label> Tanggal </label><br>
-					<input type="text" name="tanggal_edit" id="tanggal_edit" placeholder="Tanggal" value="<?php echo date("d-m-Y"); ?>" class="form-control tgl" required="" >
+					<input type="text" name="tanggal_edit" id="tanggal_edit" placeholder="Tanggal" value="<?php echo date("d-m-Y"); ?>" class="form-control tgl" >
 
 					
 						
 					<label> Jumlah Baru </label><br>
-					<input type="text" name="jumlah_baru" id="edit_jumlah" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" class="form-control" required="">
+					<input type="text" name="jumlah_baru" id="edit_jumlah" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" class="form-control">
 
 
-					<input type="hidden" name="jumlah" id="edit_jumlah_lama" value="<?php echo $data['jumlah']; ?>" class="form-control" readonly="" required="">	
+					<input type="hidden" name="jumlah" id="edit_jumlah_lama" value="<?php echo $data['jumlah']; ?>" class="form-control" readonly="">	
 					
-					<input type="hidden" name="ke_akun" id="edit_ke_akun" value="<?php echo $data['ke_akun']; ?>" class="form-control" readonly="" required="">
+					<input type="hidden" name="ke_akun" id="edit_ke_akun" value="<?php echo $data['ke_akun']; ?>" class="form-control" readonly="">
 
-					<input type="hidden" name="dari_akun" id="edit_dari_akun" value="<?php echo $data['dari_akun']; ?>" class="form-control" readonly="" required="">
+					<input type="hidden" name="dari_akun" id="edit_dari_akun" value="<?php echo $data['dari_akun']; ?>" class="form-control" readonly="">
+
+					<input type="hidden" name="sisa_kas" id="sisa_kas" class="form-control" readonly="">
 					
 					<label> Keterangan </label><br>
 					<textarea type="text" name="keterangan" id="edit_keterangan" class="form-control"> </textarea>
@@ -265,7 +267,7 @@ echo '<button type="button" id="tambah" class="btn btn-info" data-toggle="modal"
 
 <div class="table-responsive"><!--membuat agar ada garis pada tabel disetiap kolom-->
 <span id="tabel_baru">
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
 		<thead>
 			<th style='background-color: #4CAF50; color:white'> Nomor Faktur </th>
 			<th style='background-color: #4CAF50; color:white'> Keterangan </th>
@@ -320,13 +322,13 @@ $dari_akun = $data['nama_daftar_akun'];
 if ($kas_mutasi['kas_mutasi_hapus'] > 0) {
 
 		
-			echo "<td> <button class='btn btn-danger btn-hapus' data-id='". $data1['id'] ."' data-faktur='". $data1['no_faktur'] ."'> <span class='glyphicon glyphicon-trash'></span> Hapus </button> </td>";
+			echo "<td> <button class='btn btn-danger btn-hapus' data-id='". $data1['id'] ."' data-faktur='". $data1['no_faktur'] ."'> <i class='fa fa-trash'></i> Hapus </button> </td>";
 		}
 
 
 if ($kas_mutasi['kas_mutasi_edit'] > 0) {
 
-			echo "<td> <button class='btn btn-info btn-edit' data-jumlah='". $data1['jumlah'] ."' data-ket='". $data1['keterangan'] ."' data-id='". $data1['id'] ."' data-dari-akun='". $data1['dari_akun'] ."' data-ke-akun='". $data1['ke_akun'] ."' data-jumlah='". $data1['jumlah'] ."' data-tanggal='". $data1['tanggal'] ."' data-faktur='". $data1['no_faktur'] ."'> <span class='glyphicon glyphicon-edit'></span> Edit </button> </td>
+			echo "<td> <button class='btn btn-info btn-edit' data-jumlah='". $data1['jumlah'] ."' data-ket='". $data1['keterangan'] ."' data-id='". $data1['id'] ."' data-dari-akun='". $data1['dari_akun'] ."' data-ke-akun='". $data1['ke_akun'] ."' data-jumlah='". $data1['jumlah'] ."' data-tanggal='". $data1['tanggal'] ."' data-faktur='". $data1['no_faktur'] ."'> <i class='fa fa-edit'></i> Edit </button> </td>
 			</tr>";
 			}
 		}
@@ -349,6 +351,10 @@ $(document).ready(function(){
 });
 
 </script>
+
+
+
+
 			<!-- Dari Form Kas Mutasi -->
 			<script>
 			
@@ -357,9 +363,9 @@ $(document).ready(function(){
 
 			var dari_akun = $("#dari_akun1").val();
 			
-			//metode POST untuk mengirim dari file cek_jumlah_kas.php ke dalam variabel "dari akun"
 			$.post('cek_jumlah_kas.php', {dari_akun: dari_akun}, function(data) {
-			/*optional stuff to do after success */
+
+				data = data.replace(/\s+/g, '');
 			
 			$("#jumlah_kas1").val(data);
 			});
@@ -371,13 +377,16 @@ $(document).ready(function(){
 			$.post('cek_jumlah_kas.php', {dari_akun: dari_akun}, function(data) {
 			/*optional stuff to do after success */
 			
+		data = data.replace(/\s+/g, '');
+
+			
 			$("#jumlah_kas1").val(tandaPemisahTitik(data));
 			});
 			
 			});
 			});
 			</script>
-			
+		<!--	
 			<script>
 			
 			// untuk memunculkan jumlah kas secara otomatis
@@ -403,7 +412,7 @@ $(document).ready(function(){
 			
 			});
 			</script>
-			
+			-->
 			<script>
 			$(document).ready(function(){
 			$("#ke_akun1").change(function(){
@@ -419,6 +428,23 @@ $(document).ready(function(){
 			}
 			
 			});
+
+
+			$("#dari_akun1").change(function(){
+			var dari_akun = $("#dari_akun1").val();
+			var ke_akun = $("#ke_akun1").val();
+			
+			if (ke_akun == dari_akun)
+			{
+			
+			alert("Nama Akun Tidak Boleh Sama");
+			$("#dari_akun1").val('');
+			$("#jumlah_kas1").val('');
+			
+			}
+			
+			});
+
 			});
 			</script>
 
@@ -429,6 +455,7 @@ $(document).ready(function(){
 						$("#tambah").click(function() {
 						
 						$.get('no_faktur_KMT.php', function(data) {
+							data = data.replace(/\s+/g, '');
 						
 						$("#tambah_faktur").val(data);
 						});
@@ -436,6 +463,7 @@ $(document).ready(function(){
 						});
 
 			</script>
+
 
 
 
@@ -450,26 +478,40 @@ $(document).ready(function(){
 		var dari_akun = $("#dari_akun1").val();
 		var ke_akun = $("#ke_akun1").val();
 		var jumlah = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#jumlah2").val()))));
+		var sisa_kas = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#jumlah_kas1").val()))));
 
-		$("#dari_akun1").val('');
-		$("#ke_akun1").val('');
-		$("#jumlah2").val('');
+		 sisa_kas = parseInt(sisa_kas,10) - parseInt(jumlah,10);
+
+if (sisa_kas < 0) {
+
+			alert("Total Kas Tidak Mencukupi !!");
+			$("#jumlah2").val('');
+			$("#jumlah2").focus();
+
+}
+
+else{
+
 
 		
 		if (tanggal == "") {
 
 			alert("Silakan Isi Kolom Tanggal");
+			$("#tanggal1").focus();
 		}
 		
 		else if(ke_akun == ""){
 			alert("Silakan Isi Kolom Ke Akun");
+			$("#ke_akun1").focus();
 		}
 		else if(dari_akun == ""){
 			alert("Silakan Isi Kolom Dari Akun");
+			$("#dari_akun1").focus();
 		}
 		else if(jumlah == ""){
 
 			alert("Silakan Isi Kolom Jumlah");
+			$("#jumlah2").focus()
 		}
 		else{
 
@@ -484,9 +526,7 @@ $(document).ready(function(){
 		$("#ke_akun1").val('');
 		$("#jumlah2").val('');
 		$(".alert").show('fast');
-		$("#tabel_baru").load('tabel_kas_mutasi.php');
-		
-		
+		window.location.href = 'kas_mutasi.php';		
 
 		setTimeout(tutupalert, 2000);
 		$(".modal").modal("hide");
@@ -494,6 +534,10 @@ $(document).ready(function(){
 		
 		
 		});
+
+
+		}
+
 		
 		function tutupmodal() {
 		
@@ -501,10 +545,25 @@ $(document).ready(function(){
 		}
 		});
 
-// end fungsi tambah data
 
+
+
+		});
+
+		$('form').submit(function(){
+		
+		return false;
+		});
+
+// end fungsi tambah data
+</script>
+
+
+
+<script>
 			
 //fungsi hapus data 
+$(document).ready(function(){	
 		$(".btn-hapus").click(function(){
 		
 		var id = $(this).attr("data-id");
@@ -527,7 +586,7 @@ $(document).ready(function(){
 		if (data != "") {
 
 		
-		$("#tabel_baru").html(data);
+
 		$("#modal_hapus").modal('hide');
 		$(".tr-id-"+id).remove();
 		
@@ -557,7 +616,12 @@ $(document).ready(function(){
 		$("#edit_dari_akun").val(dari_akun);
 		$("#id_edit").val(id);
 		$("#faktur_edit").val(no_faktur);
-		
+
+				var dari_akun = $("#edit_dari_akun").val();			
+					$.post('cek_jumlah_kas.php', {dari_akun: dari_akun}, function(data) {
+					data = data.replace(/\s+/g, '');			
+					$("#sisa_kas").val(data);	
+				});
 		
 		});
 		
@@ -571,19 +635,32 @@ $(document).ready(function(){
 		var keterangan = $("#edit_keterangan").val();
 		var id = $("#id_edit").val();
 		var no_faktur = $("#faktur_edit").val();
+		var sisa_kas = $("#sisa_kas").val();
+		var jumlah_t = parseInt(jumlah_baru,10);
+		    sisa_kas = parseInt(sisa_kas,10) + parseInt(jumlah,10);
 
-		$.post("update_kas_mutasi.php",{no_faktur:no_faktur,tanggal:tanggal,jumlah_baru:jumlah_baru,jumlah:jumlah,ke_akun:ke_akun,dari_akun:dari_akun,keterangan:keterangan,id:id},function(data){
+		var total_j = parseInt(sisa_kas,10) - parseInt(jumlah_t,10);
 
-		
-		if (data == "sukses") {
-
-		$(".alert").show('fast');
-		$("#tabel_baru").load('tabel_kas_mutasi.php');
-		setTimeout(tutupalert, 2000);
-		$(".modal").modal("hide");
-		
+		if (total_j < 0) {
+			alert("Total Kas Tidak Mencukupi !!");
+			$("#edit_jumlah").val('');
+			$("#edit_jumlah").focus();	
 		}
+
+		else{
+
+			$.post("update_kas_mutasi.php",{no_faktur:no_faktur,tanggal:tanggal,jumlah_baru:jumlah_baru,jumlah:jumlah,ke_akun:ke_akun,dari_akun:dari_akun,keterangan:keterangan,id:id},function(data){
+
+		
+			$(".alert").show('fast');
+			$("#edit_jumlah").val('');
+			$("#tabel_baru").load('tabel_kas_mutasi.php');
+			setTimeout(tutupalert, 2000);
+			$(".modal").modal("hide");
+
 		});
+
+		}
 
 		});
 		

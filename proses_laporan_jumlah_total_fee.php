@@ -10,9 +10,9 @@ $sampai_tanggal = stringdoang($_POST['sampai_tanggal']);
 
 
 //menampilkan seluruh data yang ada pada tabel penjualan
-$perintah = $db->query("SELECT * FROM laporan_fee_produk WHERE nama_petugas = '$nama_petugas' AND tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'");
+$perintah = $db->query("SELECT lfp.id, lfp.nama_petugas, lfp.no_faktur, lfp.kode_produk, lfp.nama_produk, lfp.jumlah_fee, lfp.tanggal, lfp.jam, u.nama AS nama_user FROM laporan_fee_produk lfp INNER JOIN user u ON lfp.nama_petugas = u.id WHERE lfp.nama_petugas = '$nama_petugas' AND lfp.tanggal >= '$dari_tanggal' AND lfp.tanggal <= '$sampai_tanggal'");
 
-$perintah1 = $db->query("SELECT * FROM laporan_fee_faktur WHERE nama_petugas = '$nama_petugas' AND tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'");
+$perintah1 = $db->query("SELECT lff.nama_petugas, lff.no_faktur, lff.jumlah_fee, lff.tanggal, lff.jam, u.nama AS nama_user  FROM laporan_fee_faktur lff INNER JOIN user u ON lff.nama_petugas = u.id WHERE nama_petugas = '$nama_petugas' AND tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'");
 
 $query01 = $db->query("SELECT SUM(jumlah_fee) AS total_fee FROM laporan_fee_produk WHERE nama_petugas = '$nama_petugas' AND tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'");
 $cek01 = mysqli_fetch_array($query01);
@@ -36,7 +36,7 @@ $total_komisi = $total_fee1 + $total_fee2;
 
 <h3><center><b>Komisi Produk / Petugas</b></center></h3><br>
 <div class="table-responsive">
- <table id="tableuser" class="table table-bordered">
+ <table id="tableuser" class="table table-bordered table-sm">
             <thead>
                   <th style="background-color: #4CAF50; color: white;"> Nama Petugas </th>
                   <th style="background-color: #4CAF50; color: white;"> Nomor Faktur </th>
@@ -63,7 +63,7 @@ $total_komisi = $total_fee1 + $total_fee2;
                   {
                   
                   echo "<tr class='pilih' data-petugas='". $data1['nama_petugas'] ."'>
-                  <td>". $data1['nama_petugas'] ."</td>
+                  <td>". $data1['nama_user'] ."</td>
                   <td>". $data1['no_faktur'] ."</td>
                   <td>". $data1['kode_produk'] ."</td>
                   <td>". $data1['nama_produk'] ."</td>
@@ -84,7 +84,7 @@ $total_komisi = $total_fee1 + $total_fee2;
 <div class="card card-block">
 <h3><center><b>Komisi Faktur / Petugas</b></center></h3><br>
 <div class="table-responsive">
- <table id="tableuser" class="table table-bordered">
+ <table id="tableuser" class="table table-bordered table-sm">
             <thead>
                   <th style="background-color: #4CAF50; color: white;"> Nama Petugas </th>
                   <th style="background-color: #4CAF50; color: white;"> Nomor Faktur </th>
@@ -103,7 +103,7 @@ $total_komisi = $total_fee1 + $total_fee2;
                   {
                   
                   echo "<tr class='pilih' data-petugas='". $data1['nama_petugas'] ."'>
-                  <td>". $data0['nama_petugas'] ."</td>
+                  <td>". $data0['nama_user'] ."</td>
                   <td>". $data0['no_faktur'] ."</td>
                   <td>". rp($data0['jumlah_fee']) ."</td>
                   <td>". tanggal($data0['tanggal']) ."</td>
@@ -119,7 +119,7 @@ $total_komisi = $total_fee1 + $total_fee2;
       </table>
 </div>
 
-<a href='cetak_laporan_komisi.php?nama_petugas=<?php echo $nama_petugas; ?>&dari_tanggal=<?php echo $dari_tanggal; ?>&sampai_tanggal=<?php echo $sampai_tanggal; ?>' class='btn btn-success'><i class='fa fa-print'> </i> Cetak Komisi / Petugas</a>
+<a href='cetak_laporan_komisi.php?nama_petugas=<?php echo urlencode ($nama_petugas); ?>&dari_tanggal=<?php echo $dari_tanggal; ?>&sampai_tanggal=<?php echo $sampai_tanggal; ?>' class='btn btn-success'><i class='fa fa-print'> </i> Cetak Komisi / Petugas</a>
 
 </div>
       <h4> Total Komisi / Faktur Dari <?php echo tanggal($dari_tanggal); ?> s/d <?php echo tanggal($sampai_tanggal); ?> : <b><?php echo rp($total_fee2); ?></b></h4><br>

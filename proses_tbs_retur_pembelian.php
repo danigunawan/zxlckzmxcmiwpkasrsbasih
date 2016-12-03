@@ -125,7 +125,7 @@ else {
       <td><span id='text-subtotal-".$data1['id']."'>". rp($data1['subtotal']) ."</span></td>
 
 
-      <td><button class='btn btn-danger btn-hapus-tbs' id='btn-hapus-".$data1['id']."' data-id='". $data1['id'] ."' data-kode-barang='". $data1['kode_barang'] ."' data-faktur='". $data1['no_faktur_pembelian'] ."' data-subtotal='". $data1['subtotal'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>
+      <td><button class='btn btn-danger btn-sm btn-hapus-tbs' id='btn-hapus-".$data1['id']."' data-id='". $data1['id'] ."' data-kode-barang='". $data1['kode_barang'] ."' data-faktur='". $data1['no_faktur_pembelian'] ."' data-subtotal='". $data1['subtotal'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>
 
       </tr>";
       
@@ -180,6 +180,40 @@ else {
                                     var tax_tbs = tax / subtotal_lama * 100;
                                     var jumlah_tax = tax_tbs * subtotal / 100;
 
+        var tax_faktur = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#tax").val()))));
+            if (tax_faktur == '') {
+              tax_faktur = 0;
+            };
+
+        var pot_fakt_per = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_persen").val()))));
+       if (pot_fakt_per == '') {
+          pot_fakt_per = 0;
+        }
+
+        else
+          {
+            var pos1 = pot_fakt_per.search("%");
+           if (pos1 > 0) 
+            {
+               var pot_fakt_per = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#potongan_persen").val()))));
+               pot_fakt_per = pot_fakt_per.replace("%","");
+            };
+          }
+
+      potongaaan = subtotal_penjualan * pot_fakt_per / 100;
+
+      var hitung_tax = parseInt(subtotal_penjualan,10) - parseInt(Math.round(potongaaan,10));
+
+      if (tax_faktur != 0) {
+        var tax_bener = parseInt(hitung_tax,10) * parseInt(tax_faktur,10) / 100;
+      }
+      else
+      {
+        var tax_bener = 0;  
+      }
+
+      
+     var total_bener = parseInt(hitung_tax,10) + parseInt(Math.round(tax_bener,10));
                                       if (jumlah_baru == 0) {
 
                                       alert ("Jumlah Retur Tidak Boleh 0!");
@@ -222,8 +256,11 @@ else {
                                     $("#btn-hapus-"+id).attr("data-subtotal", subtotal);
                                     $("#input-jumlah-"+id+"").attr("type", "hidden"); 
                                     $("#text-tax-"+id+"").text(jumlah_tax);
-                                    $("#total_retur_pembelian").val(tandaPemisahTitik(subtotal_penjualan)); 
-                                    $("#total_retur_pembelian1").val(tandaPemisahTitik(subtotal_penjualan));         
+                                       $("#total_retur_pembelian").val(tandaPemisahTitik(Math.round(total_bener))); 
+                                       $("#potongan_pembelian").val(tandaPemisahTitik(Math.round(potongaaan))); 
+                                       $("#total_retur_pembelian1").val(tandaPemisahTitik(subtotal_penjualan));
+                                       $("#sisa_pembayaran_pembelian").val('');
+                                        $("#pembayaran_pembelian").val('');            
 
                                     });
 

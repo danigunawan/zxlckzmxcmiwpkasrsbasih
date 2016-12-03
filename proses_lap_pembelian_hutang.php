@@ -83,7 +83,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 <div class="card card-block">
 
 <div class="table-responsive">
- <table id="tableuser" class="table table-bordered">
+ <table id="tableuser" class="table table-bordered table-sm">
             <thead>
 			<th style="background-color: #4CAF50; color: white;"> Tanggal </th>
 			<th style="background-color: #4CAF50; color: white;"> Nomor Faktur </th>
@@ -136,11 +136,12 @@ tr:nth-child(even){background-color: #f2f2f2}
 </div>
 <br>
 
-       <a href='cetak_laporan_pembelian_hutang.php?dari_tanggal=<?php echo $dari_tanggal; ?>&sampai_tanggal=<?php echo $sampai_tanggal; ?>' class='btn btn-success' target='blank'><span class='glyphicon glyphicon-print'> </span> Cetak Pembelian Hutang</a>
+<h3> Subtotal Hutang :  Rp. <?php echo rp($total_hutang); ?></h3>
+
+       <a href='cetak_laporan_pembelian_hutang.php?dari_tanggal=<?php echo $dari_tanggal; ?>&sampai_tanggal=<?php echo $sampai_tanggal; ?>' class='btn btn-success' target='blank'><i class='fa fa-print'> </i> </span> Cetak Pembelian Hutang</a>
 
 </div>
 
-<h3> Subtotal Hutang :  Rp. <?php echo rp($total_hutang); ?></h3>
 
 <script>
 // untuk memunculkan data tabel 

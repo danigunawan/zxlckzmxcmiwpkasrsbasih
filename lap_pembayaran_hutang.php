@@ -20,8 +20,8 @@ $perintah = $db->query("SELECT da.nama_daftar_akun,p.no_faktur_pembayaran,p.tang
 <div class="dropdown">
              <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="width:150px"> Jenis Laporan <span class="caret"></span></button>
 
-             <ul class="dropdown-menu">
-				<li><a href="lap_pembayaran_hutang_rekap.php"> Laporan Pembayaran Hutang Rekap</a></li> 
+             <ul class="dropdown-menu dropdown-ins">
+				<li><a class="dropdown-item" href="lap_pembayaran_hutang_rekap.php"> Laporan Pembayaran Hutang Rekap</a></li> 
 		
 
 
@@ -36,13 +36,10 @@ $perintah = $db->query("SELECT da.nama_daftar_akun,p.no_faktur_pembayaran,p.tang
 		<thead>
 			<th style="background-color: #4CAF50; color: white;"> Nomor Faktur </th>
 			<th style="background-color: #4CAF50; color: white;"> Tanggal </th>
-			<th style="background-color: #4CAF50; color: white;"> Nama Suplier </th>
 			<th style="background-color: #4CAF50; color: white;"> Cara Bayar </th>
 			<th style="background-color: #4CAF50; color: white;"> Potongan </th>
 			<th style="background-color: #4CAF50; color: white;"> Jumlah Bayar </th>
 
-			
-			
 		</thead>
 		
 		<tbody>
@@ -56,7 +53,6 @@ $perintah = $db->query("SELECT da.nama_daftar_akun,p.no_faktur_pembayaran,p.tang
 			echo "<tr>
 			<td>". $data1['no_faktur_pembayaran'] ."</td>
 			<td>". $data1['tanggal'] ."</td>
-			<td>". $data1['nama'] ."</td>
 			<td>". $data1['nama_daftar_akun'] ."</td>
 			<td>". $cek['potongan'] ."</td>
 			<td>". rp($data1['total']) ."</td>

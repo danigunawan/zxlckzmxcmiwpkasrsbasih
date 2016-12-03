@@ -68,17 +68,17 @@ $data50 = mysqli_fetch_array($perintah50);
 $no_faktur_pembelian = $data50['no_faktur_pembelian']; 
 
  ?>
-  <table id="tableuser" class="table table-bordered">
+  <table id="table_nya" class="table table-bordered table-sm" >
     <thead>
-      <th> Nomor Faktur Pembayaran </th>
-      <th> Nomor Faktur Pembelian </th>
+      <th> No Faktur Bayar </th>
+      <th> No Faktur Beli </th>
+      <th>Suplier</th>
       <th> Tanggal </th>
-      <th> Tanggal JT </th>
+      <th> Jatuh Tempo </th>
       <th> Kredit </th>
       <th> Potongan </th>
       <th> Total</th>
       <th> Jumlah Bayar </th>
-      
       <th> Hapus </th>
       <th> Edit </th>
       
@@ -94,11 +94,17 @@ $no_faktur_pembelian = $data50['no_faktur_pembelian'];
     //menyimpan data sementara yang ada pada $perintah
       while ($data1 = mysqli_fetch_array($perintah))
       {
-
+$suplier = $db->query("SELECT id,nama FROM suplier WHERE id = '$data1[suplier]'");
+        $out = mysqli_fetch_array($suplier);
+        if ($data1['suplier'] == $out['id'])
+        {
+          $out['nama'];
+        }
         // menampilkan data
       echo "<tr>
       <td>". $data1['no_faktur_pembayaran'] ."</td>
       <td>". $data1['no_faktur_pembelian'] ."</td>
+      <td>". $out['nama'] ."</td>
       <td>". $data1['tanggal'] ."</td>
       <td>". $data1['tanggal_jt'] ."</td>
       <td>". rp($data1['kredit']) ."</td>
@@ -123,7 +129,7 @@ mysqli_close($db);
   <script>
 //untuk menampilkan data tabel
 $(document).ready(function(){
-    $('#tableuser').DataTable();
+    $('#table_nya').DataTable();
 });
 
 </script>

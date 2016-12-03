@@ -29,7 +29,7 @@ if (!$perintah)
 }
 else 
 {
- header('location:daftar_group_akun.php');
+ echo '<META HTTP-EQUIV="Refresh" Content="0; URL=daftar_group_akun.php">';
 }
 
 //Untuk Memutuskan Koneksi Ke Database

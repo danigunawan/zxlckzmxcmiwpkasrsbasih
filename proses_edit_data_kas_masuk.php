@@ -28,8 +28,7 @@ $perintah1 = $db->query("INSERT INTO tbs_kas_masuk (no_faktur, keterangan, dari_
 
 
 }
-
- header ('location:edit_data_kas_masuk.php?no_faktur='.$no_faktur.'&nama_daftar_akun='.$nama_daftar_akun.'');
+echo '<META HTTP-EQUIV="Refresh" Content="0; URL=edit_data_kas_masuk.php?no_faktur='.$no_faktur.'&nama_daftar_akun='.$nama_daftar_akun.'">';
 
 
 //Untuk Memutuskan Koneksi Ke Database

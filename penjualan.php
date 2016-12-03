@@ -246,10 +246,10 @@ else{
 </div>
 
 
-<h3>DATA PENJUALAN</h3>
+<h3>DATA PENJUALAN </h3>
 <hr>
 
-<div class="row">
+<div class="rows">
 
 <div class="col-sm-5">
 

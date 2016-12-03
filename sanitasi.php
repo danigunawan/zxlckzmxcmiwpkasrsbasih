@@ -15,8 +15,15 @@ return $rpp;
 function tanggal_mysql($tanggal2){
 
  $date= date_create($tanggal2);
- $date_format =  date_format($date,"Y-m-d");
+ $date_format = date_format($date,"Y-m-d");
  return $date_format;
+}
+
+function tanggal_terbalik($tanggal){
+
+ $date= date_create($tanggal);
+ $date_terbalik =  date_format($date,"d-m-Y");
+ return $date_terbalik;
 }
 
 function angkadoang($angka){
@@ -111,7 +118,7 @@ return $baru;
 function tanggal($tanggal){
 
  $date= date_create($tanggal);
- $date_format =  date_format($date,"d/m/Y");
+ $date_format = date_format($date,"d/m/Y");
  return $date_format;
 }
 
@@ -121,7 +128,6 @@ function cek_stok($kode_barang){
 include 'db.php';
 
 $kode_barang = stringdoang($kode_barang);
-
 
 // mencari jumlah Barang
             $query0 = $db->query("SELECT SUM(jumlah_barang) AS jumlah_pembelian FROM detail_pembelian WHERE kode_barang = '$kode_barang'");

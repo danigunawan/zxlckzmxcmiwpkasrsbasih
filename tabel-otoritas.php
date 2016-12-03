@@ -8,7 +8,7 @@ $perintah = $db->query("SELECT * FROM hak_otoritas");
 
  ?>
 
-		<table id="tableuser" class="table table-bordered">
+		<table id="tableuser" class="table table-bordered table-sm">
 		<thead>
 			<th style='background-color: #4CAF50; color: white'> ID Otoritas </th>
 

@@ -1,6 +1,4 @@
 <?php 
-
-include 'header.php';
 include 'db.php';
 
 $no_faktur = $_POST['no_faktur'];
@@ -15,34 +13,14 @@ $kode_barang = $_POST['kode_barang'];
 
  ?>
 
- <style>
-table {
-    border-collapse: collapse;
-    width: 100%;
-}
-
-.th, td {
-    text-align: left;
-    padding: 8px;
-}
-
-tr:nth-child(even){background-color: #f2f2f2}
-
-.th {
-    background-color: #4CAF50;
-    color: white;
-}
-</style>
-
-
 
 <table id="tableuser" class="table table-hover">
     <thead>
 
-          <th class="th"> Nomor Faktur</th>
-          <th class="th"> Kode Barang</th>
-          <th class="th"> Tanggal </th>
-          <th class="th"> Keterangan </th>
+          <th style='background-color: #4CAF50; color:white'> Nomor Faktur</th>
+          <th style='background-color: #4CAF50; color:white'> Kode Barang</th>
+          <th style='background-color: #4CAF50; color:white'> Tanggal </th>
+          <th style='background-color: #4CAF50; color:white'> Keterangan </th>
           </thead>
           
           
@@ -114,3 +92,10 @@ mysqli_close($db);
 </table>
 
 
+
+<script>
+    
+    $(document).ready(function(){
+    $('#tableuser').DataTable();
+    });
+    </script>

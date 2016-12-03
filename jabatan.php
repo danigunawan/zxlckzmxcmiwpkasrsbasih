@@ -48,13 +48,13 @@ echo '<button type="button" class="btn btn-info" data-toggle="modal" data-target
 <form role="form">
 					<div class="form-group">
 					<label> Nama Jabatan </label><br>
-					<input type="text" name="nama" id="nama_jabatan" class="form-control" autocomplete="off" required="" >
+					<input type="text" name="nama" id="nama_jabatan" class="form-control" autocomplete="off"  >
 					</div>
 					
 					
 					<div class="form-group">
 					<label> Wewenang </label><br>
-					<textarea type="text" name="wewenang" id="wewenang" class="form-control" required=""></textarea>
+					<textarea type="text" name="wewenang" id="wewenang" class="form-control"></textarea>
 					</div>
 					
 					
@@ -137,12 +137,12 @@ echo '<button type="button" class="btn btn-info" data-toggle="modal" data-target
    <div class="form-group">
     <label for="email">Nama Jabatan:</label>
      <input type="text" class="form-control" id="jabatan_edit" autocomplete="off">
-     <input type="hidden" class="form-control" id="id_edit">
+     <input type="text" class="form-control" id="id_edit">
     
    </div>
    
    
-   <button type="submit" id="submit_edit" class="btn btn-success">Submit</button>
+   <button type="submit" id="submit_edit" data-nama="" class="btn btn-success">Submit</button>
   </form>
   <div class="alert alert-success" style="display:none">
    <strong>Berhasil!</strong> Data Berhasil Di Edit
@@ -179,7 +179,7 @@ th {
 
 <div class="table-responsive"><!-- membuat agar ada garis pada tabel, disetiap kolom -->
 <span id="table_baru">
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
 		<thead> 
 			
 			<th> Nama Jabatan </th>
@@ -196,7 +196,9 @@ $jabatan_hapus = mysqli_num_rows($pilih_akses_jabatan_hapus);
 		}
 ?>
 
-<?php 
+
+
+<!--
 include 'db.php';
 
 $pilih_akses_jabatan_edit = $db->query("SELECT jabatan_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND jabatan_edit = '1'");
@@ -206,8 +208,9 @@ $jabatan_edit = mysqli_num_rows($pilih_akses_jabatan_edit);
     if ($jabatan_edit > 0){
     	echo "<th> Edit </th>";
     }
- ?>
-			
+    */
+ 
+	-->
 			
 		</thead>
 		
@@ -218,10 +221,24 @@ $jabatan_edit = mysqli_num_rows($pilih_akses_jabatan_edit);
 			while ($data = mysqli_fetch_array($query))
 			{
 				//menampilkan data
-			echo "<tr>
-			
-			<td>". $data['nama'] ."</td>
-			<td>". $data['wewenang'] ."</td>";
+			echo "<tr>";
+			include 'db.php';
+
+				$pilih_akses_jabatan_edit = $db->query("SELECT jabatan_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND jabatan_edit = '1'");
+				$jabatan_edit = mysqli_num_rows($pilih_akses_jabatan_edit);
+
+				    if ($jabatan_edit > 0){ 
+			echo"<td class='edit-nama' data-id='".$data['id']."'><span id='text-nama-".$data['id']."'>". $data['nama'] ."</span><input type='hidden' class='edit_nama' id='edit-nama-".$data['id']."' value='". $data['nama'] ."' data-id='".$data['id']."' data-nama='".$data['nama']."' data-www='".$data['wewenang']."'></td>";
+
+			echo"<td class='edit-www' data-id='".$data['id']."'><span id='text-www-".$data['id']."'>". $data['wewenang'] ."</span><input type='hidden' class='edit_www' id='edit-www-".$data['id']."' value='". $data['wewenang'] ."' data-id='".$data['id']."' data-nama='".$data['nama']."' data-www='".$data['wewenang']."'></td>";
+
+				}
+				else
+				{
+					echo"<td>". $data['nama'] ."</td>";
+					echo"<td>". $data['wewenang'] ."</td>";
+				}
+
 
 include 'db.php';
 
@@ -234,6 +251,7 @@ $jabatan_hapus = mysqli_num_rows($pilih_akses_jabatan_hapus);
 			echo "<td> <button class='btn btn-danger btn-hapus' data-id='". $data['id'] ."' data-jabatan='". $data['nama'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>";
 		}
 
+/*
 include 'db.php';
 
 $pilih_akses_jabatan_edit = $db->query("SELECT jabatan_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND jabatan_edit = '1'");
@@ -244,6 +262,8 @@ $jabatan_edit = mysqli_num_rows($pilih_akses_jabatan_edit);
 			echo "<td> <button class='btn btn-info btn-edit' data-jabatan='". $data['nama'] ."' data-id='". $data['id'] ."'> <span class='glyphicon glyphicon-edit'> </span> Edit </button> </td>
 			</tr>";
 			}
+
+			*/
 	}
 
 	//Untuk Memutuskan Koneksi Ke Database
@@ -252,30 +272,129 @@ mysqli_close($db);
 		</tbody>
 
 	</table>
+
+	<?php include 'db.php';
+
+				$pilih_akses_jabatan_edit = $db->query("SELECT jabatan_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND jabatan_edit = '1'");
+				$jabatan_edit = mysqli_num_rows($pilih_akses_jabatan_edit);
+
+				    if ($jabatan_edit > 0){ 
+				    	echo "<h6 style='text-align: left ; color: red'><i> * Klik 2x pada kolom jika ingin mengedit.</i></h6>";
+				    }
+				     ?>
+	
 </span>
 </div>
 </div> <!-- tag penutup cantainer -->
 
+<script type="text/javascript">
+	$(document).on('dblclick','.edit-nama',function(e){
 
-							
+			var id = $(this).attr("data-id");
+			$("#text-nama-"+id+"").hide();
+			$("#edit-nama-"+id+"").attr("type","text");
+
+	});
+
+
+	$(document).on('blur','.edit_nama',function(e){
+
+		var id = $(this).attr("data-id");
+		var nama_lama = $(this).attr("data-nama");
+		var www = $(this).attr("data-www");
+		var nama = $("#edit-nama-"+id+"").val();
+		var jenis_update = 'Jabatan';
+
+		$.post('cek_jabatan.php',{nama:nama}, function(data){
+			if (data == 1) {
+				alert('Nama Jabatan Sudah Ada!');
+				$("#text-nama-"+id+"").show();
+				$("#edit-nama-"+id+"").attr("type","hidden");
+				$("#edit-nama-"+id+"").val(nama_lama);
+				$("#text-nama-"+id+"").text(nama_lama);
+				$("#edit-nama-"+id+"").attr("data-nama",nama_lama);
+			}
+			else
+			{
+				$("#edit-nama-"+id+"").attr("data-nama",nama);				
+				$.post("update_jabatan.php",{id:id,nama:nama,jenis_update:jenis_update,www:www},function(data){
+
+					$("#text-nama-"+id+"").show();
+					$("#edit-nama-"+id+"").attr("type","hidden");
+					$("#edit-nama-"+id+"").val(nama);
+					$("#text-nama-"+id+"").text(nama);
+					
+				});
+			}
+
+		});
+
+	});
+
+</script>
+				
+<script type="text/javascript">
+	$(document).on('dblclick','.edit-www',function(e){
+
+			var id = $(this).attr("data-id");
+			$("#text-www-"+id+"").hide();
+			$("#edit-www-"+id+"").attr("type","text");
+
+	});
+
+
+	$(document).on('blur','.edit_www',function(e){
+
+		var id = $(this).attr("data-id");
+		var nama = $(this).attr("data-nama");
+		var www_lama = $(this).attr("data-www");
+		var www = $("#edit-www-"+id+"").val();
+		var jenis_update = 'www';
+
+
+				$("#edit-www-"+id+"").attr("data-www",www)
+				$.post("update_jabatan.php",{id:id,nama:nama,jenis_update:jenis_update,www:www},function(data){
+
+					$("#text-www-"+id+"").show();
+					$("#edit-www-"+id+"").attr("type","hidden");
+					$("#edit-www-"+id+"").val(www);
+					$("#text-www-"+id+"").text(www);
+				});
+
+
+	});
+
+</script>
+						
 <script>
-    $(document).ready(function(){
+$(document).ready(function(){
+$(document).on('click','#submit_tambah',function(e){
 
-
-//fungsi untuk menambahkan data
-		$("#submit_tambah").click(function(){
 		var nama = $("#nama_jabatan").val();
 		var wewenang = $("#wewenang").val();
 
 		$("#nama_jabatan").val('');
-		$("#wewenang").val('');
-
-									if (nama == ""){
-									alert("Nama Harus Diisi");
-									}
-									else {
 		
-		$.post('prosesjabatan.php',{nama:nama,wewenang:wewenang},function(data){
+
+		if (nama == ""){
+			alert("Nama Harus Diisi");
+		}
+		
+		else {
+		
+
+// cek namanya
+ $.post('cek_jabatan.php',{nama:nama}, function(data){
+
+        if(data == 1){
+          alert('Nama Jabatan Sudah Ada!');
+          $("#nama_jabatan").focus();
+          $("#nama_jabatan").val('');
+        }
+        else{
+
+// Start Proses
+ $.post('prosesjabatan.php',{nama:nama,wewenang:wewenang},function(data){
 
 		if (data != '') {
 		$("#nama_jabatan").val('');
@@ -289,8 +408,14 @@ mysqli_close($db);
 		}
 		
 		
-		});										
-									}
+		});
+// Finish Proses
+        }
+
+      }); // end post dari cek nama
+
+
+	}
 
 		function tutupmodal() {
 		
@@ -303,7 +428,8 @@ mysqli_close($db);
 
 	
 //fungsi hapus data 
-		$(".btn-hapus").click(function(){
+	$(document).on('click','.btn-hapus',function(e){
+
 		var nama = $(this).attr("data-jabatan");
 		var id = $(this).attr("data-id");
 		$("#data_jabatan").val(nama);
@@ -332,28 +458,40 @@ mysqli_close($db);
 		});
 // end fungsi hapus data
 
-//fungsi edit data 
-		$(".btn-edit").click(function(){
-		
+/*//fungsi edit data 
+$(document).on('click','.btn-edit',function(e){
 		$("#modal_edit").modal('show');
 		var nama = $(this).attr("data-jabatan"); 
 		var id  = $(this).attr("data-id");
 		$("#jabatan_edit").val(nama);
 		$("#id_edit").val(id);
-		
+		$("#submit_edit").attr("data-nama",nama);
+
 		
 		});
 		
 		$("#submit_edit").click(function(){
 		var nama = $("#jabatan_edit").val();
 		var id = $("#id_edit").val();
+    	var show_name = $(this).attr("data-nama"); 
 
 		if (nama == ""){
 			alert("Nama Harus Diisi");
+			$("#jabatan_edit").focus();
 		}
 		else {
 
-					$.post("update_jabatan.php",{id:id,nama:nama},function(data){
+	// cek namanya
+ $.post('cek_jabatan.php',{nama:nama}, function(data){
+        if(data == 1){
+          alert('Nama Bidang Laboratorium yang anda masukkan sudah ada!');
+          $("#jabatan_edit").val(show_name); // menampilkan NAMA yang sebelumnya
+          $("#jabatan_edit").focus();
+        }
+        else{
+
+// mulai proses edit
+   $.post("update_jabatan.php",{id:id,nama:nama},function(data){
 		if (data != '') {
 		$(".alert").show('fast');
 		$("#table_baru").load('tabel-jabatan.php');
@@ -364,6 +502,12 @@ mysqli_close($db);
 		
 		
 		});
+// end proses edit
+
+        }
+
+      }); // end post dari cek nama
+	
 		}
 									
 
@@ -373,7 +517,7 @@ mysqli_close($db);
 		});
 		
 
-
+*/
 //end function edit data
 
 		$('form').submit(function(){

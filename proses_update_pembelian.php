@@ -16,7 +16,7 @@ include 'db.php';
 			if ($perintah0 == TRUE)
 
 				{
-				header('location:formpembelian.php');
+				echo '<META HTTP-EQUIV="Refresh" Content="0; URL=formpembelian.php">';
 				}
 				else
 				{

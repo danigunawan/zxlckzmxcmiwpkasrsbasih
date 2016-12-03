@@ -35,29 +35,7 @@ $perintah = $db->prepare("UPDATE pelanggan SET  nama_pelanggan = ?, jenis_kelami
 
 $perintah->bind_param("ssssssisisssssssssisssi",
 
-$nama_lengkap,
-$jenis_kelamin,
-$tanggal_lahir,
-$umur,
-$tempat_lahir,
-$alamat_sekarang,
-$no_ktp,
-$alamat_ktp,
-$no_hp,
-$status_kawin,
-$pendidikan_terakhir,
-$agama,
-$nama_suamiortu,
-$pekerjaan_suamiortu,
-$nama_penanggungjawab,
-$hubungan_dengan_pasien,
-$no_hp_penanggung,
-$alamat_penanggung,
-$no_kk,
-$nama_kk,
-$gol_darah,
-$tanggal_sekarang,
-$id);
+$nama_lengkap, $jenis_kelamin, $tanggal_lahir, $umur, $tempat_lahir, $alamat_sekarang, $no_ktp, $alamat_ktp, $no_hp, $status_kawin, $pendidikan_terakhir, $agama, $nama_suamiortu, $pekerjaan_suamiortu, $nama_penanggungjawab, $hubungan_dengan_pasien, $no_hp_penanggung, $alamat_penanggung, $no_kk, $nama_kk, $gol_darah, $tanggal_sekarang, $id);
 
 
 

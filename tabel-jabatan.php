@@ -13,7 +13,7 @@ $query = $db->query("SELECT * FROM jabatan");
 
 
 
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
 		<thead> 
 			
 			<th> Nama Jabatan </th>

@@ -12,7 +12,7 @@ include 'sanitasi.php';
 
  ?>
 
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
 		<thead>
 			<th> Kode Group Akun </th>
 			<th> Nama Group Akun </th>

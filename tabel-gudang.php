@@ -10,7 +10,7 @@ $query = $db->query("SELECT * FROM gudang");
 
  ?>
 
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
 		<thead>
 			<th style="background-color: #4CAF50; color: white"> Kode Gudang </th>
 			<th style="background-color: #4CAF50; color: white"> Nama Gudang </th>

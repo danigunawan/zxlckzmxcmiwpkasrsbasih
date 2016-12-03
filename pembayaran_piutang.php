@@ -7,9 +7,8 @@ include 'navbar.php';
 include 'sanitasi.php';
 include 'db.php';
 
+$query_piutang = $db->query("SELECT p.id, p.no_faktur_pembayaran, p.tanggal, p.jam, p.nama_suplier, p.keterangan, p.total, p.user_buat, p.user_edit, p.tanggal_edit, p.dari_kas,da.nama_daftar_akun FROM pembayaran_piutang p INNER JOIN daftar_akun da ON p.dari_kas = da.kode_daftar_akun ORDER BY id DESC");
 
-
-$perintah = $db->query("SELECT p.id, p.no_faktur_pembayaran, p.tanggal, p.jam, p.nama_suplier, p.keterangan, p.total, p.user_buat, p.user_edit, p.tanggal_edit, p.dari_kas, pl.nama_pelanggan, da.nama_daftar_akun FROM pembayaran_piutang p INNER JOIN pelanggan pl ON p.nama_suplier = pl.kode_pelanggan INNER JOIN daftar_akun da ON p.dari_kas = da.kode_daftar_akun ORDER BY id DESC");
 
  ?>
 
@@ -17,7 +16,7 @@ $perintah = $db->query("SELECT p.id, p.no_faktur_pembayaran, p.tanggal, p.jam, p
 tr:nth-child(even){background-color: #f2f2f2}
 </style>
 
-<div class="container"> <!--start of container-->
+<div style="padding-left: 5%; padding-right: 5%"> <!--start of container-->
 
 <h3><b>DATA PEMBAYARAN PIUTANG</b></h3><hr>
 <!--membuat link-->
@@ -111,7 +110,7 @@ echo '<a href="form_pembayaran_piutang.php" class="btn btn-info"> <i class="fa f
 
 <div class="table-responsive"><!--membuat agar ada garis pada tabel disetiap kolom-->
 <span id="tabel-baru">
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
 		<thead>
 			<th style="background-color: #4CAF50; color:white"> Detail </th>
 
@@ -133,7 +132,6 @@ if ($pembayaran_piutang['pembayaran_piutang_hapus'] > 0) {
 			<th style="background-color: #4CAF50; color:white"> Nomor Faktur </th>
 			<th style="background-color: #4CAF50; color:white"> Tanggal </th>
 			<th style="background-color: #4CAF50; color:white"> Jam </th>
-			<th style="background-color: #4CAF50; color:white"> Kode Pelanggan </th>
 			<th style="background-color: #4CAF50; color:white"> Keterangan </th>
 			<th style="background-color: #4CAF50; color:white"> Total </th>
 			<th style="background-color: #4CAF50; color:white"> User Buat </th>
@@ -150,7 +148,7 @@ if ($pembayaran_piutang['pembayaran_piutang_hapus'] > 0) {
 		<?php
 
 			//menyimpan data sementara yang ada pada $perintah
-			while ($data1 = mysqli_fetch_array($perintah))
+			while ($data1 = mysqli_fetch_array($query_piutang))
 			{
 
 				$perintah5 = $db->query("SELECT * FROM detail_pembayaran_piutang");
@@ -170,22 +168,21 @@ if ($pembayaran_piutang['pembayaran_piutang_hapus'] > 0) {
 			echo "<td> <button class='btn btn-danger btn-hapus' data-id='". $data1['id'] ."' data-suplier='". $data1['nama_suplier'] ."' data-no-faktur='". $data1['no_faktur_pembayaran'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>";
 }
 
-		echo "<td> <a href='cetak_lap_pembayaran_piutang.php?no_faktur_pembayaran=".$data1['no_faktur_pembayaran']."'  class='btn btn-primary' target='blank'><span class='glyphicon glyphicon-print'> </span> Cetak Piutang </a> </td>
+		echo "<td> <a href='cetak_lap_pembayaran_piutang.php?no_faktur_pembayaran=".$data1['no_faktur_pembayaran']."'  class='btn btn-primary' target='blank'><span class='glyphicon glyphicon-print'> </span> Cetak Piutang </a> </td>";
 
-			<td>". $data1['no_faktur_pembayaran'] ."</td>
+
+
+			echo "<td>". $data1['no_faktur_pembayaran'] ."</td>
 			<td>". $data1['tanggal'] ."</td>
-			<td>". $data1['jam'] ."</td>
-			<td>". $data1['nama_pelanggan'] ."</td>
-			<td>". $data1['keterangan'] ."</td>
+			<td>". $data1['jam'] ."</td>";
+
+		echo "<td>". $data1['keterangan'] ."</td>
 			<td>". rp($data1['total']) ."</td>
 			<td>". $data1['user_buat'] ."</td>
 			<td>". $data1['user_edit'] ."</td>
 			<td>". $data1['tanggal_edit'] ."</td>
 			<td>". $data1['nama_daftar_akun'] ."</td>
 
-
-
-			
 			</tr>";
 			}
 

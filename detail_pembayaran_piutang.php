@@ -5,7 +5,7 @@ include 'db.php';
 $no_faktur_pembayaran = $_POST['no_faktur_pembayaran'];
 
 
-$query = $db->query("SELECT * FROM detail_pembayaran_piutang WHERE no_faktur_pembayaran = '$no_faktur_pembayaran'");
+$query = $db->query("SELECT dp.no_faktur_pembayaran, dp.kode_pelanggan, dp.no_faktur_penjualan, dp.tanggal, dp.tanggal_jt, dp.kredit, dp.potongan, dp.total, dp.jumlah_bayar, p.nama_pelanggan FROM detail_pembayaran_piutang dp INNER JOIN pelanggan p ON dp.kode_pelanggan = p.kode_pelanggan WHERE dp.no_faktur_pembayaran = '$no_faktur_pembayaran'");
 
 
 
@@ -16,6 +16,7 @@ $query = $db->query("SELECT * FROM detail_pembayaran_piutang WHERE no_faktur_pem
 					<table id="tableuser" class="table table-bordered">
 					<thead>
 					<th> Nomor Faktur Pembayaran</th>
+					<th> Kode Pelanggan </th>
 					<th> Nomor Faktur Penjualan </th>
 					<th> Tanggal </th>
 					<th> Tanggal Jatuh Tempo </th>
@@ -36,6 +37,7 @@ $query = $db->query("SELECT * FROM detail_pembayaran_piutang WHERE no_faktur_pem
 					//menampilkan data
 					echo "<tr>
 					<td>". $data1['no_faktur_pembayaran'] ."</td>
+					<td>". $data1['kode_pelanggan'] ." - ". $data1['nama_pelanggan'] ."</td>
 					<td>". $data1['no_faktur_penjualan'] ."</td>
 					<td>". $data1['tanggal'] ."</td>
 					<td>". $data1['tanggal_jt'] ."</td>

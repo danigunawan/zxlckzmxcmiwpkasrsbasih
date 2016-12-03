@@ -108,7 +108,7 @@ echo '<a href="form_tambah_grup_akun.php" class="btn btn-info"><i class="fa fa-p
 
 <div class="table-responsive">
 <span id="table-baru">
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
 		<thead>
 			<th style="background-color: #4CAF50; color:white"> Kode Group Akun </th>
 			<th style="background-color: #4CAF50; color:white"> Nama Group Akun </th>

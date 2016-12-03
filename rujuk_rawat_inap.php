@@ -45,6 +45,17 @@ opacity: 0.9;
     }
 </style>
 
+ <script type="text/javascript">
+  function isNumberKey(evt)
+      {
+         var charCode = (evt.which) ? evt.which : event.keyCode
+         if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+
+         return true;
+      }
+</script>
+
 <!-- Modal Untuk Confirm LAYANAN PERUSAHAAN-->
 <div id="detail" class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg">
@@ -227,7 +238,7 @@ opacity: 0.9;
 
 <div class="form-group">
     <label for="alamat">No Hp:</label>
-    <input style="height:20;" type="text" class="form-control" id="hp_pasien" value="<?php echo $out['hp_pasien'];?>" name="hp_pasien" required="" >
+    <input style="height:20;" type="text" onkeypress="return isNumberKey(event)" class="form-control" id="hp_pasien" value="<?php echo $out['hp_pasien'];?>" name="hp_pasien" required="" >
 </div>
 
 
@@ -257,7 +268,7 @@ opacity: 0.9;
 
 <div class="form-group" >
   <label for="umur">No Telp / HP Penanggung  :</label>
-  <input style="height:20;" type="text" class="form-control" id="no_hp_penanggung" name="no_hp_penanggung" maxlenght="12" required="" autocomplete="off">
+  <input style="height:20;" onkeypress="return isNumberKey(event)" type="text" class="form-control" id="no_hp_penanggung" name="no_hp_penanggung" maxlenght="12" required="" autocomplete="off">
 </div>
 
 <div class="form-group" >
@@ -289,7 +300,7 @@ opacity: 0.9;
 
 <div class="form-group" >
   <label for="umur">Perkiraan Menginap:</label>
-  <input style="height:20;" type="text" class="form-control" id="perkiraan_menginap" name="perkiraan_menginap" required=""  autocomplete="off">
+  <input style="height:20;" type="text" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" class="form-control" id="perkiraan_menginap" name="perkiraan_menginap" required=""  autocomplete="off">
 </div>
 
 <div class="form-group" >
@@ -389,32 +400,32 @@ opacity: 0.9;
   <center><h4>Tanda Tanda Vital</h4></center>
 <div class="form-group">
  <label >Sistole / Diastole (mmHg):</label>
- <input style="height:20;" type="text" class="form-control" id="sistole_distole" value="<?php echo $out_from['sistole_distole'];?>" required="" name="sistole_distole" autocomplete="off" >
+ <input style="height:20;" type="text" class="form-control" id="sistole_distole" value="<?php echo $out_from['sistole_distole'];?>" onkeypress="return isNumberKey(event)" name="sistole_distole" autocomplete="off" >
 </div>
 
 <div class="form-group ">
   <label >Frekuensi Pernapasan (kali/menit):</label>
-  <input style="height:20;" type="text" class="form-control" id="respiratory_rate" value="<?php echo $out_from['respiratory'];?>" required="" name="respiratory_rate"  autocomplete="off" > 
+  <input style="height:20;" type="text" class="form-control" id="respiratory_rate" value="<?php echo $out_from['respiratory'];?>" onkeypress="return isNumberKey(event)" name="respiratory_rate"  autocomplete="off" > 
 </div>
 
 <div class="form-group">
   <label >Suhu  (°C):</label>
-  <input style="height:20;" type="text" class="form-control" id="suhu" name="suhu" value="<?php echo $out_from['suhu'];?>" required="" autocomplete="off"  > 
+  <input style="height:20;" type="text" class="form-control" id="suhu" name="suhu" value="<?php echo $out_from['suhu'];?>" onkeypress="return isNumberKey(event)" autocomplete="off"  > 
 </div>   
 
 <div class="form-group ">
  <label >Nadi (kali/menit):</label>
- <input style="height:20;" type="text" class="form-control" id="nadi" name="nadi" value="<?php echo $out_from['nadi'];?>" required="" autocomplete="off"> 
+ <input style="height:20;" type="text" class="form-control" id="nadi" name="nadi" value="<?php echo $out_from['nadi'];?>" onkeypress="return isNumberKey(event)" autocomplete="off"> 
 </div>
 
 <div class="form-group ">
   <label >Berat Badan (kg):</label>
-  <input style="height:20;" type="text" class="form-control" id="berat_badan" required="" value="<?php echo $out_from['berat_badan'];?>" name="berat_badan" autocomplete="off"> 
+  <input style="height:20;" type="text" class="form-control" id="berat_badan" value="<?php echo $out_from['berat_badan'];?>" onkeypress="return isNumberKey(event)"  name="berat_badan" autocomplete="off"> 
 </div>
 
 <div class="form-group ">
  <label >Tinggi Badan (cm):</label>
- <input style="height:20;" type="text" class="form-control" id="tinggi_badan" required="" value="<?php echo $out_from['tinggi_badan'];?>" name="tinggi_badan"autocomplete="off"> 
+ <input style="height:20;" type="text" class="form-control" id="tinggi_badan" value="<?php echo $out_from['tinggi_badan'];?>" onkeypress="return isNumberKey(event)" name="tinggi_badan"autocomplete="off"> 
 </div>
 
 
@@ -482,8 +493,8 @@ var now = new Date(); //Todays Date
 var birthday = tanggal_input;
 birthday=birthday.split("/");   
 
-var dobMonth= birthday[0]; 
-var dobDay= birthday[1];
+var dobDay= birthday[0]; 
+var dobMonth= birthday[1];
 var dobYear= birthday[2];
 
 var nowDay= now.getDate();

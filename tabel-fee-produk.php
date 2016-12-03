@@ -5,11 +5,11 @@ include 'sanitasi.php';
 include 'db.php';
 $session_id = session_id();
 //menampilkan seluruh data yang ada pada tabel penjualan
-$perintah = $db->query("SELECT * FROM fee_produk");
+$perintah = $db->query("SELECT f.id, f.nama_petugas, f.kode_produk, f.nama_produk, f.jumlah_prosentase, f.jumlah_uang, f.user_buat, u.nama FROM fee_produk f INNER JOIN user u ON f.nama_petugas = u.id");
 
  ?>
 
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
 		<thead>
 			<th style='background-color: #4CAF50; color: white'> Nama Petugas </th>
 			<th style='background-color: #4CAF50; color: white'> Kode Produk</th>

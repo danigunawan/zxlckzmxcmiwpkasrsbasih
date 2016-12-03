@@ -284,7 +284,7 @@ while ($datagrup_akun = mysqli_fetch_array($select_grup_akun))
 {
 	echo "<h4 style='padding-left:25px'><b>" .$datagrup_akun['kode_grup_akun']." ".$datagrup_akun['nama_grup_akun'] ."</b></h4>";
 
-$select_daftar_akun = $db->query("SELECT da.kode_daftar_akun, da.nama_daftar_akun, SUM(j.debit) - SUM(j.kredit) AS total FROM daftar_akun da INNER JOIN jurnal_trans j  ON da.kode_daftar_akun = j.kode_akun_jurnal WHERE da.kategori_akun = 'Biaya' AND da.tipe_akun = 'Beban Operasional' AND da.grup_akun= '$datagrup_akun[kode_grup_akun]' AND date(j.waktu_jurnal) >= '$dari_tanggal' AND date(j.waktu_jurnal) <= '$sampai_tanggal' GROUP BY j.kode_akun_jurnal  ");
+$select_daftar_akun = $db->query("SELECT da.kode_daftar_akun, da.nama_daftar_akun, SUM(j.debit) - SUM(j.kredit) AS total FROM daftar_akun da INNER JOIN jurnal_trans j  ON da.kode_daftar_akun = j.kode_akun_jurnal WHERE da.kategori_akun = 'Biaya' AND da.tipe_akun = 'Beban Operasional' AND da.grup_akun= '$datagrup_akun[kode_grup_akun]' AND date(j.waktu_jurnal) >= '$dari_tanggal' AND date(j.waktu_jurnal) <= '$sampai_tanggal' GROUP BY j.kode_akun_jurnal ");
 
 while ($datadaftar_akun = mysqli_fetch_array($select_daftar_akun))
 {

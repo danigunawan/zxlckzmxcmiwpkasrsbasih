@@ -25,7 +25,7 @@ include 'db.php';
 
 
 
-<div class="container">
+<div style="padding-left: 5%; padding-right: 5%;">
 <h3>KOMISI FAKTUR / PETUGAS</h3><hr>
 
 
@@ -46,7 +46,7 @@ include 'db.php';
         <!--perintah agar modal update-->
 <span class="modal_baru">
  <div class="table-responsive">       
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
     <thead>
       <th style="background-color: #4CAF50; color: white;"> Username </th></th>
       <th style="background-color: #4CAF50; color: white;"> Nama Lengkap </th>
@@ -64,7 +64,7 @@ include 'db.php';
       $perintah0 = $db->query("SELECT * FROM user");
       while ($data1 = mysqli_fetch_array($perintah0))
       {
-      echo "<tr  class='pilih' data-petugas='". $data1['nama'] ."'>
+      echo "<tr  class='pilih' data-petugas='".$data1['nama']."' data-petugas-value='".$data1['id']."'>
       <td>". $data1['username'] ."</td>
       <td>". $data1['nama'] ."</td>
       <td>". $data1['alamat'] ."</td>
@@ -101,8 +101,11 @@ include 'db.php';
               
                   <div class="form-group"> 
 
-                  <input type="text" name="nama_petugas" id="nama_petugas" class="form-control" placeholder="Nama Petugas" required="">
-                  </div>                  
+                  <input type="hidden" name="nama_petugas" id="nama_petugas" class="form-control" placeholder="Nama Petugas Value" required="">
+
+                  <input type="text" name="nama_petugas_value" id="nama_petugas_value" class="form-control" placeholder="Nama Petugas " required="">
+                  </div>  
+                                    
 
                   <div class="form-group"> 
 
@@ -114,7 +117,7 @@ include 'db.php';
                   <input type="text" name="sampai_tanggal" id="sampai_tanggal" class="form-control" placeholder="Sampai Tanggal" required="">
                   </div>
 
-                  <button type="submit" name="submit" id="submit" class="btn btn-primary" > <i class="fa fa-send"></i> Submit </button>
+                  <button type="submit" name="submit" id="submit" class="btn btn-primary" > <i class="fa fa-send"></i> Lihat </button>
 
 </form>
 
@@ -158,7 +161,8 @@ $(document).ready(function(){
 
 // jika dipilih, nim akan masuk ke input dan modal di tutup
   $(document).on('click', '.pilih', function (e) {
-  document.getElementById("nama_petugas").value = $(this).attr('data-petugas');
+  document.getElementById("nama_petugas_value").value = $(this).attr('data-petugas');
+  document.getElementById("nama_petugas").value = $(this).attr('data-petugas-value');
 
   $('#myModal').modal('hide');
   });

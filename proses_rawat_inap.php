@@ -1,10 +1,16 @@
-<?php 
+<?php include 'session_login.php';
 include 'db.php';
 include_once 'sanitasi.php';
-session_start();
 
 $token = stringdoang($_POST['token']);
+$pilih_akses_registrasi_ri = $db->query("SELECT registrasi_ri_lihat, registrasi_ri_tambah, registrasi_ri_edit, registrasi_ri_hapus FROM otoritas_registrasi WHERE id_otoritas = '$_SESSION[otoritas_id]'");
+$registrasi_ri = mysqli_fetch_array($pilih_akses_registrasi_ri);
 
+$pilih_akses_penjualan = $db->query("SELECT penjualan_tambah FROM otoritas_penjualan WHERE id_otoritas = '$_SESSION[otoritas_id]'");
+$penjualan = mysqli_fetch_array($pilih_akses_penjualan);
+
+$pilih_akses_rekam_medik = $db->query("SELECT rekam_medik_ri_lihat FROM otoritas_rekam_medik WHERE id_otoritas = '$_SESSION[otoritas_id]'");
+$rekam_medik = mysqli_fetch_array($pilih_akses_rekam_medik);
 
 // start data agar tetap masuk 
 try {
@@ -15,44 +21,88 @@ $db->begin_transaction();
 
 if ($token == '')
 {
-  
-header("location:rawat_inap.php");
+    echo '<META HTTP-EQUIV="Refresh" Content="0; URL=rawat_inap.php">';
 
 }
 else
 {
 
 $username = stringdoang($_SESSION['user_name']);
-$tanggal_lahir = tanggal($_POST['tanggal_lahir']);
+$tanggal_lahir = stringdoang($_POST['tanggal_lahir']);
+
 $umur = stringdoang($_POST['umur']);
 $no_rm = stringdoang($_POST['no_rm']);
 $nama_lengkap = stringdoang($_POST['nama_lengkap']);
 $alamat = stringdoang($_POST['alamat']);
 $jenis_kelamin = stringdoang($_POST['jenis_kelamin']);
-$hp_pasien = stringdoang($_POST['hp_pasien']);
+$hp_pasien = angkadoang($_POST['hp_pasien']);
 $kondisi = stringdoang($_POST['kondisi']);
 $penjamin = stringdoang($_POST['penjamin']);
 $surat_jaminan = stringdoang($_POST['surat_jaminan']);
 $menginap = angkadoang($_POST['perkiraan_menginap']);
+$bed = stringdoang($_POST['bed']);
+$group_bed = stringdoang($_POST['group_bed']);
+$poli = stringdoang($_POST['poli']);
+$dokter_pengirim = stringdoang($_POST['dokter_pengirim']);
+$dokter_penanggung_jawab = stringdoang($_POST['dokter_penanggung_jawab']);
+
+
+$sett_registrasi= $db->query("SELECT * FROM setting_registrasi ");
+$data_sett = mysqli_fetch_array($sett_registrasi);
+
+if ($data_sett['tampil_data_pasien_umum'] == 1) {
+
+
 $penanggung_jawab = stringdoang($_POST['penanggung_jawab']);
 $alamat_penanggung = stringdoang($_POST['alamat_penanggung']);
 $no_hp_penanggung = stringdoang($_POST['no_hp_penanggung']);
 $pekerjaan = stringdoang($_POST['pekerjaan_penanggung']);
 $hubungan_dengan_pasien = stringdoang($_POST['hubungan_dengan_pasien']);
-$dokter_penanggung_jawab = stringdoang($_POST['dokter_penanggung_jawab']);
-$bed = stringdoang($_POST['bed']);
-$poli = stringdoang($_POST['poli']);
-$dokter_pengirim = stringdoang($_POST['dokter_pengirim']);
-$group_bed = stringdoang($_POST['group_bed']);
+}
+else
+{
+$penanggung_jawab = '';
+$alamat_penanggung = '';
+$no_hp_penanggung = '';
+$pekerjaan = '';
+$hubungan_dengan_pasien = '';
+}
+
+
+$sett_registrasi_2 = $db->query("SELECT * FROM setting_registrasi ");
+$data_sett_2 = mysqli_fetch_array($sett_registrasi_2);
+
+if ($data_sett_2['tampil_ttv'] == 1) {
+
 $tinggi_badan = stringdoang($_POST['tinggi_badan']);
 $berat_badan = stringdoang($_POST['berat_badan']);
 $suhu = stringdoang($_POST['suhu']);
 $nadi = stringdoang($_POST['nadi']);
 $respiratory_rate = stringdoang($_POST['respiratory_rate']);
 $sistole_distole = stringdoang($_POST['sistole_distole']);
+}
+else
+{
+$tinggi_badan = '-';
+$berat_badan = '-';
+$suhu = '-';
+$nadi = '-';
+$respiratory_rate = '-';
+$sistole_distole = '-';
+}
+
+
 $perujuk = stringdoang($_POST['rujukan']);
 $alergi = stringdoang($_POST['alergi']);
 
+
+$session_id = session_id();
+
+
+
+$ambil_satuan = $db->query("SELECT id FROM satuan WHERE nama = 'BED'");
+$b = mysqli_fetch_array($ambil_satuan);
+$satuan_bed = $b['id'];
 
 $jam =  date("H:i:s");
 $tanggal_sekarang = date("Y-m-d");
@@ -67,7 +117,7 @@ $keluar = mysqli_fetch_array($select_to);
 
 if ($keluar['nama_pasien'] == $nama_lengkap )
 {
-header('location:rawat_inap.php');
+  echo '<META HTTP-EQUIV="Refresh" Content="0; URL=rawat_inap.php">';
 }
 else{
 // START UNTUK AMBIL NO REG NYA LEWAT PROSES SAJA
@@ -137,7 +187,7 @@ $sql0->execute();
 
 
 // UPDATE PASIEN NYA
-$update_pasien = "UPDATE pelanggan SET pekerjaan_suamiortu = '$pekerjaan', no_hp_penanggung = '$no_hp_penanggung', hubungan_dengan_pasien = '$hubungan_dengan_pasien', alamat_penanggung = '$alamat_penanggung', nama_penanggungjawab = '$penanggung_jawab', umur = '$umur', no_telp = '$hp_pasien', alamat_sekarang = '$alamat', penjamin = '$penjamin' WHERE no_rm = '$no_rm'";
+$update_pasien = "UPDATE pelanggan SET pekerjaan_suamiortu = '$pekerjaan', no_hp_penanggung = '$no_hp_penanggung', hubungan_dengan_pasien = '$hubungan_dengan_pasien', alamat_penanggung = '$alamat_penanggung', nama_penanggungjawab = '$penanggung_jawab', umur = '$umur',no_telp = '$hp_pasien', alamat_sekarang = '$alamat', penjamin = '$penjamin' WHERE kode_pelanggan = '$no_rm'";
 if ($db->query($update_pasien) === TRUE) 
   {
 } 
@@ -154,7 +204,7 @@ $query = $db->query("UPDATE bed SET sisa_bed = sisa_bed - 1 WHERE nama_kamar = '
 // ambil bahan untuk kamar 
 $query20 = $db->query(" SELECT * FROM penjamin WHERE nama = '$penjamin'");
 $data20  = mysqli_fetch_array($query20);
-$level_harga = $data20['harga'];
+echo$level_harga = $data20['harga'];
 
 $cari_harga_kamar = $db->query("SELECT tarif,tarif_2,tarif_3,tarif_4,tarif_5,tarif_6,tarif_7 FROM bed WHERE nama_kamar = '$bed' AND group_bed = '$group_bed' ");
 $kamar_luar = mysqli_fetch_array($cari_harga_kamar);
@@ -177,7 +227,7 @@ if ($level_harga == 'harga_1')
 $subtotal = $menginap * $harga_kamar1;
 
 
-$query65 = "INSERT INTO tbs_penjualan (no_reg,kode_barang,nama_barang,jumlah_barang,harga,subtotal,tipe_barang,potongan,tax) VALUES ('$no_reg','$bed','$group_bed','$menginap','$harga_kamar1','$subtotal','Jasa','0','0')";
+$query65 = "INSERT INTO tbs_penjualan (session_id,no_reg,kode_barang,nama_barang,jumlah_barang,harga,subtotal,tipe_barang,potongan,tax,satuan,jam,tanggal) VALUES ('$session_id','$no_reg','$bed','$group_bed','$menginap','$harga_kamar1','$subtotal','Bed','0','0','$satuan_bed','$jam','$tanggal_sekarang')";
       if ($db->query($query65) === TRUE) 
       {
   
@@ -198,7 +248,7 @@ else if ($level_harga == 'harga_2')
 $subtotal = $menginap * $harga_kamar2;
 
 
-$query65 = "INSERT INTO tbs_penjualan (no_reg,kode_barang,nama_barang,jumlah_barang,harga,subtotal,tipe_barang,potongan,tax) VALUES ('$no_reg','$bed','$group_bed','$menginap','$harga_kamar2','$subtotal','Jasa','0','0')";
+$query65 = "INSERT INTO tbs_penjualan (session_id,no_reg,kode_barang,nama_barang,jumlah_barang,harga,subtotal,tipe_barang,potongan,tax,satuan,jam,tanggal) VALUES ('$session_id','$no_reg','$bed','$group_bed','$menginap','$harga_kamar2','$subtotal','Bed','0','0','$satuan_bed','$jam','$tanggal_sekarang')";
       if ($db->query($query65) === TRUE) 
       {
   
@@ -220,7 +270,7 @@ else if ($level_harga == 'harga_3')
 $subtotal = $menginap * $harga_kamar3;
 
 
-$query65 = "INSERT INTO tbs_penjualan (no_reg,kode_barang,nama_barang,jumlah_barang,harga,subtotal,tipe_barang,potongan,tax) VALUES ('$no_reg','$bed','$group_bed','$menginap','$harga_kamar3','$subtotal','Jasa','0','0')";
+$query65 = "INSERT INTO tbs_penjualan (session_id,no_reg,kode_barang,nama_barang,jumlah_barang,harga,subtotal,tipe_barang,potongan,tax,satuan,jam,tanggal) VALUES ('$session_id','$no_reg','$bed','$group_bed','$menginap','$harga_kamar3','$subtotal','Bed','0','0','$satuan_bed','$jam','$tanggal_sekarang')";
       if ($db->query($query65) === TRUE) 
       {
   
@@ -229,7 +279,6 @@ $query65 = "INSERT INTO tbs_penjualan (no_reg,kode_barang,nama_barang,jumlah_bar
       {
         echo "Error: " . $query65 . "<br>" . $db->error;
       }
-
 
 }
 // harga_3 (pertama)
@@ -241,7 +290,7 @@ else if ($level_harga == 'harga_4')
 $subtotal = $menginap * $harga_kamar4;
 
 
-$query65 = "INSERT INTO tbs_penjualan (no_reg,kode_barang,nama_barang,jumlah_barang,harga,subtotal,tipe_barang,potongan,tax) VALUES ('$no_reg','$bed','$group_bed','$menginap','$harga_kamar4','$subtotal','Jasa','0','0')";
+$query65 = "INSERT INTO tbs_penjualan (session_id,no_reg,kode_barang,nama_barang,jumlah_barang,harga,subtotal,tipe_barang,potongan,tax,satuan,jam,tanggal) VALUES ('$session_id','$no_reg','$bed','$group_bed','$menginap','$harga_kamar4','$subtotal','Bed','0','0','$satuan_bed','$jam','$tanggal_sekarang')";
       if ($db->query($query65) === TRUE) 
       {
         
@@ -261,7 +310,7 @@ else if ($level_harga == 'harga_5')
 $subtotal = $menginap * $harga_kamar5;
 
 
-$query65 = "INSERT INTO tbs_penjualan (no_reg,kode_barang,nama_barang,jumlah_barang,harga,subtotal,tipe_barang,potongan,tax) VALUES ('$no_reg','$bed','$group_bed','$menginap','$harga_kamar5','$subtotal','Jasa','0','0')";
+$query65 = "INSERT INTO tbs_penjualan (session_id,no_reg,kode_barang,nama_barang,jumlah_barang,harga,subtotal,tipe_barang,potongan,tax,satuan,jam,tanggal) VALUES ('$session_id','$no_reg','$bed','$group_bed','$menginap','$harga_kamar5','$subtotal','Bed','0','0','$satuan_bed','$jam','$tanggal_sekarang')";
       if ($db->query($query65) === TRUE) 
       {
   
@@ -283,7 +332,7 @@ else if ($level_harga == 'harga_6')
 $subtotal = $menginap * $harga_kamar6;
 
 
-$query65 = "INSERT INTO tbs_penjualan (no_reg,kode_barang,nama_barang,jumlah_barang,harga,subtotal,tipe_barang,potongan,tax) VALUES ('$no_reg','$bed','$group_bed','$menginap','$harga_kamar6','$subtotal','Jasa','0','0')";
+$query65 = "INSERT INTO tbs_penjualan (session_id,no_reg,kode_barang,nama_barang,jumlah_barang,harga,subtotal,tipe_barang,potongan,tax,satuan,jam,tanggal) VALUES ('$session_id','$no_reg','$bed','$group_bed','$menginap','$harga_kamar6','$subtotal','Bed','0','0','$satuan_bed','$jam','$tanggal_sekarang')";
       if ($db->query($query65) === TRUE) 
       {
   
@@ -305,7 +354,7 @@ else if ($level_harga == 'harga_7')
 
 $subtotal = $menginap * $harga_kamar7;
 
-$query65 = "INSERT INTO tbs_penjualan (no_reg,kode_barang,nama_barang,jumlah_barang,harga,subtotal,tipe_barang,potongan,tax) VALUES ('$no_reg','$bed','$group_bed','$menginap','$harga_kamar7','$subtotal','Jasa','0','0')";
+$query65 = "INSERT INTO tbs_penjualan (session_id,no_reg,kode_barang,nama_barang,jumlah_barang,harga,subtotal,tipe_barang,potongan,tax,satuan,jam,tanggal) VALUES ('$session_id','$no_reg','$bed','$group_bed','$menginap','$harga_kamar7','$subtotal','Bed','0','0','$satuan_bed','$jam','$tanggal_sekarang')";
       if ($db->query($query65) === TRUE) 
       {
   
@@ -345,12 +394,56 @@ $query65 = "INSERT INTO tbs_penjualan (no_reg,kode_barang,nama_barang,jumlah_bar
 
   <?php 
 
-$query7 = $db->query("SELECT * FROM registrasi WHERE jenis_pasien = 'Rawat Inap' AND status = 'menginap' AND status != 'Batal Rawat Inap' AND tanggal = '$tanggal_sekarang'ORDER BY id DESC LIMIT 1 ");
+$query7 = $db->query("SELECT * FROM registrasi WHERE jenis_pasien = 'Rawat Inap' AND status = 'menginap' AND status != 'Batal Rawat Inap' AND tanggal = '$tanggal_sekarang' ORDER BY id DESC LIMIT 1 ");
   $data = mysqli_fetch_array($query7);
-      
+ 
+     echo "
+     <tr class='tr-id-".$data['id']."'>";
 
-    echo "<tr class='tr-id-".$data['id']."'>
-            <td>". $data['no_rm']."</td>
+        if ($registrasi_ri['registrasi_ri_hapus']) {
+          echo "<td><button  class='btn btn-floating btn-small btn-info' id='batal_ranap' data-reg='". $data['no_reg']. "' data-id='". $data['id']. "'><i class='fa fa-remove'></i> </button></td>";
+        }
+        else{
+          echo "<td> </td>";
+        }
+
+        if ($penjualan['penjualan_tambah'] > 0) {
+                 
+                 $query_z = $db->query("SELECT status,no_faktur,nama,kode_gudang FROM penjualan WHERE no_reg = '$data[no_reg]' ");
+                 $data_z = mysqli_fetch_array($query_z);
+                 
+                 if ($data_z['status'] == 'Simpan Sementara') {
+                 
+                 echo "<td> <a href='proses_pesanan_barang_ranap.php?no_faktur=".$data_z['no_faktur']."&no_reg=".$data['no_reg']."&kode_pelanggan=".$data['no_rm']."&nama_pelanggan=".$data_z['nama']."&kode_gudang=".$data_z['kode_gudang']."'class='btn btn-floating btn-small btn btn-danger'><i class='fa fa-credit-card'></i></a> </td>"; 
+                 }
+                 
+                 else {
+                 echo "<td><a href='form_penjualan_kasir_ranap.php?no_reg=". $data['no_reg']. "' ' class='btn btn-floating btn-small btn-info'><i class='fa fa-shopping-cart'></i></a></td>";
+                 }
+
+        }
+        else{
+          echo "<td> </td>";
+        }
+
+        if ($registrasi_ri['registrasi_ri_lihat']) {
+          echo "<td> <button type='button' data-reg='".$data['no_reg']."' data-bed='".$data['bed']."' data-group-bed='".$data['group_bed']."' data-id='".$data['id']."' data-reg='".$data['no_reg']."'  class='btn btn-floating btn-small btn-info pindah'><i class='fa fa-reply'></i></button></td>
+
+          <td><a href='registrasi_operasi.php?no_reg=".$data['no_reg']."&no_rm=".$data['no_rm']."&bed=".$data['bed']."&kamar=".$data['group_bed']."' class='btn btn-floating btn-small btn-danger'><i class='fa fa-plus-circle'></i></a></td>";
+        }
+        else{
+          echo "<td> </td>";
+          echo "<td> </td>";
+        }          
+
+        if ($rekam_medik['rekam_medik_ri_lihat']) {
+          echo "<td><a href='rekam_medik_ranap.php' class='btn btn-floating btn-small btn-danger'><i class='fa fa-medkit'></i></a></td>";
+        }
+        else{          
+          echo "<td> </td>";
+        }
+
+            echo "<td>". $data['no_rm']."</td>
             <td>". $data['no_reg']."</td>
             <td>". $data['status']."</td>           
             <td>". $data['nama_pasien']."</td>
@@ -365,29 +458,31 @@ $query7 = $db->query("SELECT * FROM registrasi WHERE jenis_pasien = 'Rawat Inap'
             <td>". $data['penanggung_jawab']."</td>
             <td>". $data['umur_pasien']."</td> 
 
-            <td><a style='width:95px;' href='form-rujuk-lab-ri.php?no_reg=".$data['no_reg']."' class='btn btn-success'><i class='fa fa-hand-pointer-o'></i> Rujuk Lab</a></td>
-
-          <td> <button style='width:120px;'  type='button' data-reg='".$data['no_reg']."' data-bed='".$data['bed']."' data-group-bed='".$data['group_bed']."' data-id='".$data['id']."' data-reg='".$data['no_reg']."'  class='btn btn-warning pindah'><i class='fa fa-reply'> Pindah Kamar</button></td>
-
-          <td><button style='width:55px;' class='btn btn-danger' id='batal_ranap' data-reg='". $data['no_reg']. "' data-id='". $data['id']. "'><i class='fa fa-remove'> Batal</button></td>
+           
 
       </tr>";
-      
     ?>
 
-
-<!--script disable hubungan pasien-->
+<!--   script untuk detail layanan PINDAH KAMAR-->
 <script type="text/javascript">
-  $("#coba").click(function(){
-  $("#demo").show();
-  $("#kembali").show();
-   $("#coba").hide();
-  });
-    $("#kembali").click(function(){
-  $("#demo").hide();
-  $("#coba").show();
-  $("#kembali").hide();
+     $(".pindah").click(function(){   
+            
+            var id = $(this).attr('data-id');
+            var reg = $(this).attr('data-reg');
+            var bed = $(this).attr('data-bed');
+            var group_bed = $(this).attr('data-group-bed');
+            var no_reg = $(this).attr('data-reg');
 
-  });
+            $("#pindah_kamar").attr("data-id",id);
+            $("#pindah_kamar").attr("data-reg",reg);
+            $("#pindah_kamar").attr("data-bed",bed);
+            $("#pindah_kamar").attr("data-group_bed",group_bed);
 
+                $.post("pindah_kamar.php",{reg:reg,bed:bed,group_bed:group_bed},function(data){
+                $("#tampil_kamar").html(data);
+                $("#modal_kamar").modal('show');
+          
+                });
+            });
+//            tabel lookup mahasiswa         
 </script>

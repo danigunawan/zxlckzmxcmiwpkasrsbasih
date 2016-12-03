@@ -11,38 +11,9 @@ $waktu = date("Y-m-d H:i:s");
 $bulan_php = date('m');
 $tahun_php = date('Y');
 
-
-// START UNTUK AMBIL NO RM NYA LEWAT PROSES SAJA
-
- $tahun_sekarang = substr($tahun_php, 2);
-// end 
-
-//ambil bulan dari no rm terakhir
-$q_rm_tanggal = $db->query("SELECT MONTH(tanggal) as bulan FROM pelanggan ORDER BY id DESC LIMIT 1");
-$v_rm_tanggal = mysqli_fetch_array($q_rm_tanggal);
- $bulan_terakhir_rm = $v_rm_tanggal['bulan'];
-//end 
-
-
-//ambil no_rm terkahir dari pasien
-$q_rm = $db->query("SELECT kode_pelanggan FROM pelanggan WHERE kode_pelanggan IS NOT NULL ORDER BY id DESC LIMIT 1");
-$v_rm = mysqli_fetch_array($q_rm);
-$no_rm_terakhir = substr($v_rm['kode_pelanggan'],0,-6);
-//end
-
- if ($bulan_terakhir_rm != $bulan_php) {
-  # code...
-  $no_rm = "1-".$bulan_php."-".$tahun_sekarang;
- }
-
- else
- {
-
-  $nomor = 1 + $no_rm_terakhir;
-  $no_rm = $nomor."-".$bulan_php."-".$tahun_sekarang;
- }
-// ENDING UNTUK AMBIL NO RM NYA LEWAT PROSES SAJA
-
+$ambil_rm = $db->query("SELECT kode_pelanggan FROM pelanggan ORDER BY kode_pelanggan DESC LIMIT 1 ");
+$no_ter = mysqli_fetch_array($ambil_rm);
+$no_rm = $no_ter['kode_pelanggan'] + 1;
 
 $nama_lengkap = stringdoang($_POST['nama_lengkap']);
 $jenis_kelamin = stringdoang($_POST['jenis_kelamin']);

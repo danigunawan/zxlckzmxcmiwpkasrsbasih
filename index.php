@@ -1,8 +1,5 @@
 <?php
-
 include 'header.php';
-
-
 ?>
 <link rel="stylesheet" href="login.css">
 <script src="login.js"></script>
@@ -47,7 +44,5 @@ include 'header.php';
 
 
 <?php
-
 include 'footer.php';
-
 ?>

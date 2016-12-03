@@ -25,8 +25,7 @@ $session_id = session_id();
     <?php
 
     //menampilkan semua data yang ada pada tabel tbs penjualan dalam DB
-     $perintah = $db->query("SELECT * FROM tbs_item_keluar
-                WHERE session_id = '$session_id'");
+     $perintah = $db->query("SELECT tik.id,tik.no_faktur,tik.kode_barang,tik.nama_barang,tik.jumlah,tik.harga,tik.subtotal,s.nama FROM tbs_item_keluar tik INNER JOIN satuan s ON tik.satuan = s.id WHERE tik.session_id = '$session_id'");
 
       //menyimpan data sementara yang ada pada $perintah
 
@@ -39,7 +38,7 @@ $session_id = session_id();
 
       <td class='edit-jumlah' data-id='".$data1['id']."'><span id='text-jumlah-".$data1['id']."'>". $data1['jumlah'] ."</span> <input type='hidden' id='input-jumlah-".$data1['id']."'  value='".$data1['jumlah']."' class='input_jumlah' data-subtotal='".$data1['subtotal']."' data-id='".$data1['id']."' autofocus='' data-harga='".$data1['harga']."' data-faktur='".$data1['no_faktur']."' data-kode='".$data1['kode_barang']."' > </td>
 
-      <td>". $data1['satuan'] ."</td>
+      <td>". $data1['nama'] ."</td>
       <td>". rp($data1['harga']) ."</td>
       <td><span id='text-subtotal-".$data1['id']."'>". rp($data1['subtotal']) ."</span></td>
 
@@ -132,3 +131,5 @@ $(document).ready(function(){
                                  });
 
                              </script>
+
+                             

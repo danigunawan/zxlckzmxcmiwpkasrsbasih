@@ -9,11 +9,6 @@ $session_id = session_id();
 
 $query = $db->query("SELECT * FROM pembayaran_hutang ORDER BY id DESC");
  
-
-
-
-
-
  ?>
 
 <style type="text/css">
@@ -32,11 +27,13 @@ $query = $db->query("SELECT * FROM pembayaran_hutang ORDER BY id DESC");
 
 
 
+<!-- js untuk tombol shortcut -->
+ <script src="shortcut.js"></script>
+<!-- js untuk tombol shortcut -->
 
- <div class="container">
+ <div style="padding-left: 5%; padding-right: 5%">
  
 <h3> <u>FORM PEMBAYARAN HUTANG</u> </h3>
-<br><br>
 
 <!-- Modal Hapus data -->
 <div id="modal_hapus" class="modal fade" role="dialog">
@@ -127,89 +124,10 @@ $query = $db->query("SELECT * FROM pembayaran_hutang ORDER BY id DESC");
 
 
 <form action="proses_tbs_pembayaran_hutang.php" role="form" method="post" id="formtambahproduk">
-<div class="row">
 
 
 
-          
-          <div class="form-group col-sm-4">
-          <label> Suplier </label>
-          <br>
-          <select type="text" name="suplier" id="nama_suplier" class="form-control chosen" required="">
-          <option value="">--Silakan Pilih--</option>
-          
-          <?php 
-          include 'db.php';
-          
-          // menampilkan data yang ada pada tabel suplier
-          $query = $db->query("SELECT * FROM suplier ");
-          
-          // menyimpan data sementara yang ada pada $query
-          while($data = mysqli_fetch_array($query))
-          {
-          
-          echo "<option value='".$data['id'] ."'>".$data['nama'] ."</option>";
-          }
-          
-          
-          ?>
-          </select>
-          </div>
-
-
-          
-
-          <div class="form-group col-sm-4">
-          <label> Cara Bayar </label><br>
-          <select type="text" name="cara_bayar" id="carabayar1" class="form-control" >
-          
-             <?php 
-             
-             
-             $sett_akun = $db->query("SELECT sa.kas, da.nama_daftar_akun FROM setting_akun sa INNER JOIN daftar_akun da ON sa.kas = da.kode_daftar_akun");
-             $data_sett = mysqli_fetch_array($sett_akun);
-             
-             
-             
-             echo "<option selected='' value='".$data_sett['kas']."'>".$data_sett['nama_daftar_akun'] ."</option>";
-             
-             $query = $db->query("SELECT nama_daftar_akun, kode_daftar_akun FROM daftar_akun WHERE tipe_akun = 'Kas & Bank'");
-             while($data = mysqli_fetch_array($query))
-             {
-             
-             
-             
-             
-             echo "<option value='".$data['kode_daftar_akun']."'>".$data['nama_daftar_akun'] ."</option>";
-             
-             
-             
-             
-             }
-             
-             
-             ?>
-          
-          </select>
-          </div>
-
-          
-          <div class="form-group col-sm-4">
-          <label> Tanggal </label><br>
-          <input type="text" name="tanggal" id="tanggal" placeholder="Tanggal" style="height: 20px" value="<?php echo date("Y/m/d"); ?>" class="form-control" required="" >
-          
-
-          
-          <input type="hidden" name="session_id" id="session_id" class="form-control" readonly="" value="<?php echo $session_id; ?>" required="" >
-          </div>
-
-          <input type="hidden" class="form-control" id="jumlah1" name="jumlah0" placeholder="jumlah">
-
-          
-
-</div> <!-- tag penutup div row -->
-
-<button type="button" class="btn btn-info" id="cari_produk_pembelian" data-toggle="modal" data-target="#myModal"> <i class='fa fa-search'> </i> Cari</button>
+<button type="button" class="btn btn-info" id="cari_produk_pembelian" data-toggle="modal" data-target="#myModal" data-placement='top' title='Pastikan anda memilih supplier terlebih dahulu sebelum klik tombol cari.'> <i class='fa fa-search'> </i> Cari (F1)</button>
 <br>
 
 <!-- Tampilan Modal -->
@@ -313,60 +231,64 @@ $query = $db->query("SELECT * FROM pembayaran_hutang ORDER BY id DESC");
 <div class="row">
   <div class="col-sm-8">
 
-<div class="form-group col-sm-3">
+<div class="form-group col-sm-2">
   <input type="text" class="form-control" name="no_faktur_pembelian" id="nomorfakturbeli" placeholder="Nomor Faktur Beli" readonly="">
   </div>
   
-  <div class="form-group col-sm-3">
+  <div class="form-group col-sm-2">
     <input type="text" class="form-control" name="kredit" id="kredit" placeholder="Kredit" readonly="">
   </div>
 
 
-<div class="form-group col-sm-3">
+<div class="form-group col-sm-2">
           <input type="text" name="potongan" id="potongan_penjualan" class="form-control" placeholder="Potongan" autocomplete="off">
 </div>
 
-  <div class="form-group col-sm-3">
+  <div class="form-group col-sm-2">
     <input type="text" class="form-control" name="jumlah_bayar"  onkeydown="return numbersonly(this, event);" id="jumlah_bayar" placeholder="Jumlah Bayar" autocomplete="off">
+  
+    <div class="form-group">
+      <input type="hidden" name="total" id="total" class="form-control" value="" required="">
+    </div>
+
+    <div class="form-group">
+      <input type="hidden" name="potongan" id="potongan10" class="form-control" value="" required="">
+    </div>
+
+    <div class="form-group">
+      <input type="hidden" name="tanggal_jt" id="tanggal_jt" class="form-control" value="" required="">
+    </div>
+
+    <input type="hidden" name="status" id="status" class="form-control" value="">
+
+    <input value="<?php echo $data01['id']; ?>" type="hidden" name="suplier" id="n_suplier" class="form-control" required="" >
   </div>
 
-
-
-<div class="form-group">
-  <input type="hidden" name="total" id="total" class="form-control" value="" required="">
+  <div class="form-group col-sm-3">
+       <button type="submit" id="submit_tambah" class="btn btn-success"> <i class='fa fa-plus'> </i> Tambah </button>
 </div>
 
-<div class="form-group">
-  <input type="hidden" name="potongan" id="potongan10" class="form-control" value="" required="">
-</div>
 
-<div class="form-group">
-  <input type="hidden" name="tanggal_jt" id="tanggal_jt" class="form-control" value="" required="">
-</div>
-<input type="hidden" name="status" id="status" class="form-control" value="">
 
-<input value="<?php echo $data01['id']; ?>" type="hidden" name="suplier" id="n_suplier" class="form-control" required="" >
 
-<button type="submit" id="submit_tambah" class="btn btn-success"> <i class='fa fa-plus'> </i>Tambah </button>
 
 </form>
 <br><br>
 
       <span id="result"> 
-
   <div class="table-responsive">
 
   <!--tag untuk membuat garis pada tabel-->       
-  <table id="table" class="table table-bordered">
+  <table id="table" class="table table-bordered table-sm">
     <thead>
-      <th> Nomor Faktur Pembelian </th>
+      <th> No Faktur Beli </th>
+      <th>Suplier</th>
       <th> Tanggal </th>
-      <th> Tanggal JT </th>
+      <th> Jatuh Tempo</th>
       <th> Kredit </th>
       <th> Potongan </th>
       <th> Total </th>
-      <th> Jumlah Bayar </th>
-      
+      <th> Jumlah Bayar </th>    
       <th> Hapus </th>
       <th> Edit </th>
       
@@ -382,10 +304,16 @@ $query = $db->query("SELECT * FROM pembayaran_hutang ORDER BY id DESC");
     //menyimpan data sementara yang ada pada $perintah
       while ($data1 = mysqli_fetch_array($perintah))
       {
-
+ $suplier = $db->query("SELECT id,nama FROM suplier WHERE id = '$data1[suplier]'");
+        $out = mysqli_fetch_array($suplier);
+        if ($data1['suplier'] == $out['id'])
+        {
+          $out['nama'];
+        }
         // menampilkan data
       echo "<tr class='tr-id-".$data1['id']."'>
       <td>". $data1['no_faktur_pembelian'] ."</td>
+      <td>". $out['nama'] ."</td>
       <td>". $data1['tanggal'] ."</td>
       <td>". $data1['tanggal_jt'] ."</td>
       <td>". rp($data1['kredit']) ."</td>
@@ -403,18 +331,74 @@ $query = $db->query("SELECT * FROM pembayaran_hutang ORDER BY id DESC");
     </tbody>
 
   </table>
-  </div>
-</span> <!--tag penutup span-->
  
+  
+</div>
+</span> <!--tag penutup span-->
+
 
 </div>
 
-  <div class="col-sm-4">
 
-  <div class="form-group">
-          <label> <b> Total Bayar </b> </label><br>
-          <input type="text" name="total_bayar" id="totalbayar" placeholder="Total Bayar" class="form-control" readonly="" required="">
+  <div class="col-sm-4">
+<div class="card card-block">
+  <div class="row 1">
+
+          <div class="form-group col-sm-6">
+          <label> Suplier </label>
+          <br>
+          <select type="text" name="suplier" id="nama_suplier" class="form-control chosen" required="">
+          <option value="">--Silakan Pilih--</option>
+          
+          <?php 
+          include 'db.php';
+          $take = $db->query("SELECT id,nama FROM suplier");
+          while($data = mysqli_fetch_array($take))
+          {
+          echo "<option value='".$data['id'] ."'>".$data['nama'] ."</option>";
+          }
+          ?>
+          </select>
           </div>
+          
+          <div class="form-group col-sm-6">
+          <label> Tanggal </label><br>
+          <input type="text" name="tanggal" id="tanggal" placeholder="Tanggal" style="height: 20px" value="<?php echo date("Y/m/d"); ?>" class="form-control" required="" >
+          
+          <input type="hidden" name="session_id" id="session_id" class="form-control" readonly="" value="<?php echo $session_id; ?>" required="" >
+          </div>
+
+          <input type="hidden" class="form-control" id="jumlah1" name="jumlah0" placeholder="jumlah">
+
+</div> <!-- tag penutup div row 1-->
+
+
+
+        <div class="row 2">
+          <div class="form-group col-sm-6">
+            <div class="form-group">
+              <label> <b> Total Bayar </b> </label><br>
+              <b><input style="font-size:20px" type="text" name="total_bayar" id="totalbayar" placeholder="Total Bayar" class="form-control" readonly="" required=""></b>
+            </div>
+          </div>
+
+          <div class="form-group col-sm-6">
+            <label> Cara Bayar </label><br>
+            <select type="text" name="cara_bayar" id="carabayar1" class="form-control" >
+               <?php 
+               $sett_akun = $db->query("SELECT sa.kas, da.nama_daftar_akun FROM setting_akun sa INNER JOIN daftar_akun da ON sa.kas = da.kode_daftar_akun");
+               $data_sett = mysqli_fetch_array($sett_akun);
+                            echo "<option selected='' value='".$data_sett['kas']."'>".$data_sett['nama_daftar_akun'] ."</option>";
+               
+               $query = $db->query("SELECT nama_daftar_akun, kode_daftar_akun FROM daftar_akun WHERE tipe_akun = 'Kas & Bank'");
+               while($data = mysqli_fetch_array($query))
+               {
+                 echo "<option value='".$data['kode_daftar_akun']."'>".$data['nama_daftar_akun'] ."</option>";
+               }
+               ?>
+            </select>
+          </div>
+        </div>
 
           <input type="hidden" class="form-control" name="potongan1" id="potongan1" placeholder="Potongan 1" autocomplete="off">
           <input type="hidden" class="form-control" name="faktur" id="faktur" placeholder="Faktur" autocomplete="off">
@@ -424,12 +408,13 @@ $query = $db->query("SELECT * FROM pembayaran_hutang ORDER BY id DESC");
           <label> Keterangan </label><br>
           <textarea name="keterangan" id="keterangan" class="form-control" ></textarea>
           <br>
-
+</div>
 
 
 <button type="submit" id="pembayaran" class="btn btn-info"><i class="fa fa-send"></i> Bayar</button>
 
 <a href="form_pembayaran_hutang.php" class="btn btn-primary" style="display: none" id="transaksi_baru"><i class="fa fa-refresh"></i> Transaksi Baru</a>
+
 
 <?php 
 $perintah50 = $db->query("SELECT * FROM tbs_pembayaran_hutang WHERE session_id = '$session_id'");
@@ -451,7 +436,7 @@ mysqli_close($db);
     
   </div>
 </div>
-
+</div>
 
 <span id="demo"> </span>
 </div>
@@ -486,6 +471,15 @@ $(document).ready(function(){
 
    
   </script> <!--tag penutup perintah java script-->
+
+<script type="text/javascript">
+    $(document).ready(function(){
+    // Tooltips Initialization
+    $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+    });
+    });
+</script>
 
 <script>
    //perintah javascript yang diambil dari form tbs pembelian dengan id=form tambah produk
@@ -729,6 +723,7 @@ $.post("cek_total_pembayaran_hutang.php",
         session_id: session_id
     },
     function(data){
+      data = data.replace(/\s+/g, '');
         $("#totalbayar"). val(data);
     });
 
@@ -737,6 +732,15 @@ $.post("cek_total_pembayaran_hutang.php",
 
 </script>
 
+
+<script type="text/javascript">
+   shortcut.add("f1", function() {
+        // Do something
+
+        $("#cari_produk_pembelian").click();
+
+    });
+</script>
 
 <!--membuat menampilkan no faktur dan suplier pada tax-->
 <script>
@@ -946,7 +950,13 @@ $(document).ready(function(){
 
     </script>
 
+<script>
+// untuk memunculkan data tabel 
+$(document).ready(function() {
+        $('#table').DataTable({"ordering":false});
+    });
 
+</script>
 
 
 <?php 

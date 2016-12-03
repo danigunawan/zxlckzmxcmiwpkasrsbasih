@@ -16,10 +16,10 @@
 
 
 
-<h1>FORM KOMISI PRODUK / JABATAN </h1>
-<br><br>
+<h3>FORM KOMISI PRODUK / JABATAN </h3><hr>
+
         <!-- membuat tombol agar menampilkan modal -->
-        <button type="button" class="btn btn-warning btn-lg" id="cari_produk" data-toggle="modal" data-target="#myModal"> <span class='glyphicon glyphicon-search'> </span> Cari Produk</button>
+        <button type="button" class="btn btn-warning" id="cari_produk" data-toggle="modal" data-target="#myModal"> <i class='fa fa-search'> </i> Cari Produk</button>
         <br><br>
         <!-- Tampilan Modal -->
         <div id="myModal" class="modal fade" role="dialog">
@@ -200,7 +200,7 @@
     while($data = mysqli_fetch_array($query))
     {
     
-    echo "<option>".$data['nama'] ."</option>";
+    echo "<option value='".$data['id'] ."'>".$data['nama'] ."</option>";
     }
     
 //Untuk Memutuskan Koneksi Ke Database
@@ -210,7 +210,7 @@ mysqli_close($db);
    					</select>
 					</div>
 
-					<button type="submit" id="tambah_fee" class="btn btn-info"> <span class='glyphicon glyphicon-plus'> </span> Tambah</button>
+					<button type="submit" id="tambah_fee" class="btn btn-info"> <i class='fa fa-plus'> </i> Tambah</button>
 
 </div>
 </form>
@@ -221,9 +221,7 @@ mysqli_close($db);
 </span>
 
 </div><!-- end row -->
-<br>
-<br>
-<label> User : <?php echo $_SESSION['user_name']; ?> </label> 
+
 
 
 

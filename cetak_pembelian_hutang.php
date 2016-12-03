@@ -42,14 +42,13 @@ $data001 = mysqli_fetch_array($perintah);
 <div class="container">
     
     <div class="row"><!--row1-->
+    <h3> <center><b> BUKTI PEMBELIAN HUTANG </b></center></h3><hr>
         <div class="col-sm-2">
-        <br><br>
                 <img src='save_picture/<?php echo $data1['foto']; ?>' class='img-rounded' alt='Cinque Terre' width='160' height='140`'> 
         </div><!--penutup colsm2-->
 
         <div class="col-sm-4">
-                 <h3> <b> BUKTI PEMBELIAN HUTANG </b></h3>
-                 <hr>
+                 
                  <h4> <b> <?php echo $data1['nama_perusahaan']; ?> </b> </h4> 
                  <p> <?php echo $data1['alamat_perusahaan']; ?> </p> 
                  <p> No.Telp:<?php echo $data1['no_telp']; ?> </p> 
@@ -57,7 +56,7 @@ $data001 = mysqli_fetch_array($perintah);
         </div><!--penutup colsm4-->
 
         <div class="col-sm-4">
-                          <br><br><br><br><br>
+                         
 
    <table>
   <tbody>
@@ -73,7 +72,7 @@ $data001 = mysqli_fetch_array($perintah);
         </div><!--penutup colsm4-->
 
         <div class="col-sm-2">
-                <br><br><br><br><br>
+               
                 User: <?php echo $_SESSION['user_name']; ?>  <br>
 
         </div><!--penutup colsm4-->
@@ -87,7 +86,7 @@ $data001 = mysqli_fetch_array($perintah);
 <br>
 <div class="container">
 
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
         <thead>
 
            <th> Nomor Faktur </th>

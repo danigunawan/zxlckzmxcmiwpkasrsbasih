@@ -77,12 +77,12 @@
                   </div>
 
                   <div class="form-group">
-                  <input type="text" class="form-control" name="kode_barang" id="kode_barang" placeholder="Kode Produk" autocomplete="off">
+                  <input type="text" class="form-control" name="kode_barang" id="kode_barang" placeholder="Ketikkan Kode Produk" autocomplete="off">
                   </div>
                   
                   <div class="form-group"> <!-- agar tampilan berada pada satu group -->
                   <!-- memasukan teks pada kolom kode barang -->
-                  <input type="text" class="form-control" name="nama_barang" readonly="" id="nama_barang" placeholder="Nama Barang">
+                  <input type="hidden" class="form-control" name="nama_barang" readonly="" id="nama_barang" placeholder="Nama Barang">
                   </div>
                   
                   
@@ -317,6 +317,13 @@
                   
                   </script> <!--tag penutup perintah java script-->
                   
+                  <script>
+                  $(function() {
+                      $( "#kode_barang" ).autocomplete({
+                          source: 'kode_barang_autocomplete.php'
+                      });
+                  });
+                  </script> 
                   
                   <script>
                   //perintah javascript yang diambil dari form tbs pembelian dengan id=form tambah produk
@@ -325,6 +332,7 @@
                   $("#submit_produk").click(function(){
                   
                   var kode_barang = $("#kode_barang").val();
+                  var kode_barang = kode_barang.substr(0, kode_barang.indexOf('('));
                   var nama_barang = $("#nama_barang").val();
                   var jumlah_awal = $("#jumlah_barang").val();
                   var satuan = $("#satuan").val();
@@ -538,7 +546,8 @@
 
     var session_id = $("#session_id").val();
     var kode_barang = $("#kode_barang").val();
-    
+    var kode_barang = kode_barang.substr(0, kode_barang.indexOf('('));
+
     $.post('cek_kode_barang_tbs_stok_awal.php',{kode_barang:kode_barang,session_id:session_id}, function(data){
     
     if(data == 1){
@@ -549,7 +558,7 @@
     
     });////penutup function(data)
 
-      $.getJSON('lihat_stok_awal.php',{kode_barang:$(this).val()}, function(json){
+      $.getJSON('lihat_stok_awal.php',{kode_barang:kode_barang}, function(json){
       
       if (json == null)
       {

@@ -115,9 +115,9 @@ $kredit = $cek105['kredit'];
 					
 					<td><br><b> Ref : ". $data['jenis_transaksi'] ." / ". $data['no_faktur'] ." </b>
 					<br>
-					". $data['debit'] ."</td>
+					". rp($data['debit']) ."</td>
 					
-					<td><br><br>". $data['kredit'] ."</td>
+					<td><br><br>". rp($data['kredit']) ."</td>
 					<td><br><br>". $data['keterangan_jurnal'] ."</td>
 					</tr>";
 					
@@ -139,9 +139,9 @@ $kredit = $cek105['kredit'];
 					
 					<td>
 					<br>
-					". $data['debit'] ."</td>
+					". rp($data['debit']) ."</td>
 					
-					<td><br>". $data['kredit'] ."</td>
+					<td><br>". rp($data['kredit']) ."</td>
 					<td><br>". $data['keterangan_jurnal'] ."</td>
 					</tr>";
 
@@ -153,8 +153,8 @@ $kredit = $cek105['kredit'];
 			echo "<tr style='color:blue'>
 			<td><b>Subtotal  ". $data['no_faktur'] ."</b></td>
 			<td></td>
-			<td><b>". $debit ."</b></td>
-			<td><b>". $kredit ."</b></td>
+			<td><b>". rp($debit) ."</b></td>
+			<td><b>". rp($kredit) ."</b></td>
 			<td></td>
 
 			</tr>";	
@@ -181,8 +181,8 @@ $kredit = $cek105['kredit'];
 			echo "<tr style='color:red'>
 			<td><b>Total :</b></td>
 			<td></td>
-			<td><b>". $t_debit ."</b></td>
-			<td><b>". $t_kredit ."</b></td>
+			<td><b>". rp($t_debit) ."</b></td>
+			<td><b>". rp($t_kredit) ."</b></td>
 			<td></td>
 
 			</tr>";	

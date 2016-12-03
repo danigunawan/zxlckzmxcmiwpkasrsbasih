@@ -48,9 +48,9 @@ include 'db.php';
 <span id="result">
 <table id="tableuser" class="table table-bordered">
 		<thead>
-			<th style="background-color: #4CAF50; color: white;"> Nomor Faktur </th>
+			<th style="background-color: #4CAF50; color: white;"> Nomor Faktur Penjualan </th>
 			<th style="background-color: #4CAF50; color: white;"> Tanggal </th>
-			<th style="background-color: #4CAF50; color: white;"> Nama Suplier </th>
+			<th style="background-color: #4CAF50; color: white;"> Kode Pelangan </th>
 			<th style="background-color: #4CAF50; color: white;"> Cara Bayar </th>
 			<th style="background-color: #4CAF50; color: white;"> Potongan </th>
 			<th style="background-color: #4CAF50; color: white;"> Jumlah Bayar </th>

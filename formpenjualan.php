@@ -17,6 +17,13 @@ $session_id = session_id();
  ?>
 
 
+
+
+<!-- js untuk tombol shortcut -->
+ <script src="shortcut.js"></script>
+<!-- js untuk tombol shortcut -->
+
+
  <style type="text/css">
   .disabled {
     opacity: 0.6;
@@ -2105,5 +2112,89 @@ $(document).ready(function(){
   });
 </script>
 
+
+<script> 
+    shortcut.add("f2", function() {
+        // Do something
+
+        $("#kode_barang").focus();
+
+    });
+
+    
+    shortcut.add("f1", function() {
+        // Do something
+
+        $("#cari_produk_penjualan").click();
+
+    }); 
+
+    
+    shortcut.add("f3", function() {
+        // Do something
+
+        $("#submit_produk").click();
+
+    }); 
+
+    
+    shortcut.add("f4", function() {
+        // Do something
+
+        $("#carabayar1").focus();
+
+    }); 
+
+    
+    shortcut.add("f7", function() {
+        // Do something
+
+        $("#pembayaran_penjualan").focus();
+
+    }); 
+
+    
+    shortcut.add("f8", function() {
+        // Do something
+
+        $("#penjualan").click();
+
+    }); 
+
+    
+    shortcut.add("f9", function() {
+        // Do something
+
+        $("#piutang").click();
+
+    }); 
+
+    
+    shortcut.add("f10", function() {
+        // Do something
+
+        $("#simpan_sementara").click();
+
+    }); 
+
+    
+    shortcut.add("ctrl+b", function() {
+        // Do something
+
+    var session_id = $("#session_id").val()
+
+        window.location.href="batal_penjualan.php?session_id="+session_id+"";
+
+
+    }); 
+
+     shortcut.add("ctrl+k", function() {
+        // Do something
+
+        $("#cetak_langsung").click();
+
+
+    }); 
+</script>
 <!-- memasukan file footer.php -->
 <?php include 'footer.php'; ?>

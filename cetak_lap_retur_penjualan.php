@@ -91,16 +91,27 @@ $no_faktur_retur = $_GET['no_faktur_retur'];
         <tbody>
         <?php
 
-            $query5 = $db->query("SELECT drp.kode_barang ,drp.nama_barang ,drp.jumlah_retur ,s.nama ,drp.harga ,drp.potongan ,drp.subtotal ,drp.tax FROM detail_retur_penjualan drp INNER JOIN satuan s ON drp.satuan = s.id  WHERE drp.no_faktur_retur = '$no_faktur_retur' ");
+            $query5 = $db->query("SELECT drp.kode_barang ,drp.nama_barang ,drp.jumlah_retur ,s.nama ,drp.harga ,drp.potongan ,drp.subtotal ,drp.tax,drp.satuan FROM detail_retur_penjualan drp INNER JOIN satuan s ON drp.satuan = s.id  WHERE drp.no_faktur_retur = '$no_faktur_retur' ");
             //menyimpan data sementara yang ada pada $perintah
             while ($data5 = mysqli_fetch_array($query5))
             {
+              $ss = $db->query("SELECT konversi FROM satuan_konversi WHERE kode_produk = '$data5[kode_barang]' AND id_satuan = '$data5[satuan]' ");
+              $cek = mysqli_num_rows($ss);
+              $sid = mysqli_fetch_array($ss);
  
             echo "<tr>
                 <td>". $data5['kode_barang'] ."</td>
-                <td>". $data5['nama_barang'] ."</td>
-                <td>". $data5['jumlah_retur'] ."</td>
-                <td>". $data5['nama'] ."</td>
+                <td>". $data5['nama_barang'] ."</td>";
+                if ($cek > 0) {
+                  $jumlah_retur = $data5['jumlah_retur'] / $sid['konversi'];
+                  echo"<td>". $jumlah_retur ."</td>";
+                }
+                else
+                {
+                  echo"<td>". $data5['jumlah_retur'] ."</td>";
+                }
+                
+                echo"<td>". $data5['nama'] ."</td>
                 <td>". rp($data5['harga']) ."</td>
                 <td>". rp($data5['potongan']) ."</td>
                 <td>". rp($data0['total']) ."</td>

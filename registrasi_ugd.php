@@ -6,11 +6,20 @@ include_once 'sanitasi.php';
 
 
 
-$query7 = $db->query("SELECT * FROM registrasi WHERE jenis_pasien = 'UGD' AND status = 'Masuk Ruang UGD' AND status != 'Batal UGD' AND status != 'Rujuk Rumah Sakit' ORDER BY id DESC ");
+$query7 = $db->query("SELECT * FROM registrasi WHERE jenis_pasien = 'UGD' AND status = 'Masuk Ruang UGD' AND status != 'Batal UGD' AND status != 'Rujuk Rumah Sakit' AND TO_DAYS(NOW()) - TO_DAYS(tanggal) <= 7 ORDER BY id DESC ");
 
 
 $qertu= $db->query("SELECT nama_dokter,nama_paramedik,nama_farmasi FROM penetapan_petugas ");
 $ss = mysqli_fetch_array($qertu);
+
+$pilih_akses_registrasi_ugd = $db->query("SELECT registrasi_ugd_lihat, registrasi_ugd_tambah, registrasi_ugd_edit, registrasi_ugd_hapus FROM otoritas_registrasi WHERE id_otoritas = '$_SESSION[otoritas_id]'");
+$registrasi_ugd = mysqli_fetch_array($pilih_akses_registrasi_ugd);
+
+$pilih_akses_penjualan = $db->query("SELECT penjualan_tambah FROM otoritas_penjualan WHERE id_otoritas = '$_SESSION[otoritas_id]'");
+$penjualan = mysqli_fetch_array($pilih_akses_penjualan);
+
+$pilih_akses_rekam_medik = $db->query("SELECT rekam_medik_ugd_lihat FROM otoritas_rekam_medik WHERE id_otoritas = '$_SESSION[otoritas_id]'");
+$rekam_medik = mysqli_fetch_array($pilih_akses_rekam_medik);
 
 ?>
 
@@ -50,6 +59,17 @@ opacity: 0.9;
 
 
 </style>
+
+<script type="text/javascript">
+  function isNumberKey(evt)
+      {
+         var charCode = (evt.which) ? evt.which : event.keyCode
+         if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+
+         return true;
+      }
+</script>
 
 
 <!-- Modal Untuk Confirm rUJUKAN KE RS-->
@@ -101,7 +121,7 @@ opacity: 0.9;
       </span>
     </div>
     <div class="modal-footer">    
-       <center><button type="button" class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove-sign"></span> Closed</button></center>
+       <center><button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-remove-sign"></i> Closed</button></center>
     </div>
     </div>
   </div>
@@ -168,16 +188,21 @@ opacity: 0.9;
 <!--modal end Layanan RUJUK KE RS-->
 
 <div class="container">
-  <h3> DATA PASIEN UGD </h3><hr>
+  <h3> DATA PASIEN UGD</h3><hr>
+<?php if ($registrasi_ugd['registrasi_ugd_lihat'] > 0): ?>
 
   <button id="coba" data-toggle="collapse" accesskey="u"  class="btn btn-primary"><i class="fa fa-plus"></i> Daftar <u>U</u>GD</button>
-    <button id="kembali" style="display:none" data-toggle="collapse" accesskey="k"  class="btn btn-primary"><i class="fa fa-reply"></i> <u>K</u>embali</button>
+    
+  <button id="kembali" style="display:none" data-toggle="collapse" accesskey="k"  class="btn btn-primary"><i class="fa fa-reply"></i> <u>K</u>embali</button>
 
-<a href="registrasi_ugd_baru.php" accesskey="b" class="btn btn-info"> <i class="fa fa-plus"></i> Pasien <u>B</u>aru</a>
+  <a href="registrasi_ugd_baru.php" accesskey="b" class="btn btn-info"> <i class="fa fa-plus"></i> Pasien <u>B</u>aru</a>
+
+  <a href="reg_ugd_belum_selesai.php" accesskey="s" class="btn btn-danger"> <i class="fa fa-list"></i> Pasien Belum <u>S</u>elesai Pembayaran </a>
+<br>
 <br>
 
- <br>
-
+<?php endif ?>
+  
 <div id="demo" class="collapse">
 
 <form id="form_cari" action="" method="get" accept-charset="utf-8">
@@ -274,18 +299,17 @@ opacity: 0.9;
 <div class="form-group">
   <label for="sel1">Golongan Darah</label>
   <select class="form-control" id="gol_darah" name="gol_darah" autocomplete="off">
-  <option value="">Silahkan Pilih</option>
+    <option value="-">-</option>
     <option value="A">A</option>
     <option value="B">B</option>
     <option value="O">O</option>
     <option value="AB">AB</option>
-    <option value="-">-</option>
   </select>
 </div>
 
 <div class="form-group" >
   <label for="umur">No Telphone / HP</label>
-  <input style="height: 20px;" type="text" class="form-control " id="no_hp" name="no_hp"  >
+  <input style="height: 20px;" type="text" onkeypress="return isNumberKey(event)" class="form-control " id="no_hp" name="no_hp"  >
 </div> 
 
 
@@ -421,7 +445,7 @@ opacity: 0.9;
 
 <div class="form-group" >
   <label for="umur">No Telphone / HP Pengantar</label>
-  <input style="height: 20px;" type="text" class="form-control" id="hp_pengantar" name="hp_pengantar"  autocomplete="off">
+  <input style="height: 20px;" type="text" onkeypress="return isNumberKey(event)" class="form-control" id="hp_pengantar" name="hp_pengantar"  autocomplete="off">
 </div>
 
    
@@ -443,7 +467,7 @@ opacity: 0.9;
   <option value="<?php echo $ss['nama_dokter'];?>"><?php echo $ss['nama_dokter'];?></option>
           <option value="Tidak Ada">Tidak Ada</option>
  <?php 
-  $query = $db->query("SELECT nama FROM user WHERE otoritas = 'Dokter' ORDER BY status_pakai DESC");
+  $query = $db->query("SELECT nama FROM user WHERE otoritas = 'Dokter'");
 while ( $data = mysqli_fetch_array($query))
  {
   echo "<option value='".$data['nama']."'>".$data['nama']."</option>";
@@ -472,10 +496,17 @@ tr:nth-child(even){background-color: #f2f2f2}
 <!-- PEMBUKA DATA TABLE -->
 <span id="table_baru">
 <div class="table-responsive">
-<table id="table_rawat_jalan" class="table table-bordered">
+<table id="table_rawat_jalan" class="table table-bordered table-sm  ">
  
     <thead>
       <tr>
+      <th style='background-color: #4CAF50; color: white'>Batal</th>
+
+      <th style='background-color: #4CAF50; color: white'>Transaksi Penjualan</th>
+      <th style='background-color: #4CAF50; color: white'>Rujuk Tempat Lain</th>
+      <th style='background-color: #4CAF50; color: white'>Rujuk Rawat Inap</th>
+      <th style='background-color: #4CAF50; color: white'>Rekam medik</th> 
+
       <th style='background-color: #4CAF50; color: white'>No REG</th>
       <th style='background-color: #4CAF50; color: white'>No RM </th>	
       <th style='background-color: #4CAF50; color: white'>Penjamin</th>  
@@ -491,9 +522,7 @@ tr:nth-child(even){background-color: #f2f2f2}
       <th style='background-color: #4CAF50; color: white'>Tanggal</th>
       <th style='background-color: #4CAF50; color: white'>Alamat Pengantar</th>
       <th style='background-color: #4CAF50; color: white'>Hubungan Pengantar</th>
-      <th style='background-color: #4CAF50; color: white'>Rujuk Tempat Lain</th>
-      <th style='background-color: #4CAF50; color: white'>Rujuk Rawat Inap</th>
-      <th style='background-color: #4CAF50; color: white'>Batal</th>
+
    </tr>
     </thead>
     <tbody id="tbody">
@@ -501,8 +530,54 @@ tr:nth-child(even){background-color: #f2f2f2}
    <?php while($data = mysqli_fetch_array($query7))
       
       {
-      echo "<tr  class='tr-id-".$data['id']."'  >
-                    <td>". $data['no_reg']."</td>
+      $query_z = $db->query("SELECT status,no_faktur,nama,kode_gudang FROM penjualan WHERE no_reg = '$data[no_reg]' ");
+      $data_z = mysqli_fetch_array($query_z);
+
+      
+      echo "<tr  class='tr-id-".$data['id']."'  >";
+
+if ($registrasi_ugd['registrasi_ugd_hapus'] > 0) {
+  echo "<td> <button type='button' data-reg='".$data['no_reg']."'  data-id='".$data['id']."'  class='btn btn-floating btn-small btn-info pulang_rumah' ><b> X </b></button></td>";
+}
+else{
+  echo "<td> </td>";
+}
+      
+if ($penjualan['penjualan_tambah'] > 0) {
+
+      if ($data_z['status'] == 'Simpan Sementara') {
+
+       echo "<td> <a href='proses_pesanan_barang_ugd.php?no_faktur=".$data_z['no_faktur']."&no_reg=".$data['no_reg']."&no_rm=".$data['no_rm']."&nama_pasien=".$data_z['nama']."&kode_gudang=".$data_z['kode_gudang']."'class='btn btn-floating btn-small btn btn-danger'><i class='fa fa-credit-card'></i></a> </td>"; 
+      }
+      else
+      {
+      echo "<td> <a href='form_penjualan_ugd.php?no_reg=". $data['no_reg']."' class='btn btn-floating btn-small btn-info penjualan' ><i class='fa fa-shopping-cart'></a></td>";
+
+      }
+
+}
+else{
+  echo "<td> </td>";
+}
+
+if ($registrasi_ugd['registrasi_ugd_lihat'] > 0) {
+    echo "<td> <button  type='button' data-reg='".$data['no_reg']."' data-id='".$data['id']."'  class='btn btn-floating btn-small btn-info rujuk' ><i class='fa fa-bus'></i>   </button>
+        </td>
+
+        <td> <button  type='button' data-reg='".$data['no_reg']."' class='btn btn-floating btn-small btn-info rujuk_ri' ><i class='fa fa-hotel'></i>   </button></td>";
+}
+else{
+  echo "<td> </td>";
+  echo "<td> </td>";
+}  
+                                     
+if ($rekam_medik['rekam_medik_ugd_lihat']) {
+  echo "<td> <a href='rekam_medik_ugd.php' class='btn btn-floating btn-small btn-info penjualan' ><i class='fa fa-medkit'></i></a></td>";
+}
+else{
+  echo "<td> </td>";
+}  
+                    echo "<td>". $data['no_reg']."</td>
                     <td>". $data['no_rm']."</td>
                     <td>". $data['penjamin']."</td>														
                     <td>". $data['nama_pasien']."</td>
@@ -516,15 +591,7 @@ tr:nth-child(even){background-color: #f2f2f2}
                     <td>". $data['hp_pengantar']."</td>
                     <td>". tanggal($data['tanggal'])."</td>
                     <td>". $data['alamat_pengantar']."</td>
-                    <td>". $data['hubungan_dengan_pasien']."</td>                 
-  <td> <button  type='button' data-reg='".$data['no_reg']."' data-id='".$data['id']."'  class='btn btn-floating btn-small btn-success rujuk' ><i class='fa fa-bus'></i>   </button></td>
-
-  <td> <button  type='button' data-reg='".$data['no_reg']."' class='btn btn-floating btn-small btn-info rujuk_ri' ><i class='fa fa-hotel'></i>   </button></td>
-
-  <td> <button type='button' data-reg='".$data['no_reg']."'  data-id='".$data['id']."'  class='btn btn-floating btn-small btn-danger pulang_rumah' ><i class='fa fa-remove'></i> </button></td>
-
-
-                    ";
+                    <td>". $data['hubungan_dengan_pasien']."</td>";
       echo "</tr>";
       
       }
@@ -573,17 +640,17 @@ tr:nth-child(even){background-color: #f2f2f2}
     var hp_pengantar = $("#hp_pengantar").val();
     var keterangan = $("#keterangan").val();
     var dokter_jaga = $("#dokter_jaga").val();
+    var cari_migrasi = $("#cari_migrasi").val();
 
-       if (penjamin == ""){
+       if ( no_rm == ""){
+      alert("Pasien Belum Ada!");
+      $("#cari_migrasi").focus();
+    }
+    else if(penjamin == ""){
 
     alert("Kolom Penjamin Harus Disi");
     
         }
-
-    else if ( no_rm == ""){
-      alert("Kolom No Rm Harus Disi");
-      
-    }
         else if (rujukan == ""){
 
     alert("Kolom Rujukan Harus Disi");
@@ -643,10 +710,8 @@ else{
      
      $("#demo").hide();
      $("#tbody").prepend(data);
-     
      $("#rujukan").val('');
      $("#token").val('');
-     $("#penjamin").val('');
      $("#nama_pasien").val('');
      $("#jenis_kelamin").val('');
      $("#tanggal_lahir").val('');
@@ -876,10 +941,10 @@ function hitung_umur(tanggal_input){
 
 var now = new Date(); //Todays Date   
 var birthday = tanggal_input;
-birthday=birthday.split("/");   
+birthday=birthday.split("-");   
 
-var dobMonth= birthday[0]; 
-var dobDay= birthday[1];
+var dobDay = birthday[0]; 
+var dobMonth= birthday[1];
 var dobYear= birthday[2];
 
 var nowDay= now.getDate();

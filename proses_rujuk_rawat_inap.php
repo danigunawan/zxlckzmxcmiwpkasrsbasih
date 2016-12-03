@@ -1,16 +1,13 @@
-<?php 
+<?php session_start();
 include 'db.php';
 include_once 'sanitasi.php';
-session_start();
 
 $token = stringdoang($_POST['token']);
 
 
 if ($token == '')
 {
-  
-header("location:rawat_inap.php");
-
+   echo '<META HTTP-EQUIV="Refresh" Content="0; URL=rawat_inap.php">';
 }
 else
 {
@@ -47,6 +44,11 @@ $perujuk = stringdoang($_POST['rujukan']);
 $alergi = stringdoang($_POST['alergi']);
 $no_reg = stringdoang($_POST['no_reg']);
 
+
+$session_id = session_id();
+
+
+
 $jam =  date("H:i:s");
 $tanggal_sekarang = date("Y-m-d");
 $waktu = date("Y-m-d H:i:s");
@@ -55,12 +57,16 @@ $no_urut = 1;
 $bulan_php = date("m");
 $tahun_php = date("Y");
 
+$ambil_satuan = $db->query("SELECT id FROM satuan WHERE nama = 'BED'");
+$b = mysqli_fetch_array($ambil_satuan);
+$satuan_bed = $b['id'];
+
 $select_to = $db->query("SELECT nama_pasien FROM registrasi WHERE jenis_pasien = 'Rawat Inap' ORDER BY id DESC LIMIT 1 ");
 $keluar = mysqli_fetch_array($select_to);
 
 if ($keluar['nama_pasien'] == $nama_lengkap)
 {
-header('location:rawat_inap.php');
+echo '<META HTTP-EQUIV="Refresh" Content="0; URL=rawat_inap.php">';
 }
 else{
 
@@ -157,7 +163,7 @@ if ($level_harga == 'harga_1')
 $subtotal = $perkiraan_menginap * $harga_kamar1;
 
 
-$query65 = "INSERT INTO tbs_penjualan (no_reg,kode_barang,nama_barang,jumlah_barang,harga,subtotal,tipe_barang,potongan,tax) VALUES ('$no_reg','$bed','$group_bed','$perkiraan_menginap','$harga_kamar1','$subtotal','Jasa','0','0')";
+$query65 = "INSERT INTO tbs_penjualan (session_id,no_reg,kode_barang,nama_barang,jumlah_barang,harga,subtotal,tipe_barang,potongan,tax,satuan,jam,tanggal) VALUES ('$session_id','$no_reg','$bed','$group_bed','$perkiraan_menginap','$harga_kamar1','$subtotal','Bed','0','0','$satuan_bed','$jam','$tanggal_sekarang')";
       if ($db->query($query65) === TRUE) 
       {
   
@@ -178,7 +184,7 @@ else if ($level_harga == 'harga_2')
 $subtotal = $perkiraan_menginap * $harga_kamar2;
 
 
-$query65 = "INSERT INTO tbs_penjualan (no_reg,kode_barang,nama_barang,jumlah_barang,harga,subtotal,tipe_barang,potongan,tax) VALUES ('$no_reg','$bed','$group_bed','$perkiraan_menginap','$harga_kamar2','$subtotal','Jasa','0','0')";
+$query65 = "INSERT INTO tbs_penjualan (session_id,no_reg,kode_barang,nama_barang,jumlah_barang,harga,subtotal,tipe_barang,potongan,tax,satuan,jam,tanggal) VALUES ('$session_id','$no_reg','$bed','$group_bed','$perkiraan_menginap','$harga_kamar2','$subtotal','Bed','0','0','$satuan_bed','$jam','$tanggal_sekarang')";
       if ($db->query($query65) === TRUE) 
       {
   
@@ -200,7 +206,7 @@ else if ($level_harga == 'harga_3')
 $subtotal = $perkiraan_menginap * $harga_kamar3;
 
 
-$query65 = "INSERT INTO tbs_penjualan (no_reg,kode_barang,nama_barang,jumlah_barang,harga,subtotal,tipe_barang,potongan,tax) VALUES ('$no_reg','$bed','$group_bed','$perkiraan_menginap','$harga_kamar3','$subtotal','Jasa','0','0')";
+$query65 = "INSERT INTO tbs_penjualan (session_id,no_reg,kode_barang,nama_barang,jumlah_barang,harga,subtotal,tipe_barang,potongan,tax,satuan,jam,tanggal) VALUES ('$session_id','$no_reg','$bed','$group_bed','$perkiraan_menginap','$harga_kamar3','$subtotal','Bed','0','0','$satuan_bed','$jam','$tanggal_sekarang')";
       if ($db->query($query65) === TRUE) 
       {
   
@@ -221,7 +227,7 @@ else if ($level_harga == 'harga_4')
 $subtotal = $perkiraan_menginap * $harga_kamar4;
 
 
-$query65 = "INSERT INTO tbs_penjualan (no_reg,kode_barang,nama_barang,jumlah_barang,harga,subtotal,tipe_barang,potongan,tax) VALUES ('$no_reg','$bed','$group_bed','$perkiraan_menginap','$harga_kamar4','$subtotal','Jasa','0','0')";
+$query65 = "INSERT INTO tbs_penjualan (session_id,no_reg,kode_barang,nama_barang,jumlah_barang,harga,subtotal,tipe_barang,potongan,tax,satuan,jam,tanggal) VALUES ('$session_id','$no_reg','$bed','$group_bed','$perkiraan_menginap','$harga_kamar4','$subtotal','Bed','0','0','$satuan_bed','$jam','$tanggal_sekarang')";
       if ($db->query($query65) === TRUE) 
       {
         
@@ -241,7 +247,7 @@ else if ($level_harga == 'harga_5')
 $subtotal = $perkiraan_menginap * $harga_kamar5;
 
 
-$query65 = "INSERT INTO tbs_penjualan (no_reg,kode_barang,nama_barang,jumlah_barang,harga,subtotal,tipe_barang,potongan,tax) VALUES ('$no_reg','$bed','$group_bed','$perkiraan_menginap','$harga_kamar5','$subtotal','Jasa','0','0')";
+$query65 = "INSERT INTO tbs_penjualan (session_id,no_reg,kode_barang,nama_barang,jumlah_barang,harga,subtotal,tipe_barang,potongan,tax,satuan,jam,tanggal) VALUES ('$session_id','$no_reg','$bed','$group_bed','$perkiraan_menginap','$harga_kamar5','$subtotal','Bed','0','0','$satuan_bed','$jam','$tanggal_sekarang')";
       if ($db->query($query65) === TRUE) 
       {
   
@@ -263,7 +269,7 @@ else if ($level_harga == 'harga_6')
 $subtotal = $perkiraan_menginap * $harga_kamar6;
 
 
-$query65 = "INSERT INTO tbs_penjualan (no_reg,kode_barang,nama_barang,jumlah_barang,harga,subtotal,tipe_barang,potongan,tax) VALUES ('$no_reg','$bed','$group_bed','$perkiraan_menginap','$harga_kamar6','$subtotal','Jasa','0','0')";
+$query65 = "INSERT INTO tbs_penjualan (session_id,no_reg,kode_barang,nama_barang,jumlah_barang,harga,subtotal,tipe_barang,potongan,tax,satuan,jam,tanggal) VALUES ('$session_id','$no_reg','$bed','$group_bed','$perkiraan_menginap','$harga_kamar6','$subtotal','Bed','0','0','$satuan_bed','$jam','$tanggal_sekarang')";
       if ($db->query($query65) === TRUE) 
       {
   
@@ -285,7 +291,7 @@ else if ($level_harga == 'harga_7')
 
 $subtotal = $perkiraan_menginap * $harga_kamar7;
 
-$query65 = "INSERT INTO tbs_penjualan (no_reg,kode_barang,nama_barang,jumlah_barang,harga,subtotal,tipe_barang,potongan,tax) VALUES ('$no_reg','$bed','$group_bed','$perkiraan_menginap','$harga_kamar7','$subtotal','Jasa','0','0')";
+$query65 = "INSERT INTO tbs_penjualan (session_id,no_reg,kode_barang,nama_barang,jumlah_barang,harga,subtotal,tipe_barang,potongan,tax,satuan,jam,tanggal) VALUES ('$session_id','$no_reg','$bed','$group_bed','$perkiraan_menginap','$harga_kamar7','$subtotal','Bed','0','0','$satuan_bed','$jam','$tanggal_sekarang')";
       if ($db->query($query65) === TRUE) 
       {
   
@@ -303,8 +309,7 @@ $query65 = "INSERT INTO tbs_penjualan (no_reg,kode_barang,nama_barang,jumlah_bar
 }
 
 
-
-header("location:rawat_inap.php");
+ echo '<META HTTP-EQUIV="Refresh" Content="0; URL=rawat_inap.php">';
 
 ?>
 

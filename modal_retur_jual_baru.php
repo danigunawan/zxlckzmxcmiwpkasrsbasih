@@ -61,13 +61,13 @@ if ($sisa == 0)
           $konversi_data = $data1['sisa_barang'] / $data_konversi['konversi'];
 
         // menampilkan data
-      echo "<tr class='pilih' data-kode='". $data1['kode_barang'] ."' nama-barang='". $data1['nama_barang'] ."' satuan='". $data1['satuan'] ."' no_faktur='". $data1['no_faktur'] ."' harga='". $harga ."' jumlah-barang='". $data1['jumlah_barang'] ."' sisa='". $konversi_data ."' id_produk='". $data1['id_produk'] ."' asal_satuan = ".$data1['asal_satuan']." harga_pcs = ".$data1['harga']." >";
+      echo "<tr class='pilih' data-kode='". $data1['kode_barang'] ."(". $data1['nama_barang'] .")' nama-barang='". $data1['nama_barang'] ."' satuan='". $data1['satuan'] ."' no_faktur='". $data1['no_faktur'] ."' harga='". $harga ."' jumlah-barang='". $data1['jumlah_barang'] ."' sisa='". $konversi_data ."' id_produk='". $data1['id_produk'] ."' asal_satuan = ".$data1['asal_satuan']." harga_pcs = ".$data1['harga']." >";
 
 }
 else{
 
        // menampilkan data
-      echo "<tr class='pilih' data-kode='". $data1['kode_barang'] ."' nama-barang='". $data1['nama_barang'] ."' satuan='". $data1['asal_satuan'] ."' no_faktur='". $data1['no_faktur'] ."' harga='". $data1['harga'] ."' jumlah-barang='". $data1['jumlah_barang'] ."' sisa='". $data1['sisa_barang'] ."' id_produk='". $data1['id_produk'] ."' asal_satuan = ".$data1['asal_satuan']." harga_pcs = ".$data1['harga']." >";
+      echo "<tr class='pilih' data-kode='". $data1['kode_barang'] ."(". $data1['nama_barang'] .")' nama-barang='". $data1['nama_barang'] ."' satuan='". $data1['asal_satuan'] ."' no_faktur='". $data1['no_faktur'] ."' harga='". $data1['harga'] ."' jumlah-barang='". $data1['jumlah_barang'] ."' sisa='". $data1['sisa_barang'] ."' id_produk='". $data1['id_produk'] ."' asal_satuan = ".$data1['asal_satuan']." harga_pcs = ".$data1['harga']." >";
 
 }      
       echo "<td>". $data1['no_faktur'] ."</td>

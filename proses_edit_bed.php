@@ -18,10 +18,10 @@
         $fasilitas = stringdoang($_POST['fasilitas']);
 
     // merubah seluruh data yang ada pada tabel user, berdasarkan masing masing kolom
-    $query = $db->prepare("UPDATE bed SET kelas = ? ,nama_kamar = ? ,group_bed = ? ,tarif = ? ,tarif_2 = ? ,tarif_3 = ? ,tarif_4 = ? ,tarif_5 = ? ,tarif_6 = ? ,tarif_7 = ? ,jumlah_bed = ? ,fasilitas = ? WHERE id = ?");
+    $query = $db->prepare("UPDATE bed SET kelas = ? ,nama_kamar = ? ,group_bed = ? ,tarif = ? ,tarif_2 = ? ,tarif_3 = ? ,tarif_4 = ? ,tarif_5 = ? ,tarif_6 = ? ,tarif_7 = ? ,jumlah_bed = ?, sisa_bed = ? , fasilitas = ? WHERE id = ?");
     
-    $query->bind_param("sssiiiiiiiisi",
-     $kelas ,$nama ,$group_bed ,$tarif ,$tarif_2 ,$tarif_3 ,$tarif_4 ,$tarif_5 ,$tarif_6 ,$tarif_7 ,$jumlah_bed ,$fasilitas ,$id);
+    $query->bind_param("sssiiiiiiiiisi",
+     $kelas ,$nama ,$group_bed ,$tarif ,$tarif_2 ,$tarif_3 ,$tarif_4 ,$tarif_5 ,$tarif_6 ,$tarif_7 ,$jumlah_bed , $jumlah_bed , $fasilitas ,$id);
 
 
     $query->execute();
@@ -33,7 +33,7 @@ if (!$query)
 }
 else 
 {
-      header ('location:kamar.php');    
+    echo '<META HTTP-EQUIV="Refresh" Content="0; URL=kamar.php">';   
 }
 
 //Untuk Memutuskan Koneksi Ke Database

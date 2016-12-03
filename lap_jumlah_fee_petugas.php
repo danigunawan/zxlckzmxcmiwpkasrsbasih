@@ -24,7 +24,7 @@ include 'db.php';
     </script>
 
 
-<div class="container">
+<div style="padding-right: 5%; padding-left: 5%;">
 <h3>KOMISI PRODUK / PETUGAS</h3><br><br>
 
 
@@ -63,7 +63,7 @@ include 'db.php';
       $perintah0 = $db->query("SELECT * FROM user");
       while ($data1 = mysqli_fetch_array($perintah0))
       {
-      echo "<tr  class='pilih' data-petugas='". $data1['nama'] ."'>
+      echo "<tr  class='pilih' data-petugas='". $data1['nama'] ."' data-petugas-value='". $data1['id'] ."'>
       <td>". $data1['username'] ."</td>
       <td>". $data1['nama'] ."</td>
       <td>". $data1['alamat'] ."</td>
@@ -100,7 +100,10 @@ mysqli_close($db);
               
                   <div class="form-group"> 
 
-                  <input type="text" name="nama_petugas" id="nama_petugas" class="form-control" placeholder="Nama Petugas" required="">
+                  <input type="hidden" name="nama_petugas" id="nama_petugas" class="form-control" placeholder="Nama Petugas" required="">
+
+                  <input type="text" name="nama_petugas_value" id="nama_petugas_value" class="form-control" placeholder="Nama Petugas" required="">
+
                   </div>                  
 
                   <div class="form-group"> 
@@ -161,7 +164,8 @@ $(document).ready(function(){
 
 // jika dipilih, nim akan masuk ke input dan modal di tutup
   $(document).on('click', '.pilih', function (e) {
-  document.getElementById("nama_petugas").value = $(this).attr('data-petugas');
+  document.getElementById("nama_petugas_value").value = $(this).attr('data-petugas');
+  document.getElementById("nama_petugas").value = $(this).attr('data-petugas-value');
 
   $('#myModal').modal('hide');
   });

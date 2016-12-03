@@ -19,8 +19,7 @@ $query = $db->prepare("INSERT INTO perujuk (nama,alamat,no_telp) VALUES (?,?,?) 
 $query->bind_param("sss",$nama,$alamat,$no_telp);
 $query->execute();
 
-header('location:perujuk.php');
-
+echo '<META HTTP-EQUIV="Refresh" Content="0; URL=perujuk.php">';
 }
 
 else{

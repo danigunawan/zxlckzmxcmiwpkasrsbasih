@@ -7,15 +7,11 @@ include 'db.php';
 
 
 
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
         <thead> <!-- untuk memberikan nama pada kolom tabel -->
         
         <th> Kode Barang </th>
             <th> Nama Barang </th>
-            <th> Harga Beli </th>
-            <th> Harga Jual Level 1</th>
-            <th> Harga Jual Level 2</th>
-            <th> Harga Jual Level 3</th>
             <th> Satuan </th>
             <th> Kategori </th>
             <th> Suplier </th>
@@ -34,15 +30,11 @@ include 'db.php';
         {
         
         // menampilkan data
-        echo "<tr class='pilih' data-kode='". $data1['kode_barang'] ."' nama-barang='". $data1['nama_barang'] ."'
+        echo "<tr class='pilih' data-kode='". $data1['kode_barang'] ."(". $data1['nama_barang'] .")' nama-barang='". $data1['nama_barang'] ."'
         satuan='". $data1['satuan'] ."' harga_beli='". $data1['harga_beli'] ."' jumlah-barang='". $data1['stok_barang'] ."'>
         
             <td>". $data1['kode_barang'] ."</td>
             <td>". $data1['nama_barang'] ."</td>
-            <td>". rp($data1['harga_beli']) ."</td>
-            <td>". rp($data1['harga_jual']) ."</td>
-            <td>". rp($data1['harga_jual2']) ."</td>
-            <td>". rp($data1['harga_jual3']) ."</td>
             <td>". $data1['nama'] ."</td>
             <td>". $data1['kategori'] ."</td>
             <td>". $data1['suplier'] ."</td>

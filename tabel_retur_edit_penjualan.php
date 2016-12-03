@@ -10,7 +10,7 @@ $perintah = $db->query("SELECT * FROM retur_penjualan");
 $no_faktur = $_GET['no_faktur_retur'];
  ?>
 
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser"  class="table table-sm">
     <thead>
      <th> Nomor Faktur Retur </th>
       <th> Nomor Faktur Penjualan </th>

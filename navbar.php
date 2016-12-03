@@ -58,36 +58,82 @@
 <?php 
 include 'db.php';
 
-$pilih_akses_lihat = $db->query("SELECT open.penjualan_lihat, open.retur_lihat, open.retur_penjualan_lihat, opemb.pembelian_lihat, opemb.retur_pembelian_lihat, omd.master_data_lihat, omd.user_lihat, omd.satuan_lihat, omd.pelanggan_lihat, omd.jabatan_lihat, omd.suplier_lihat, omd.master_data_lihat, omd.item_lihat, omd.komisi_faktur_lihat, omd.komisi_produk_lihat, omd.set_perusahaan_lihat, omd.set_diskon_tax_lihat, omd.hak_otoritas_lihat, omd.kategori_lihat, omd.gudang_lihat, omd.daftar_akun_lihat, omd.grup_akun_lihat, omd.set_akun_lihat, omd.daftar_pajak_lihat, p.pembayaran_lihat, p.pembayaran_hutang_lihat, p.pembayaran_piutang_lihat, otk.transaksi_kas_lihat, okm.kas_masuk_lihat, okk.kas_keluar_lihat, okmu.kas_mutasi_lihat, op.persediaan_lihat, oim.item_masuk_lihat, oik.item_keluar_lihat, osa.stok_awal_lihat, oso.stok_opname_lihat, okas.kas_lihat, olap.akuntansi_lihat, olap.laporan_mutasi_stok_lihat, olap.laporan_lihat, olap.buku_besar_lihat, olap.laporan_jurnal_lihat, olap.laporan_laba_rugi_lihat, olap.laporan_laba_kotor_lihat, olap.laporan_neraca_lihat, olap.transaksi_jurnal_manual_lihat, olap.cash_flow_tanggal_lihat, olap.cash_flow_periode_lihat, olap.laporan_komisi_lihat, olap.laporan_komisi_produk_lihat, olap.laporan_komisi_faktur_lihat, olap.laporan_pembelian_lihat, olap.laporan_hutang_beredar_lihat, olap.laporan_penjualan_lihat, olap.laporan_piutang_beredar_lihat, olap.laporan_retur_penjualan_lihat, olap.laporan_retur_pembelian_lihat, olap.laporan_pembayaran_hutang_lihat, olap.laporan_pembayaran_piutang_lihat FROM hak_otoritas AS ho INNER JOIN otoritas_penjualan AS open ON ho.id = open.id_otoritas INNER JOIN otoritas_pembelian AS opemb ON ho.id = opemb.id_otoritas INNER JOIN otoritas_master_data AS omd ON ho.id = omd.id_otoritas INNER JOIN otoritas_pembayaran AS p ON ho.id = p.id_otoritas INNER JOIN otoritas_transaksi_kas AS otk ON ho.id = otk.id_otoritas INNER JOIN otoritas_kas_masuk AS okm ON ho.id = okm.id_otoritas INNER JOIN otoritas_kas_keluar AS okk ON ho.id = okk.id_otoritas INNER JOIN otoritas_kas_mutasi AS okmu ON ho.id = okmu.id_otoritas INNER JOIN otoritas_persediaan AS op ON ho.id = op.id_otoritas INNER JOIN otoritas_item_masuk AS oim ON ho.id = oim.id_otoritas INNER JOIN otoritas_item_keluar AS oik ON ho.id = oik.id_otoritas INNER JOIN otoritas_stok_awal AS osa ON ho.id = osa.id_otoritas INNER JOIN otoritas_stok_opname AS oso ON ho.id = oso.id_otoritas INNER JOIN otoritas_laporan AS olap ON ho.id = olap.id_otoritas INNER JOIN otoritas_kas AS okas ON ho.id = okas.id_otoritas WHERE ho.id = '$_SESSION[otoritas_id]'");
+$pilih_akses_lihat = $db->query("SELECT open.penjualan_lihat, open.retur_lihat, open.retur_penjualan_lihat, opemb.pembelian_lihat, opemb.retur_pembelian_lihat, omd.master_data_lihat, omd.user_lihat, omd.satuan_lihat, omd.pelanggan_lihat, omd.jabatan_lihat, omd.suplier_lihat, omd.master_data_lihat, omd.item_lihat, omd.komisi_faktur_lihat, omd.komisi_produk_lihat, omd.set_perusahaan_lihat, omd.set_diskon_tax_lihat, omd.hak_otoritas_lihat, omd.kategori_lihat, omd.gudang_lihat, omd.daftar_akun_lihat, omd.grup_akun_lihat, omd.set_akun_lihat, omd.daftar_pajak_lihat, omd.poli_lihat, omd.kamar_lihat, omd.penjamin_lihat, omd.perujuk_lihat, omd.jenis_obat_lihat, omd.kelas_kamar_lihat, omd.cito_lihat, omd.operasi_lihat, p.pembayaran_lihat, p.pembayaran_hutang_lihat, p.pembayaran_piutang_lihat, otk.transaksi_kas_lihat, okm.kas_masuk_lihat, okk.kas_keluar_lihat, okmu.kas_mutasi_lihat, op.persediaan_lihat, op.kartu_stok_lihat, oim.item_masuk_lihat, oik.item_keluar_lihat, osa.stok_awal_lihat, oso.stok_opname_lihat, okas.kas_lihat, olap.akuntansi_lihat, olap.laporan_mutasi_stok_lihat, olap.laporan_lihat, olap.buku_besar_lihat, olap.laporan_jurnal_lihat, olap.laporan_laba_rugi_lihat, olap.laporan_laba_kotor_lihat, olap.laporan_neraca_lihat, olap.transaksi_jurnal_manual_lihat, olap.cash_flow_tanggal_lihat, olap.cash_flow_periode_lihat, olap.laporan_komisi_lihat, olap.laporan_komisi_produk_lihat, olap.laporan_komisi_faktur_lihat, olap.laporan_pembelian_lihat, olap.laporan_hutang_beredar_lihat, olap.laporan_penjualan_lihat, olap.laporan_piutang_beredar_lihat, olap.laporan_retur_penjualan_lihat, olap.laporan_retur_pembelian_lihat, olap.laporan_pembayaran_hutang_lihat, olap.laporan_pembayaran_piutang_lihat, olap.laporan_kunjungan_rj, olap.laporan_kunjungan_ri, olap.laporan_kunjungan_ugd, oreg.registrasi_rj_lihat, oreg.registrasi_ri_lihat, oreg.registrasi_ugd_lihat, oreg.registrasi_lihat, orm.rekam_medik_rj_lihat, orm.rekam_medik_ri_lihat, orm.rekam_medik_ugd_lihat, orm.rekam_medik_lihat, ose.setting_lihat, ose.setting_registrasi_lihat, ose.penetapan_petugas_lihat, ose.printer_lihat FROM hak_otoritas AS ho INNER JOIN otoritas_penjualan AS open ON ho.id = open.id_otoritas INNER JOIN otoritas_pembelian AS opemb ON ho.id = opemb.id_otoritas INNER JOIN otoritas_master_data AS omd ON ho.id = omd.id_otoritas INNER JOIN otoritas_pembayaran AS p ON ho.id = p.id_otoritas INNER JOIN otoritas_transaksi_kas AS otk ON ho.id = otk.id_otoritas INNER JOIN otoritas_kas_masuk AS okm ON ho.id = okm.id_otoritas INNER JOIN otoritas_kas_keluar AS okk ON ho.id = okk.id_otoritas INNER JOIN otoritas_kas_mutasi AS okmu ON ho.id = okmu.id_otoritas INNER JOIN otoritas_persediaan AS op ON ho.id = op.id_otoritas INNER JOIN otoritas_item_masuk AS oim ON ho.id = oim.id_otoritas INNER JOIN otoritas_item_keluar AS oik ON ho.id = oik.id_otoritas INNER JOIN otoritas_stok_awal AS osa ON ho.id = osa.id_otoritas INNER JOIN otoritas_stok_opname AS oso ON ho.id = oso.id_otoritas INNER JOIN otoritas_laporan AS olap ON ho.id = olap.id_otoritas INNER JOIN otoritas_kas AS okas ON ho.id = okas.id_otoritas INNER JOIN otoritas_registrasi oreg ON ho.id = oreg.id_otoritas INNER JOIN otoritas_rekam_medik orm ON ho.id = orm.id_otoritas INNER JOIN otoritas_setting ose ON ho.id = ose.id_otoritas WHERE ho.id = '$_SESSION[otoritas_id]'");
 $lihat = mysqli_fetch_array($pilih_akses_lihat);
 
 ?>
 
 
-<li><a class="collapsible-header waves-effect arrow-r"><i class="fa fa-hospital-o "></i> Registrasi <i class="fa fa-angle-down rotate-icon"></i></a>
-    <div class="collapsible-body">
-       <ul>
-           <li><a href="registrasi_raja.php" class="waves-effect"> Rawat Jalan </a></li>
-           <li><a href="rawat_inap.php" class="waves-effect"> Rawat Inap </a></li>
-           <li><a href="registrasi_ugd.php" class="waves-effect"> UGD </a></li>
-       </ul>
-    </div>
-</li>
+<?php 
 
-<li><a class="collapsible-header waves-effect arrow-r"><i class="fa fa-medkit"></i> Rekam Medik <i class="fa fa-angle-down rotate-icon"></i></a>
+if ($lihat['registrasi_lihat'] > 0){
+    echo '<li><a class="collapsible-header waves-effect arrow-r"><i class="fa fa-hospital-o "></i> Registrasi <i class="fa fa-angle-down rotate-icon"></i></a>
     <div class="collapsible-body">
-       <ul>
-           <li><a href="rekam_medik_raja.php" class="waves-effect"> Rawat Jalan </a></li>
-           <li><a href="rekam_medik_ranap.php" class="waves-effect"> Rawat Inap </a></li>
-           <li><a href="rekam_medik_ugd.php" class="waves-effect"> UGD </a></li>
-       </ul>
+       <ul>';
+}
+
+if ($lihat['registrasi_rj_lihat'] > 0){
+    echo '<li><a href="registrasi_raja.php" class="waves-effect"> Rawat Jalan </a></li>';
+}
+
+if ($lihat['registrasi_ri_lihat'] > 0){
+    echo '<li><a href="rawat_inap.php" class="waves-effect"> Rawat Inap </a></li>';
+}
+
+if ($lihat['registrasi_ugd_lihat'] > 0){
+    echo '<li><a href="registrasi_ugd.php" class="waves-effect"> UGD </a></li>';
+}
+
+if ($lihat['registrasi_lihat'] > 0){
+    echo '</ul>
     </div>
-</li>
+</li>';
+}
+
+ ?>
+
+<?php 
+
+if ($lihat['rekam_medik_lihat'] > 0){
+    echo '<li><a class="collapsible-header waves-effect arrow-r"><i class="fa fa-medkit"></i> Rekam Medik <i class="fa fa-angle-down rotate-icon"></i></a>
+    <div class="collapsible-body">
+       <ul>';
+}
+
+if ($lihat['rekam_medik_rj_lihat'] > 0){
+    echo '<li><a href="rekam_medik_raja.php" class="waves-effect"> Rawat Jalan </a></li>';
+}
+
+if ($lihat['rekam_medik_ri_lihat'] > 0){
+    echo '<li><a href="rekam_medik_ranap.php" class="waves-effect"> Rawat Inap </a></li>';
+}
+
+if ($lihat['rekam_medik_ugd_lihat'] > 0){
+    echo '<li><a href="rekam_medik_ugd.php" class="waves-effect"> UGD </a></li>';
+}
+
+if ($lihat['rekam_medik_lihat'] > 0){
+    echo '</ul>
+    </div>
+</li>';
+}
+
+?>
 
 <?php
 
 if ($lihat['penjualan_lihat'] > 0){
-                echo '<li><a href="penjualan.php?status=semua" class="waves-effect"> <i class="fa fa-shopping-cart"></i> Penjualan </a></li>';
+                echo '<li><a class="collapsible-header waves-effect arrow-r"><i class="fa fa-shopping-cart"></i> Penjualan <i class="fa fa-angle-down rotate-icon"></i></a>
+    <div class="collapsible-body">
+       <ul>
+           <li><a href="pasien_sudah_masuk.php" class="waves-effect"> Rawat Jalan</a></li>
+           <li><a href="rawat_inap.php" class="waves-effect"> Rawat Inap </a></li>
+           <li><a href="registrasi_ugd.php" class="waves-effect">  UGD </a></li>
+           <li><a href="form_penjualan_kasir_apotek.php" class="waves-effect"> Apotek </a></li>
+           <li><a href="form_penjualan_lab.php" style="display:none" class="waves-effect"> Laboratorium </a></li>
+       </ul>
+    </div>
+</li>';
 }
 
 if ($lihat['pembelian_lihat'] > 0){
@@ -108,14 +154,25 @@ if ($lihat['user_lihat'] > 0){
                                 echo '<li><a href="user.php" class="waves-effect">User</a></li>';
 }
 
+
+if ($lihat['poli_lihat'] > 0){
+    echo '<li><a href="poli.php" class="waves-effect">Poli</a></li>';
+}
+
+if ($lihat['kamar_lihat'] > 0){
+    echo '<li><a href="kamar.php" class="waves-effect">Kamar</a></li>';
+}
+
+if ($lihat['penjamin_lihat'] > 0){
+    echo '<li><a href="penjamin.php" class="waves-effect">Penjamin</a></li>';
+}
+
+if ($lihat['perujuk_lihat'] > 0){
+    echo '<li><a href="perujuk.php" class="waves-effect">Perujuk</a></li>';
+}
+
+
 ?>
-
-
-<li><a href="poli.php" class="waves-effect">Poli</a></li>
-<li><a href="kamar.php" class="waves-effect">Kamar</a></li>
-<li><a href="penjamin.php" class="waves-effect">Penjamin</a></li>
-<li><a href="perujuk.php" class="waves-effect">Perujuk</a></li>
-
 
 <?php
 
@@ -139,6 +196,27 @@ if ($lihat['item_lihat'] > 0){
                                 echo '<li><a href="barang.php?kategori=semua&tipe=barang_jasa" class="waves-effect" >Produk</a></li>';
 }
 
+if ($lihat['jenis_obat_lihat'] > 0){
+    echo '<li><a href="tambah_jenis_obat.php" class="waves-effect" >Jenis Obat</a></li>';
+}
+            
+if ($lihat['kelas_kamar_lihat'] > 0){
+    echo '<li><a href="kelas_kamar.php" class="waves-effect" >Kelas Kamar</a></li>';
+}
+            
+if ($lihat['cito_lihat'] > 0){
+    echo '<li><a href="cito.php" class="waves-effect" >Cito</a></li>';
+}
+            
+if ($lihat['operasi_lihat'] > 0){
+    echo '<li><a href="operasi.php" class="waves-effect" >Operasi</a></li>';
+}
+           
+
+?>
+
+
+<?php
 if ($lihat['satuan_lihat'] > 0){
                                 echo '<li><a href="satuan.php" class="waves-effect">Satuan</a></li>';
 }
@@ -168,10 +246,12 @@ if ($lihat['grup_akun_lihat'] > 0){
 }
 
 
-
+/*
 if ($lihat['daftar_pajak_lihat'] > 0){
                                 echo '<li><a href="daftar_pajak.php" class="waves-effect">Daftar Pajak</a></li>';
 }
+
+*/
 
  
   if ($lihat['master_data_lihat'] > 0){                           
@@ -225,13 +305,24 @@ if ($lihat['pembayaran_hutang_lihat'] > 0){
                     </li>';
 
 }
+?>
 
- if ($lihat['persediaan_lihat'] > 0){
+<?php if ($lihat['persediaan_lihat'] > 0){
                 echo '<li><a class="collapsible-header waves-effect arrow-r"><i class="fa fa-archive"></i> Persediaan <i class="fa fa-angle-down rotate-icon"></i></a>
                         <div class="collapsible-body">
                             <ul>';
 }
 
+if ($lihat['kartu_stok_lihat'] > 0){
+ echo '<li><a href="kartu_stok.php" class="waves-effect" style="font-size: 16px">Kartu Stok</a></li>';
+}
+
+?>
+
+
+
+
+<?php
  if ($lihat['item_lihat'] > 0){
                             echo '<li><a href="barang.php?kategori=semua&tipe=barang" class="waves-effect" style="font-size: 16px">Persediaan Barang</a></li>';
 }
@@ -325,6 +416,23 @@ if ($lihat['akuntansi_lihat'] > 0){
                             <ul>';
 }
 
+
+ if ($lihat['laporan_kunjungan_rj'] > 0){
+    echo '<li><a href="lap_kunjungan_rj.php" class="waves-effect">Lap. Kunjungan R.Jalan</a></li>';
+ }
+
+ if ($lihat['laporan_kunjungan_ri'] > 0){
+    echo '<li><a href="lap_kunjungan_ri.php" class="waves-effect">Lap. Kunjungan R.Inap </a></li>';
+ }
+
+ if ($lihat['laporan_kunjungan_ugd'] > 0){
+    echo '<li><a href="lap_kunjungan_ugd.php" class="waves-effect">Lap. Kunjungan UGD</a></li>';
+ }
+
+
+?>
+
+<?php
  if ($lihat['laporan_penjualan_lihat'] > 0){
                             echo '<li><a href="lap_penjualan.php" class="waves-effect">Lap. Penjualan</a></li>';
 }
@@ -377,16 +485,25 @@ if ($lihat['laporan_lihat'] > 0){
 
 ?>
 
-<li><a class="collapsible-header waves-effect arrow-r"><i class="fa fa-cogs"></i> Setting <i class="fa fa-angle-down rotate-icon"></i></a>
+<?php 
+if ($lihat['setting_lihat'] > 0){
+    echo '<li><a class="collapsible-header waves-effect arrow-r"><i class="fa fa-cogs"></i> Setting <i class="fa fa-angle-down rotate-icon"></i></a>
   <div class="collapsible-body">
-     <ul>
+     <ul>';
+    }
 
-     <li><a href="setting_registrasi.php" class="waves-effect">Registrasi</a></li>
-     <li><a href="penetapan_petugas.php" class="waves-effect"> Penetapan Petugas</a></li>
-     <li><a href="setting_printer.php" class="waves-effect"> Printer</a></li>
-
-<?php
-
+     if ($lihat['setting_registrasi_lihat'] > 0){
+        echo '<li><a href="setting_registrasi.php" class="waves-effect">Registrasi</a></li>';
+     }
+     
+     if ($lihat['penetapan_petugas_lihat'] > 0){
+        echo '<li><a href="penetapan_petugas.php" class="waves-effect"> Penetapan Petugas</a></li>';
+     }
+     
+     if ($lihat['printer_lihat'] > 0){
+        echo '<li><a href="setting_printer.php" class="waves-effect"> Printer</a></li>';
+     }
+     
 
 
      if ($lihat['set_akun_lihat'] > 0){
@@ -398,13 +515,24 @@ if ($lihat['laporan_lihat'] > 0){
     }
 
     if ($lihat['set_diskon_tax_lihat'] > 0){
-                                echo '<li><a href="set_diskon_tax.php" class="waves-effect"> Diskon & Pajak</a></li>';
+                                echo '<li><a href="set_diskon_tax.php" class="waves-effect"> Diskon Penjualan</a></li>';
     }
 
 ?>
 
      </ul>
   </div>
+</li>
+
+
+<li style="display:none"><a class="collapsible-header waves-effect arrow-r"><i class="fa fa-stethoscope"></i>Laboratorium <i class="fa fa-angle-down rotate-icon"></i></a>
+    <div class="collapsible-body">
+       <ul>
+<li><a href="lab_bidang.php" class="waves-effect" >Kelompok Bidang</a></li>
+<li><a href="jasa_lab.php" class="waves-effect" >Nama Pemeriksaan</a></li>
+<li><a href="setup_hasil.php" class="waves-effect" >Setup Hasil</a></li>
+</ul>
+    </div>
 </li>
 
 

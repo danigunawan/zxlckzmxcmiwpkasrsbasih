@@ -8,7 +8,7 @@ include 'sanitasi.php';
 include 'db.php';
 
 //menampilkan seluruh data yang ada pada tabel penjualan
-$perintah = $db->query("SELECT * FROM fee_produk");
+$perintah = $db->query("SELECT f.id, f.nama_petugas, f.kode_produk, f.nama_produk, f.jumlah_prosentase, f.jumlah_uang, f.user_buat, u.nama FROM fee_produk f INNER JOIN user u ON f.nama_petugas = u.id ORDER BY f.id DESC");
 
  ?>
 
@@ -16,7 +16,6 @@ $perintah = $db->query("SELECT * FROM fee_produk");
 
 
 tr:nth-child(even){background-color: #f2f2f2}
-
 
 </style>
 
@@ -131,7 +130,7 @@ echo '<a href="form_fee_produk_petugas.php"  class="btn btn-info" > <i class="fa
 
 <div class="table-responsive"><!--membuat agar ada garis pada tabel disetiap kolom-->
 <span id="tabel_baru">
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
 		<thead>
 			<th style='background-color: #4CAF50; color: white'> Nama Petugas </th>
 			<th style='background-color: #4CAF50; color: white'> Kode Produk</th>
@@ -171,7 +170,7 @@ $fee_produk_hapus = mysqli_num_rows($pilih_akses_fee_produk_hapus);
 			{
 				//menampilkan data
 			echo "<tr>
-			<td>". $data1['nama_petugas'] ."</td>
+			<td>". $data1['nama'] ."</td>
 			<td>". $data1['kode_produk'] ."</td>
 			<td>". $data1['nama_produk'] ."</td>
 			<td>". persen($data1['jumlah_prosentase']) ."</td>
@@ -217,7 +216,7 @@ mysqli_close($db);
 <script>
 		
 	$(document).ready(function(){
-	$('#tableuser').DataTable();
+	$('#tableuser').DataTable({"ordering": false});
 	});
 
 </script>

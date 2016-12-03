@@ -85,7 +85,7 @@
     while ($data = mysqli_fetch_array($query))
     {
 
-       $query2 ="INSERT INTO detail_pembayaran_piutang (no_faktur_pembayaran, no_faktur_penjualan,tanggal, tanggal_jt, kredit, potongan, total, jumlah_bayar) VALUES ('$no_faktur_pembayaran','$data[no_faktur_penjualan]', '$tanggal_sekarang','$data[tanggal_jt]','$data[kredit]','$data[potongan]','$data[total]','$data[jumlah_bayar]')";
+       $query2 ="INSERT INTO detail_pembayaran_piutang (no_faktur_pembayaran, no_faktur_penjualan,tanggal, tanggal_jt, kredit, potongan, total, jumlah_bayar, kode_pelanggan) VALUES ('$no_faktur_pembayaran','$data[no_faktur_penjualan]', '$tanggal_sekarang','$data[tanggal_jt]','$data[kredit]','$data[potongan]','$data[total]','$data[jumlah_bayar]','$data[kode_pelanggan]')";
 
        if ($db->query($query2) === TRUE) {
        } else {

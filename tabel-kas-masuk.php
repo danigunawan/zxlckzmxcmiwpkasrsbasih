@@ -11,7 +11,7 @@ $perintah = $db->query("SELECT km.id, km.no_faktur, km.keterangan, km.ke_akun, k
 
  ?>
 
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
 		<thead>
 			<th style='background-color: #4CAF50; color:white'> Nomor Faktur </th>
 			<th style='background-color: #4CAF50; color:white'> Ke Akun </th>

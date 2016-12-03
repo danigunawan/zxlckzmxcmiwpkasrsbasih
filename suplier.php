@@ -4,7 +4,6 @@ include 'header.php';
 include 'navbar.php';
 include 'db.php';
 
-
 $query = $db->query("SELECT * FROM suplier");
 
  ?>
@@ -53,7 +52,7 @@ echo'<button type="button" class="btn btn-info " data-toggle="modal" data-target
 					<textarea name="alamat" id="alamat" class="form-control" ></textarea> <br>
 
 					<label> No. Telp </label><br>
-					<input type="text" name="nomor" id="nomor" class="form-control" autocomplete="off" required="" ><br>
+					<input type="text" name="nomor" id="nomor" class="form-control" autocomplete="off" ><br>
 
 
 					
@@ -152,7 +151,7 @@ echo'<button type="button" class="btn btn-info " data-toggle="modal" data-target
    
    
    
-   					<button type="submit" id="submit_edit" class="btn btn-success">Submit</button>
+   					<button type="submit" id="submit_edit" data-nama="" class="btn btn-success">Submit</button>
    			</div>			
   </form>
   <div class="alert alert-success" style="display:none">
@@ -180,7 +179,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 
 <div class="table-responsive">
 <span id="table_baru">
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
 		<thead>
 			
 			<th style='background-color: #4CAF50; color: white'> Nama Suplier </th>
@@ -257,6 +256,27 @@ mysqli_close($db);
 </span>
 </div>
 
+<script type="text/javascript">
+$("#suplier").blur(function(){
+
+var nama = $("#suplier").val();
+// cek namanya
+ $.post('cek_suplier.php',{nama:nama}, function(data){
+
+        if(data == 1){
+          alert('Nama suplier yang anda masukkan sudah ada!');
+          $("#suplier").val('');
+          $("#suplier").focus();
+        }
+        else{
+
+// Finish Proses
+        }
+
+      }); // end post dari cek nama
+
+});
+</script>
 
 
 <script>
@@ -297,9 +317,7 @@ $(document).ready(function(){
 								
 								if (data != "") {
 								$("#suplier").val('');
-								$("#alamat").val('');
-								$("#nomor").val('');
-								
+
 								$(".alert").show('fast');
 								$("#table_baru").load('tabel-suplier.php');
 								
@@ -321,7 +339,7 @@ $(document).ready(function(){
 					// end fungsi tambah 
 
 					//fungsi hapus data 
-								$(".btn-hapus").click(function(){
+								$(document).on('click', '.btn-hapus', function (e) {
 								var suplier = $(this).attr("data-suplier");
 								var id = $(this).attr("data-id");
 								$("#data_suplier").val(suplier);
@@ -337,11 +355,11 @@ $(document).ready(function(){
 								var id = $("#id_hapus").val();
 								
 								$.post("hapussuplier.php",{id:id},function(data){
-								if (data == "sukses") {
+								
 								$("#table_baru").load('tabel-suplier.php');
 								$("#modal_hapus").modal('hide');
 								
-								}
+							
 								
 								
 								});
@@ -357,11 +375,13 @@ $(document).ready(function(){
 								var alamat = $(this).attr("data-alamat");
 								var no_telp = $(this).attr("data-nomor");
 								var id   = $(this).attr("data-id");
+
 								$("#edit_suplier").val(nama);
 								$("#edit_alamat").val(alamat);
 								$("#edit_nomor").val(no_telp);
 								$("#id_edit").val(id);
-								
+								$("#submit_edit").attr("data-nama",nama);
+
 								
 								});
 								
@@ -370,7 +390,8 @@ $(document).ready(function(){
 								var alamat = $("#edit_alamat").val();
 								var no_telp = $("#edit_nomor").val();
 								var id   = $("#id_edit").val();
-								
+								var as   = $(this).attr("data-nama");
+
 								if (nama == ""){
 									alert("Nama Harus Diisi");
 								}
@@ -381,22 +402,39 @@ $(document).ready(function(){
 									alert("Nomor Telpon Harus Diisi");
 								}
 								else {
-								$.post("updatesuplier.php",{nama:nama,alamat:alamat,no_telp:no_telp,id:id},function(data){
-								if (data == 'sukses') {
-								$(".alert").show('fast');
-								$("#table_baru").load('tabel-suplier.php');
-								
-								setTimeout(tutupalert, 2000);
-								$(".modal").modal("hide");
-								}
-								
-								
-								});
-																	
-								}
 
+												// cek namanya
+			 $.post('cek_suplier.php',{nama:nama}, function(data){
 
-								function tutupmodal() {
+			 if(data == 1){
+			 alert('Nama suplier yang anda masukkan sudah ada!');
+			    $("#edit_suplier").focus();
+			    $("#edit_suplier").val(as);
+
+			 }
+			else
+			{
+
+			// ptoses updatenya
+			$.post("updatesuplier.php",{nama:nama,alamat:alamat,no_telp:no_telp,id:id},function(data){
+											
+											$(".alert").show('fast');
+											$("#table_baru").load('tabel-suplier.php');
+											
+											setTimeout(tutupalert, 2000);
+											$(".modal").modal("hide");
+										
+											
+											
+											});
+			// Finish Proses
+			}
+
+			}); // end post dari cek nama
+
+				}
+
+				function tutupmodal() {
 								
 								}	
 								});

@@ -1,10 +1,11 @@
-<?php 
+<?php include 'session_login.php';
 include 'db.php';
 include_once 'sanitasi.php';
-session_start();
 
 $token = stringdoang($_POST['token']);
 
+$pilih_akses_registrasi_rj = $db->query("SELECT registrasi_rj_lihat, registrasi_rj_tambah, registrasi_rj_edit, registrasi_rj_hapus FROM otoritas_registrasi WHERE id_otoritas = '$_SESSION[otoritas_id]'");
+$registrasi_rj = mysqli_fetch_array($pilih_akses_registrasi_rj);
 
 // start data agar tetap masuk 
 try {
@@ -16,12 +17,40 @@ $db->begin_transaction();
 if ($token == '')
 {
   
-header("location:registrasi_raja.php");
+  echo '<META HTTP-EQUIV="Refresh" Content="0; URL=registrasi_raja.php">';
 
 }
 else
 {
-$username = stringdoang($_SESSION['username']);
+
+$sett_registrasi= $db->query("SELECT * FROM setting_registrasi ");
+$data_sett = mysqli_fetch_array($sett_registrasi);
+
+if ($data_sett['tampil_ttv'] == 1) {
+
+$sistole_distole = stringdoang($_POST['sistole_distole']);
+$respiratory_rate = stringdoang($_POST['respiratory_rate']);
+$suhu = angkadoang($_POST['suhu']);
+$nadi = angkadoang($_POST['nadi']);
+$berat_badan = stringdoang($_POST['berat_badan']);
+$tinggi_badan = stringdoang($_POST['tinggi_badan']);
+
+}
+
+else{
+
+  $sistole_distole = '-';
+  $respiratory_rate = '-';
+  $suhu = '-';
+  $nadi = '-';
+  $berat_badan = '-';
+  $tinggi_badan = '-';
+
+}
+
+
+
+$username = stringdoang($_SESSION['user_name']);
 $no_rm = stringdoang($_POST['no_rm']);
 $nama_lengkap =  stringdoang($_POST['nama_lengkap']);
 $alamat = stringdoang($_POST['alamat']);
@@ -29,19 +58,14 @@ $jenis_kelamin = stringdoang($_POST['jenis_kelamin']);
 $hp = angkadoang($_POST['hp']);
 $kondisi = stringdoang($_POST['kondisi']);
 $penjamin = stringdoang($_POST['penjamin']);
-$dokter = stringdoang($_POST['dokter']);
+$petugas_dokter = stringdoang($_POST['petugas_dokter']);
 $rujukan = stringdoang($_POST['rujukan']);
 $poli = stringdoang($_POST['poli']);
 $umur = stringdoang($_POST['umur']);
-$sistole_distole = stringdoang($_POST['sistole_distole']);
-$respiratory_rate = stringdoang($_POST['respiratory_rate']);
-$suhu = angkadoang($_POST['suhu']);
-$nadi = angkadoang($_POST['nadi']);
-$berat_badan = stringdoang($_POST['berat_badan']);
-$tinggi_badan = stringdoang($_POST['tinggi_badan']);
 $alergi = stringdoang($_POST['alergi']);
 $tanggal_lahir = stringdoang($_POST['tanggal_lahir']);
 $tanggal_lahir = tanggal_mysql($tanggal_lahir);
+
 
 
 $no_urut = 1;
@@ -53,14 +77,6 @@ $waktu = date("Y-m-d H:i:s");
 $bulan_php = date('m');
 $tahun_php = date('Y');
 
-$select_to = $db->query("SELECT nama_pasien FROM registrasi  WHERE jenis_pasien = 'Rawat Jalan'  ORDER BY id DESC LIMIT 1 ");
-$keluar = mysqli_fetch_array($select_to);
-
-if ($keluar['nama_pasien'] == $nama_lengkap )
-{
-header('location:registrasi_raja.php');
-}
-else{
 
 // START UNTUK AMBIL NO REG NYA LEWAT PROSES SAJA
 // START UNTUK NO REG 
@@ -96,8 +112,7 @@ $nomor = 1 + $ambil_nomor ;
 
 
  }
- // AKHIR UNTUK NO REG
-                      // END UNTUK AMBIL NO REG LEWAT PROSES SAJA
+
 
 
 
@@ -108,12 +123,14 @@ $data = mysqli_fetch_array($query);
 if($jumlah > 0)
 
 {
+  ECHO "1";
+  
 $no_urut_terakhir = $no_urut + $data['no_urut'];
 
 $sql6 = $db->prepare("INSERT INTO registrasi (alergi,poli,no_urut,nama_pasien,jam,hp_pasien,penjamin,dokter,status,
   no_reg,no_rm,tanggal,kondisi,petugas,alamat_pasien,umur_pasien,jenis_kelamin,rujukan,jenis_pasien)
    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-$sql6->bind_param("sssssssssssssssssss",$alergi,$poli,$no_urut_terakhir,$nama_lengkap,$jam,$hp,$penjamin,$dokter,$menunggu,$no_reg,$no_rm,$tanggal_sekarang,$kondisi,$username,$alamat,$umur,$jenis_kelamin,$rujukan,$rawat_jalanjalan);
+$sql6->bind_param("sssssssssssssssssss",$alergi,$poli,$no_urut_terakhir,$nama_lengkap,$jam,$hp,$penjamin,$petugas_dokter,$menunggu,$no_reg,$no_rm,$tanggal_sekarang,$kondisi,$username,$alamat,$umur,$jenis_kelamin,$rujukan,$rawat_jalanjalan);
 
 
 $menunggu = 'menunggu';
@@ -128,7 +145,7 @@ $sql0 = $db->prepare("INSERT INTO rekam_medik
   tinggi_badan,nadi,respiratory,poli,tanggal_periksa,jam,dokter,kondisi,rujukan)
    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
-$sql0->bind_param("sssssssssssssssssss",$alergi,$no_reg,$no_rm,$nama_lengkap,$alamat,$umur,$jenis_kelamin,$sistole_distole,$suhu,$berat_badan,$tinggi_badan,$nadi,$respiratory_rate,$poli,$tanggal_sekarang,$jam,$dokter,$kondisi,$rujukan);
+$sql0->bind_param("sssssssssssssssssss",$alergi,$no_reg,$no_rm,$nama_lengkap,$alamat,$umur,$jenis_kelamin,$sistole_distole,$suhu,$berat_badan,$tinggi_badan,$nadi,$respiratory_rate,$poli,$tanggal_sekarang,$jam,$petugas_dokter,$kondisi,$rujukan);
 
 $sql0->execute();
 
@@ -137,12 +154,12 @@ $sql0->execute();
 
 else {
 
-
+echo "2";
 
 $sql7 = $db->prepare("INSERT INTO registrasi (alergi,poli,no_urut,nama_pasien,jam,hp_pasien,penjamin,dokter,status,
   no_reg,no_rm,tanggal,kondisi,petugas,alamat_pasien,umur_pasien,jenis_kelamin,rujukan,jenis_pasien)
    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-$sql7->bind_param("sssssssssssssssssss",$alergi,$poli,$no_urut,$nama_lengkap,$jam,$hp,$penjamin,$dokter,$menunggu,$no_reg,$no_rm,$tanggal_sekarang,$kondisi,$username,$alamat,$umur,$jenis_kelamin,$rujukan,$rawat_jalanjalan);
+$sql7->bind_param("sssssssssssssssssss",$alergi,$poli,$no_urut,$nama_lengkap,$jam,$hp,$penjamin,$petugas_dokter,$menunggu,$no_reg,$no_rm,$tanggal_sekarang,$kondisi,$username,$alamat,$umur,$jenis_kelamin,$rujukan,$rawat_jalanjalan);
 
 
 $menunggu = 'menunggu';
@@ -156,7 +173,7 @@ $sql99 = $db->prepare("INSERT INTO rekam_medik
   tinggi_badan,nadi,respiratory,poli,tanggal_periksa,jam,dokter,kondisi,rujukan)
    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
-$sql99->bind_param("sssssssssssssssssss",$alergi,$no_reg,$no_rm,$nama_lengkap,$alamat,$umur,$jenis_kelamin,$sistole_distole,$suhu,$berat_badan,$tinggi_badan,$nadi,$respiratory_rate,$poli,$tanggal_sekarang,$jam,$dokter,$kondisi,$rujukan);
+$sql99->bind_param("sssssssssssssssssss",$alergi,$no_reg,$no_rm,$nama_lengkap,$alamat,$umur,$jenis_kelamin,$sistole_distole,$suhu,$berat_badan,$tinggi_badan,$nadi,$respiratory_rate,$poli,$tanggal_sekarang,$jam,$petugas_dokter,$kondisi,$rujukan);
 
 $sql99->execute();
 
@@ -174,14 +191,11 @@ else
     echo "Error: " . $update_pasien . "<br>" . $db->error;
     } 
 
-
-
-} // biar gk double 
 } // token
 
 
     $db->commit();
-    header('location:registrasi_raja.php');
+
 
 } catch (Exception $e) {
     // An exception has been thrown
@@ -190,6 +204,74 @@ else
 }
 // ending agar data tetep masuk awalau koneksi putus 
 
-mysqli_close($db);
+
+
 
  ?>
+
+<?php 
+
+$query7 = $db->query("SELECT * FROM registrasi WHERE jenis_pasien = 'Rawat Jalan' AND  status != 'Proses' AND status != 'Sudah Pulang' AND status != 'Batal Rawat' AND status != 'Rujuk Keluar Klinik Ditangani' AND status != 'Rujuk Rawat Jalan' AND status != 'Rujuk Keluar Klinik Tidak Ditangani'  ORDER BY id DESC LIMIT 1 ");
+
+$data = mysqli_fetch_array($query7);
+      
+    
+      echo "<tr class='tr-id-".$data['id']."'>";
+
+if ($registrasi_rj['registrasi_rj_lihat']) {
+          if ($data['status'] == 'menunggu') {
+          
+          echo "<td><button  class='btn btn-warning pilih1' data-id='".$data['id']."' id='panggil-".$data['id']."' data-status='di panggil' data-urut='". $data['no_urut']."' data-poli='".$data['poli']."'> Panggil  </button>";
+          
+          echo "<button style='display:none'  class='btn btn-success pilih00' data-id='".$data['id']."' id='proses-".$data['id']."' data-status='Proses'  data-urut='". $data['no_urut']."'> Masuk </button></td>";
+          
+          }
+          elseif ($data['status'] == 'di panggil') {
+          
+          echo "<td><button  class='btn btn-success pilih00' data-id='".$data['id']."' id='proses-".$data['id']."' data-status='Proses'  data-urut='". $data['no_urut']."'> Masuk </button></td>";
+          
+          }
+}
+else{
+  echo "<td> </td>";
+}
+          
+
+          if ($registrasi_rj['registrasi_rj_hapus'] > 0) {
+            echo "<td><button class='btn btn-danger btn-floating pilih2' data-id='". $data['id']."' data-reg='". $data['no_reg']."'> <b> X </b> </button></td>";
+          }
+
+          else{
+            echo "<td> </td>";
+          }
+        
+          echo "<td>". $data['no_reg']."</td>
+          <td>". $data['no_rm']."</td>
+          <td>". tanggal($data['tanggal'])."</td>              
+          <td>". $data['nama_pasien']."</td>
+          <td>". $data['penjamin']."</td>
+          <td>". $data['umur_pasien']."</td>
+          <td>". $data['jenis_kelamin']."</td>
+          <td>". $data['dokter']."</td>
+          <td>". $data['poli']."</td>
+          <td>". $data['no_urut']."</td>";
+
+ 
+      echo "</tr>";
+       ?>
+
+       <!--   script untuk detail layanan PERUSAHAAN PENJAMIN-->
+<script type="text/javascript">
+     $(".pilih2").click(function(){   
+               var reg = $(this).attr('data-reg');
+               var id = $(this).attr('data-id');
+
+               $("#batal_raja").attr('data-id',id);
+               $("#detail2").modal('show');
+               $("#no_reg").val(reg);
+               
+     });
+//            tabel lookup mahasiswa         
+</script>
+
+

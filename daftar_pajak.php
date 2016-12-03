@@ -219,7 +219,7 @@ th {
 
 <div class="table-responsive">
 <span id="table-baru">
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
 		<thead>
 			<th> Nama Pajak </th>
 			<th> Deskripsi </th>

@@ -28,7 +28,7 @@ $query->execute();
     ' - '.$db->error);
     }
 	    else{
-	    	header('location:kamar.php');
+	    	echo '<META HTTP-EQUIV="Refresh" Content="0; URL=kamar.php">';
 	 }
 
 

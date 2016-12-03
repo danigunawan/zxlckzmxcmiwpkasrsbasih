@@ -10,7 +10,6 @@ $query = $db->query("SELECT * FROM pembayaran_piutang");
  $session_id = session_id();
 
 
-
 $perintah50 = $db->query("SELECT * FROM tbs_pembayaran_piutang WHERE session_id = '$session_id'");
 $data50 = mysqli_fetch_array($perintah50);
 $no_faktur_penjualan = $data50['no_faktur_penjualan']; 
@@ -26,7 +25,7 @@ $no_faktur_penjualan = $data50['no_faktur_penjualan'];
 
 
 
- <div class="container">
+ <div style="padding-left: 5%; padding-right: 5%">
 <h3> <u>FORM PEMBAYARAN PIUTANG</u> </h3>
 <br><br>
 
@@ -121,83 +120,6 @@ $no_faktur_penjualan = $data50['no_faktur_penjualan'];
 
 
 <form action="proses_tbs_pembayaran_piutang.php" role="form" method="post" id="formtambahproduk">
-<div class="row">
-
-      
-          <div class="form-group col-sm-4">
-          <label> Kode Pelanggan </label>
-          <br>
-          <select type="text" name="kode_pelanggan" id="kd_pelanggan" class="form-control chosen" required="">
-     
-          
-          <?php 
-          include 'db.php';
-          
-          // menampilkan data yang ada pada tabel suplier
-          $query = $db->query("SELECT * FROM pelanggan ");
-          
-          // menyimpan data sementara yang ada pada $query
-          while($data = mysqli_fetch_array($query))
-          {
-          
-          echo "<option value='".$data['kode_pelanggan'] ."'> ".$data['kode_pelanggan'] ." - ".$data['nama_pelanggan'] ." </option>";
-          }
-          
-          
-          ?>
-          </select>
-          </div>
-          
-
-          <div class="form-group col-sm-4">
-          <label> Cara Bayar </label><br>
-          <select type="text" name="cara_bayar" id="carabayar1" class="form-control" >
-          
-             <?php 
-             
-             
-             $sett_akun = $db->query("SELECT sa.kas, da.nama_daftar_akun FROM setting_akun sa INNER JOIN daftar_akun da ON sa.kas = da.kode_daftar_akun");
-             $data_sett = mysqli_fetch_array($sett_akun);
-             
-             
-             
-             echo "<option selected value='".$data_sett['kas']."'>".$data_sett['nama_daftar_akun'] ."</option>";
-             
-             $query = $db->query("SELECT nama_daftar_akun, kode_daftar_akun FROM daftar_akun WHERE tipe_akun = 'Kas & Bank'");
-             while($data = mysqli_fetch_array($query))
-             {
-             
-             
-             
-             
-             echo "<option value='".$data['kode_daftar_akun']."'>".$data['nama_daftar_akun'] ."</option>";
-             
-             
-             
-             
-             }
-             
-             
-             ?>
-          
-          </select>
-          </div>
-          
-          <div class="form-group col-sm-4">
-          <label> Tanggal </label><br>
-          <input type="text" name="tanggal" id="tanggal" placeholder="Tanggal" style="height: 20px" value="<?php echo date("Y/m/d"); ?>" class="form-control" required="" >
-
-          <input type="hidden" name="session_id" id="session_id" class="form-control" readonly="" value="<?php echo $session_id; ?>" required="" >
-          </div>
-          
-    
-
-          <input type="hidden" class="form-control" id="jumlah1" name="jumlah0" placeholder="jumlah">
-
-
-          
-
-</div> <!-- tag penutup div row -->
 
 <button type="button" class="btn btn-info" id="cari_produk_penjualan" data-toggle="modal" data-target="#myModal"> <i class='fa fa-search'> </i> Cari</button>
 <br>
@@ -233,30 +155,33 @@ $no_faktur_penjualan = $data50['no_faktur_penjualan'];
 
     
 <form class="form-inline" role="form" id="formtambahproduk">
-  
 <div class="row">
+
   
   <div class="col-sm-8">
-<div class="form-group col-sm-3">
+  
+<div class="form-group col-sm-2">
   <input type="text" class="form-control" name="no_faktur_penjualan" id="nomorfakturbeli" placeholder="Nomor Faktur Jual" readonly="">
   </div>
   
-  <div class="form-group col-sm-3">
+  <div class="form-group col-sm-2">
     <input type="text" class="form-control" name="kredit" id="kredit" placeholder="Kredit" readonly="">
   </div>
 
 
 
 
-  <div class="form-group col-sm-3">
+  <div class="form-group col-sm-2">
           <input type="text" name="potongan" id="potongan_penjualan" class="form-control" placeholder="Potongan" autocomplete="off">
   </div>
 
-  <div class="form-group col-sm-3">
+  <div class="form-group col-sm-2">
     <input type="text" class="form-control" name="jumlah_bayar" onkeydown="return numbersonly(this, event);" id="jumlah_bayar" placeholder="Jumlah Bayar" autocomplete="off">
   </div>
 
-<button type="submit" id="submit_tambah" class="btn btn-success"> <i class='fa fa-plus'> </i> Tambah </button>
+  <div class="form-group col-sm-2">
+      <button type="submit" id="submit_tambah" class="btn btn-success"> <i class='fa fa-plus'> </i> Tambah </button>
+  </div>
 
 <div class="form-group">
   <input type="hidden" name="total" id="total" class="form-control" value="" required="">
@@ -276,7 +201,7 @@ $no_faktur_penjualan = $data50['no_faktur_penjualan'];
   <div class="table-responsive">
 <span id="tabel_baru"> 
   <!--tag untuk membuat garis pada tabel-->       
-  <table id="tableuser" class="table table-bordered">
+  <table id="tableuser" class="table table-bordered ">
     <thead>
       <th> Nomor Faktur Penjualan</th>
       <th> Tanggal </th>
@@ -318,8 +243,6 @@ $no_faktur_penjualan = $data50['no_faktur_penjualan'];
       </tr>";
       }
 
-      //Untuk Memutuskan Koneksi Ke Database
-mysqli_close($db);   
     ?>
     </tbody>
 
@@ -330,11 +253,78 @@ mysqli_close($db);
   </div>
   
   <div class="col-sm-4">
-    
-    <div class="form-group">
-          <label> <b> Total Bayar </b> </label><br>
-          <input type="text" name="total_bayar" id="totalbayar" placeholder="Total Bayar" class="form-control" readonly="" required="">
+<div class="card card-block">
+    <div class="row 1">
+        <div class="form-group col-sm-6">
+                <label>No RM</label>
+                <br>
+                <select type="text" name="kode_pelanggan" id="kd_pelanggan" class="form-control chosen" required="">
+           
+                
+                <?php 
+                include 'db.php';
+                
+                // menampilkan data yang ada pada tabel suplier
+                $query = $db->query("SELECT kode_pelanggan,nama FROM penjualan WHERE status = 'Piutang' GROUP BY kode_pelanggan");
+                
+                // menyimpan data sementara yang ada pada $query
+                while($data = mysqli_fetch_array($query))
+                {
+                
+                echo "<option value='".$data['kode_pelanggan'] ."'> ".$data['kode_pelanggan'] ." - ".$data['nama'] ." </option>";
+                }
+                
+                
+                ?>
+                </select>
+                </div>
+
+
+                
+                <div class="form-group col-sm-6">
+                <label> Tanggal </label><br>
+                <input type="text" name="tanggal" id="tanggal" placeholder="Tanggal" style="height: 20px" value="<?php echo date("Y/m/d"); ?>" class="form-control" required="" >
+
+                <input type="hidden" name="session_id" id="session_id" class="form-control" readonly="" value="<?php echo $session_id; ?>" required="" >
+                </div>
+                
+          
+
+                <input type="hidden" class="form-control" id="jumlah1" name="jumlah0" placeholder="jumlah">
+      </div><!--end div class="row 1"-->
+
+      <div class="row 2">
+        <div class="col-sm-6">
+          <label> Cara Bayar </label><br>
+          <select type="text" name="cara_bayar" id="carabayar1" class="form-control" >
+          
+             <?php 
+             
+             $sett_akun = $db->query("SELECT sa.kas, da.nama_daftar_akun FROM setting_akun sa INNER JOIN daftar_akun da ON sa.kas = da.kode_daftar_akun");
+             $data_sett = mysqli_fetch_array($sett_akun);
+             
+             echo "<option selected value='".$data_sett['kas']."'>".$data_sett['nama_daftar_akun'] ."</option>";
+             
+             $query = $db->query("SELECT nama_daftar_akun, kode_daftar_akun FROM daftar_akun WHERE tipe_akun = 'Kas & Bank'");
+             while($data = mysqli_fetch_array($query))
+             {
+             echo "<option value='".$data['kode_daftar_akun']."'>".$data['nama_daftar_akun'] ."</option>";
+             }
+             
+             ?>
+          </select>
+        </div>
+
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label> <b> Total Bayar </b> </label><br>
+           <b> <input type="text" name="total_bayar" style="font-size:30px" id="totalbayar" placeholder="Total Bayar" class="form-control" readonly="" required=""></b>
           </div>
+        </div>
+      </div><!--div class="row 2"-->
+          
+
+    
 
           <input type="hidden" name="potongan1" id="potongan1" placeholder="Total Bayar" class="form-control" readonly="" required="">
 
@@ -362,6 +352,7 @@ mysqli_close($db);
 </div>
 
   </div>
+</div>
 
 </div>
  
@@ -450,7 +441,8 @@ mysqli_close($db);
       else
       {
 
-        $("#totalbayar").val(tandaPemisahTitik(subtotal))
+      
+      $("#totalbayar").val(tandaPemisahTitik(subtotal))
 
     $.post("proses_tbs_pembayaran_piutang.php", {session_id:session_id,no_faktur_penjualan:no_faktur_penjualan,tanggal:tanggal,tanggal_jt:tanggal_jt,total:total_kredit,potongan:potongan,jumlah_bayar:jumlah_bayar,kredit:kredit,kode_pelanggan:kode_pelanggan,potongan1:potongan1,faktur:faktur},function(data) {
 
@@ -490,23 +482,6 @@ mysqli_close($db);
   
   $("#cari_produk_penjualan").click(function() {
 
-     $.get('no_faktur_pp.php', function(data) {
-   /*optional stuff to do after getScript */ 
-$("#nomorfaktur_pembayaran").val(data);
- });
-    //modal baru
-
-
-
-      $.get('no_faktur_retur_jl.php', function(data) {
-   /*optional stuff to do after getScript */ 
-$("#nomorfakturbeli").val(data);
- });
-//menyembunyikan notif berhasil
-     $("#alert_berhasil").hide();
-    /* Act on the event */
-
-
       var kode_pelanggan = $("#kd_pelanggan").val();
       
       $.post("modal_piutang_baru.php", {kode_pelanggan:kode_pelanggan}, function(info) {
@@ -515,6 +490,8 @@ $("#nomorfakturbeli").val(data);
       
       
       });
+
+
       });
       
       
@@ -636,6 +613,7 @@ $.post("cek_total_pembayaran_piutang.php",
         session_id: session_id
     },
     function(data){
+      data = data.replace(/\s+/g, '');
         $("#totalbayar"). val(data);
     });
 
@@ -694,7 +672,10 @@ $(document).ready(function(){
   
 $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"});
 
+
 </script>
+
+
 
                             
 <script>
@@ -738,8 +719,11 @@ $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"});
    if (total == '') 
       
       {
+        
+        $("#kd_pelanggan").attr("disabled", false);
         total = 0;
       }
+
     
     else if(jumlah_bayar   == '')
       {
@@ -752,6 +736,7 @@ $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"});
     if (subtotal == 0) 
       {
         subtotal = 0;
+        $("#kd_pelanggan").attr("disabled", false);
       }
 
       $("#totalbayar").val(tandaPemisahTitik(subtotal));
@@ -760,8 +745,7 @@ $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!"});
     $.post("hapus_tbs_pembayaran_piutang.php",{id:id},function(data){
     
     $(".tr-id-"+id).remove();
-    
-    
+        
     
     });
     

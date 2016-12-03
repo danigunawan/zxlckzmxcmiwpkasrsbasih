@@ -7,8 +7,16 @@ include_once 'sanitasi.php';
 $tanggal = date("Y-m-d");
 
 
-$query7 = $db->query("SELECT * FROM registrasi WHERE (jenis_pasien = 'Rawat Jalan' AND  status = 'Proses' AND tanggal = '$tanggal') ORDER BY id ASC");
+$query7 = $db->query("SELECT * FROM registrasi WHERE (jenis_pasien = 'Rawat Jalan' AND  status = 'Proses') OR status = 'Rujuk Keluar Ditangani' ORDER BY id ASC");
 
+$pilih_akses_penjualan = $db->query("SELECT penjualan_tambah FROM otoritas_penjualan WHERE id_otoritas = '$_SESSION[otoritas_id]'");
+$penjualan = mysqli_fetch_array($pilih_akses_penjualan);
+
+$pilih_akses_rekam_medik = $db->query("SELECT rekam_medik_rj_lihat FROM otoritas_rekam_medik WHERE id_otoritas = '$_SESSION[otoritas_id]'");
+$rekam_medik = mysqli_fetch_array($pilih_akses_rekam_medik);
+
+$pilih_akses_registrasi_rj = $db->query("SELECT registrasi_rj_lihat, registrasi_rj_tambah, registrasi_rj_edit, registrasi_rj_hapus FROM otoritas_registrasi WHERE id_otoritas = '$_SESSION[otoritas_id]'");
+$registrasi_rj = mysqli_fetch_array($pilih_akses_registrasi_rj);
 
 
 
@@ -75,7 +83,7 @@ opacity: 0.9;
 <!--modal end Layanan RUJUK KE RAWAT INAP--> 
 
 <!-- Modal Untuk Confirm rujuk KE LUAR RS WITH PENANGANAN-->
-<div id="detail" class="modal fade" role="dialog">
+<div id="rujuk_penanganan" class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg">
     <!-- Modal content-->
     <div class="modal-content">
@@ -86,16 +94,15 @@ opacity: 0.9;
 
       <span id="tampil_layanan">
 
-      <h3>Keterangan Rujuk Rawat Jalan Dengan Penanganan</h3>
-<form role="form" action="proses_keterangan_rujuk.php" method="POST">
+<h3>Keterangan Rujuk Rawat Jalan Dengan Penanganan</h3>
+<form role="form" action="proses_keterangan_rujuk" method="POST">
 
 <div class="form-group">
   <textarea type="text" class="form-control" id="keterangan2" name="keterangan2"></textarea>
 </div>
 
-<input type="hidden" class="form-control" id="no_reg2" name="no_reg2" >
 
-<button type="submit" class="btn btn-info"><i class='fa fa-plus'></i>Input Keterangan</button>
+<button type="submit" id="submit_rujuk_penanganan" data-id="" data-reg="" class="btn btn-info"><i class='fa fa-plus'></i>Input Keterangan</button>
 </form>
 
       </span>
@@ -111,7 +118,7 @@ opacity: 0.9;
 
 
 <!-- Modal Untuk Confirm rujuk KE LUAR RS TANPA PENANGANAN-->
-<div id="detail_non" class="modal fade" role="dialog">
+<div id="rujuk_non_penanganan" class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg">
     <!-- Modal content-->
     <div class="modal-content">
@@ -123,16 +130,15 @@ opacity: 0.9;
       <span id="tampil_layanan">
 
       <h3>Keterangan Rujuk Rawat Jalan Tanpa Penanganan</h3>
-<form role="form" action="proses_keterangan_rujuk_non.php" method="POST">
+<form role="form" method="POST">
 
 <div class="form-group">
   <textarea type="text" class="form-control" id="keterangan12" name="keterangan12"></textarea>
-  <input type="hidden" class="form-control" id="no_reg12" name="no_reg12" >
 
 </div>
 
 
-<button type="submit" class="btn btn-info">Input Keterangan</button>
+<button type="submit" id="submit_rujuk_non_penanganan" data-id="" data-reg="" class="btn btn-info">Input Keterangan</button>
 </form>
 
       </span>
@@ -158,15 +164,14 @@ opacity: 0.9;
       <span id="tampil_layanan">
 
       <h1>Keterangan Batal Rawat Jalan</h1>
-<form role="form" action="proses_keterangan_batal.php" method="POST">
+<form role="form" method="POST">
 <div class="form-group">
   <label for="sel1">Keterangan Batal </label>
-  <textarea type="text" class="form-control" id="keterangan" name="keterangan"></textarea>
+  <textarea type="text" class="form-control" id="keterangan_batal" name="keterangan"></textarea>
 </div>
 
-<input type="hidden" class="form-control" id="no_reg" name="no_reg" >
 
-<button type="submit" class="btn btn-info">Input Keterangan</button>
+<button type="submit" class="btn btn-info" id="batal_jalan" data-id="" data-reg="">Input Keterangan</button>
 </form>
 
       </span>
@@ -180,12 +185,16 @@ opacity: 0.9;
 </div>
 <!--modal end BATAL RAWAT-->
 
-<div class="container">
+<div style="padding-left: 5%; padding-right: 5%">
+
+<h3>DATA PASIEN REGISTRASI RAWAT JALAN</h3><hr>
+
 <ul class="nav nav-tabs yellow darken-4" role="tablist">
-        <li class="nav-item"><a class="nav-link" href='registrasi_raja.php'> Antrian Pasien Rawat Jalan </a></li>
-        <li class="nav-item"><a class="nav-link" href='pasien_sudah_panggil.php' > Pasien Sudah Dipanggil </a></li>
-        <li class="nav-item"><a class="nav-link  active" href='pasien_sudah_masuk.php' > Pasien Sudah Masuk R.Dokter </a></li>
+        <li class="nav-item"><a class="nav-link" href='registrasi_raja.php'> Antrian Pasien R. Jalan </a></li>
+        <li class="nav-item"><a class="nav-link" href='pasien_sudah_panggil.php' > Pasien Dipanggil </a></li>
+        <li class="nav-item"><a class="nav-link active" href='pasien_sudah_masuk.php' > Pasien Masuk R.Dokter </a></li>
         <li class="nav-item"><a class="nav-link" href='pasien_batal_rujuk.php' > Pasien Batal / Rujuk Ke Luar </a></li>
+        <li class="nav-item"><a class="nav-link" href='pasien_registrasi_rj_belum_selesai.php' >Pasien Belum Selesai Pembayaran </a></li>
 </ul>
 <br><br>
 
@@ -200,9 +209,18 @@ tr:nth-child(even){background-color: #f2f2f2}
 
 <span id="tabel-jalan">
 <div class="table-responsive">
-<table id="table_rawat_jalan" class="table table-bordered">
+<table id="table_rawat_jalan" class="table table-bordered table-sm">
     <thead>
       <tr>
+             <th style='background-color: #4CAF50; color: white' >Transaksi Penjualan</th>
+             <th style='background-color: #4CAF50; color: white' >Rujuk Dengan Penanganan</th>
+             <th style='background-color: #4CAF50; color: white' >Rujuk Tanpa Penanganan </th>
+             <th style='background-color: #4CAF50; color: white' >Rujuk Rawat Inap</th>
+             <th style='background-color: #4CAF50; color: white' >Rekam Medik</th>
+             <th style='background-color: #4CAF50; color: white' >Batal</th>               
+             <th style='background-color: #4CAF50; color: white' >No Urut</th>
+             <th style='background-color: #4CAF50; color: white' >Poli</th> 
+             <th style='background-color: #4CAF50; color: white' >Dokter</th>   
              <th style='background-color: #4CAF50; color: white' >No REG</th>
              <th style='background-color: #4CAF50; color: white' >No RM </th>
              <th style='background-color: #4CAF50; color: white' >Tanggal</th>       
@@ -210,22 +228,105 @@ tr:nth-child(even){background-color: #f2f2f2}
              <th style='background-color: #4CAF50; color: white' >Penjamin</th>
              <th style='background-color: #4CAF50; color: white' >Umur</th>
              <th style='background-color: #4CAF50; color: white' >Jenis Kelamin</th>
-             <th style='background-color: #4CAF50; color: white' >Keterangan</th>
-             <th style='background-color: #4CAF50; color: white' >Dokter</th>
-             <th style='background-color: #4CAF50; color: white' >Poli</th>               
-             <th style='background-color: #4CAF50; color: white' >No Urut</th>
-             <th style='background-color: #4CAF50; color: white' >Rujuk Dengan Penangan</th>
-             <th style='background-color: #4CAF50; color: white' >Rujuk Tanpa Penanganan </th>
-             <th style='background-color: #4CAF50; color: white' >Rujuk Rawat Inap</th>
-             <th style='background-color: #4CAF50; color: white' >Batal</th>            
+             <th style='background-color: #4CAF50; color: white' >Keterangan</th>        
     </tr>
     </thead>
-    <tbody>
+    <tbody id="tbody">
     
    <?php while($data = mysqli_fetch_array($query7))
       
       {
-      echo "<tr  class=''  >
+
+$penjual = $db->query("SELECT status FROM penjualan WHERE no_reg = '$data[no_reg]' ");
+$sttus = mysqli_num_rows($penjual);
+
+      echo "<tr  class='tr-id-".$data['id']."'>";
+
+      $query_z = $db->query("SELECT p.status,p.no_faktur,p.nama,p.kode_gudang,g.nama_gudang FROM penjualan p INNER JOIN gudang g ON p.kode_gudang = g.kode_gudang WHERE p.no_reg = '$data[no_reg]' ");
+      $data_z = mysqli_fetch_array($query_z);
+
+
+
+if ($penjualan['penjualan_tambah'] > 0) {
+  if ($data_z['status'] == 'Simpan Sementara') {
+
+       echo "<td> <a href='proses_pesanan_barang_raja.php?no_faktur=".$data_z['no_faktur']."&no_reg=".$data['no_reg']."&no_rm=".$data['no_rm']."&nama_pasien=".$data_z['nama']."&kode_gudang=".$data_z['kode_gudang']."&nama_gudang=".$data_z['nama_gudang']."'class='btn btn-floating btn-small btn btn-info'><i class='fa fa-credit-card'></i></a> </td>"; 
+      }
+      else
+      {
+      echo"<td> <a href='form_penjualan_kasir.php?no_reg=". $data['no_reg']."' class='btn btn-floating btn-small btn-info penjualan' ><i class='fa fa-shopping-cart'></i></a></td>";
+
+      }
+}
+else{
+
+
+       echo "<td> </td>";
+
+}
+      
+  ?>
+  <?php
+if ($registrasi_rj['registrasi_rj_lihat'] > 0) {
+    if ($data['status'] == 'Rujuk Keluar Ditangani')
+  {
+    echo "<td style='color:red;'>Silakan Transaksi Penjualan</td>";
+  } 
+  else
+  {
+    echo "<td><button class='btn btn-floating btn-small btn-info pilih1' data-reg='". $data['no_reg']."' data-id='". $data['id']."' ><i class='fa fa-bus '></button></td>";
+  }
+
+if ($sttus > 0 )
+{
+  echo "<td></td>";
+}
+else
+{
+   echo "
+ <td><button class='btn btn-floating btn-small btn-info pilih12' data-reg='". $data['no_reg']."' data-id='". $data['id']."'><i class='fa fa-cab'></button></td>";
+}
+ 
+
+  echo "<td> <button class='btn btn-floating btn-small btn-info rujuk_ri' data-reg='".$data['no_reg']."'><i class='fa fa-hotel'></button></td>";
+}
+
+else{
+  echo "<td> </td>";
+  echo "<td> </td>";
+  echo "<td> </td>";
+}
+
+
+if ($rekam_medik['rekam_medik_rj_lihat'] > 0) {
+  echo "<td> <a href='rekam_medik_raja.php' class='btn btn-floating btn-small btn-info penjualan' ><i class='fa fa-medkit'></i></a></td>";
+}
+else{
+  echo "<td> </td>";
+}
+  
+ 
+
+if ($registrasi_rj['registrasi_rj_hapus'] > 0) {
+
+  if ($sttus > 0 )
+{
+  echo "<td></td>";
+}
+else
+{
+  echo "<td><button class='btn btn-floating btn-small btn-info pilih2' data-id='". $data['id']."' data-reg='".$data['no_reg']."'><b> X </b></button></td>";
+}
+
+}
+else{
+  echo "<td> </td>";
+}
+  
+  
+          echo "<td>". $data['no_urut']."</td>
+          <td>". $data['poli']."</td>
+          <td>". $data['dokter']."</td>
           <td>". $data['no_reg']."</td>
           <td>". $data['no_rm']."</td>
           <td>". tanggal($data['tanggal'])."</td>              
@@ -234,17 +335,7 @@ tr:nth-child(even){background-color: #f2f2f2}
           <td>". $data['umur_pasien']."</td>
           <td>". $data['jenis_kelamin']."</td>
           <td>". $data['keterangan']."</td>
-          <td>". $data['dokter']."</td>
-          <td>". $data['poli']."</td>
-          <td>". $data['no_urut']."</td>
-  <td><button class='btn btn-floating btn-small btn-primary pilih1' data-id='". $data['no_reg']."' ><i class='fa fa-bus '></button></td>
-
- <td><button class='btn btn-floating btn-small btn-succcess pilih12' data-id='". $data['no_reg']."'><i class='fa fa-cab'></button></td>
-
-  <td> <button class='btn btn-floating btn-small btn-info rujuk_ri' data-reg='".$data['no_reg']."'><i class='fa fa-hotel'></button></td>
-
-  <td><button class='btn btn-floating btn-small btn-danger pilih2' data-id='". $data['no_reg']."'><i class='fa fa-refresh'></button></td>";
-      echo "</tr>";
+          </tr>";
       
       }
     ?>
@@ -268,59 +359,122 @@ tr:nth-child(even){background-color: #f2f2f2}
     });
 </script>
 
-<!-- cari untuk pegy natio -->
-<script type="text/javascript">
-  $("#cari").keyup(function(){
-var q = $(this).val();
-
-$.post('table_baru_sudah_masuk.php',{q:q},function(data)
-{
-  $("#tabel-jalan").html(data);
-  
-});
-});
-</script>
-<!-- END script cari untuk pegy natio -->
 
 <!--   script untuk detail layanan PERUSAHAAN PENJAMIN-->
-<script type="text/javascript">
-     $(".pilih1").click(function() 
-{   
-    var id = $(this).attr('data-id');
+  <script type="text/javascript">
+     $(".pilih1").click(function(){   
 
-               $("#detail").modal('show');
-          $("#no_reg2").val(id);
+    var id = $(this).attr('data-id');
+    var reg = $(this).attr('data-reg');
+
+          $("#rujuk_penanganan").modal('show');
+          $("#submit_rujuk_penanganan").attr("data-id",id);
+          $("#submit_rujuk_penanganan").attr("data-reg",reg);
+
+  });
+
+  $("#submit_rujuk_penanganan").click(function(){  
+    var keterangan = $("#keterangan2").val();
+    var reg = $(this).attr("data-reg");
+    var id = $(this).attr("data-id");
+
+            $("#rujuk_penanganan").modal('hide');
+            $(".tr-id-"+id+"").remove();
+            $.post("proses_keterangan_rujuk.php",{reg:reg,keterangan:keterangan},function(data){
+            
+            $("#tbody").prepend(data);
+
 
             });
+
+
+   });
+     
+
+   $("form").submit(function(){
+       return false;
+       });
 //            tabel lookup mahasiswa         
 </script>
-<!--  end script untuk akhir detail layanan PERUSAHAAN -->
 
 
 <!--   script untuk detail layanan PERUSAHAAN PENJAMIN-->
-<script type="text/javascript">
-     $(".pilih12").click(function() 
-{   
-    var id = $(this).attr('data-id');
+  <script type="text/javascript">
+     $(".pilih12").click(function(){   
 
-               $("#detail_non").modal('show');
-          $("#no_reg12").val(id);
+    var id = $(this).attr('data-id');
+    var reg = $(this).attr('data-reg');
+
+          $("#rujuk_non_penanganan").modal('show');
+          $("#submit_rujuk_non_penanganan").attr("data-id",id);
+          $("#submit_rujuk_non_penanganan").attr("data-reg",reg);
+
+  });
+
+  $("#submit_rujuk_non_penanganan").click(function(){  
+    var keterangan = $("#keterangan12").val();
+    var reg = $(this).attr("data-reg");
+    var id = $(this).attr("data-id");
+
+            $("#rujuk_non_penanganan").modal('hide');
+            
+            $.post("proses_keterangan_rujuk_non.php",{reg:reg,keterangan:keterangan},function(data){
+            
+            $(".tr-id-"+id+"").remove();
+
 
             });
+
+
+   });
+     
+
+   $("form").submit(function(){
+       return false;
+       });
 //            tabel lookup mahasiswa         
 </script>
-<!--  end script untuk akhir detail layanan PERUSAHAAN -->
+
+
 
 <!--   script untuk detail layanan PERUSAHAAN PENJAMIN-->
-<script type="text/javascript">
-     $(".pilih2").click(function() 
-{   
-    var id = $(this).attr('data-id');
+  <script type="text/javascript">
+     $(".pilih2").click(function(){   
 
-               $("#detail2").modal('show');
-          $("#no_reg").val(id);
+    var id = $(this).attr('data-id');
+    var reg = $(this).attr('data-reg');
+
+          $("#detail2").modal('show');
+          $("#batal_jalan").attr("data-id",id);
+          $("#batal_jalan").attr("data-reg",reg);
+
+  });
+
+  $("#batal_jalan").click(function(){  
+    var keterangan = $("#keterangan_batal").val();
+    var id = $(this).attr("data-id");
+    var reg = $(this).attr("data-reg");
+
+        if (keterangan == '') {
+          alert("Keterangan batal Harus Diisi");
+          $("#keterangan_batal").focus();
+        }
+        else
+        {
+            
+            $.post("proses_keterangan_batal.php",{reg:reg,keterangan:keterangan},function(data){
+            $(".tr-id-"+id+"").remove();
+            $("#detail2").modal('hide');
 
             });
+        }
+
+   });
+     
+
+   $("form").submit(function(){
+       return false;
+       });
 //            tabel lookup mahasiswa         
 </script>
 <!--  end script untuk akhir detail layanan PERUSAHAAN -->
@@ -342,27 +496,9 @@ $.post('table_baru_sudah_masuk.php',{q:q},function(data)
 </script>
 <!--  end script untuk akhir detail RUJUK-->
 
+
 <!--footer -->
 <?php
  include 'footer.php';
 ?>   
 <!--end footer-->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

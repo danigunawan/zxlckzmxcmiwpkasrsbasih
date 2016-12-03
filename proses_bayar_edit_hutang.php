@@ -17,9 +17,6 @@ $tahun_terakhir = substr($tahun_sekarang, 2);
 
 $perintah10 = $db->query("DELETE FROM detail_pembayaran_hutang WHERE no_faktur_pembayaran = '$no_faktur_pembayaran'");
 
-
-
-
   // buat prepared statements
         $stmt = $db->prepare("UPDATE pembayaran_hutang SET no_faktur_pembayaran = ?, tanggal = ?, tanggal_edit = ?, jam = ?, nama_suplier = ?, keterangan = ?, total = ?, user_edit = ?, dari_kas = ? WHERE no_faktur_pembayaran = ?");
 
@@ -60,7 +57,7 @@ $perintah10 = $db->query("DELETE FROM detail_pembayaran_hutang WHERE no_faktur_p
     {
 
 
-        $query2 = $db->query("INSERT INTO detail_pembayaran_hutang (no_faktur_pembayaran, no_faktur_pembelian, tanggal, tanggal_jt, kredit, potongan, total, jumlah_bayar) VALUES ('$data[no_faktur_pembayaran]', '$data[no_faktur_pembelian]', now(), '$data[tanggal_jt]', '$data[kredit]', '$data[potongan]', '$data[total]', '$data[jumlah_bayar]')");
+        $query2 = $db->query("INSERT INTO detail_pembayaran_hutang (no_faktur_pembayaran, no_faktur_pembelian, tanggal, tanggal_jt, kredit, potongan, total, jumlah_bayar,suplier) VALUES ('$data[no_faktur_pembayaran]', '$data[no_faktur_pembelian]', now(), '$data[tanggal_jt]', '$data[kredit]', '$data[potongan]', '$data[total]', '$data[jumlah_bayar]', '$data[suplier]')");
     }
 
 
@@ -100,7 +97,6 @@ if ($potongan != "" || $potongan != '0') {
 
     $query3 = $db->query("DELETE FROM tbs_pembayaran_hutang WHERE no_faktur_pembayaran = '$no_faktur_pembayaran'");
     echo "Success";
-
 
     
 //Untuk Memutuskan Koneksi Ke Database

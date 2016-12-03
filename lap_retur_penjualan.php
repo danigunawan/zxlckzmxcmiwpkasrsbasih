@@ -20,9 +20,11 @@ $perintah = $db->query("SELECT pel.nama_pelanggan,p.no_faktur_retur,p.tanggal,p.
 <div class="dropdown">
              <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="width:150px"> Jenis Laporan <span class="caret"></span></button>
 
-             <ul class="dropdown-menu">
-				<li><a href="lap_retur_penjualan_rekap.php"> Laporan Retur Penjualan Rekap </a></li> 
-				<li><a href="lap_retur_penjualan_detail.php"> Laporan Retur Penjualan Detail </a></li>
+             <ul class="dropdown-menu dropdown-ins">
+		
+		<li><a class="dropdown-item" href="lap_retur_penjualan_rekap.php"> Laporan Retur Penjualan Rekap </a></li> 
+		
+		<li><a class="dropdown-item"href="lap_retur_penjualan_detail.php"> Laporan Retur Penjualan Detail </a></li>
 				<!--
 				<li><a href="lap_retur_penjualan_harian.php"> Laporan Retur Penjualan Harian </a></li>
 				<li><a href="lap_pelanggan_detail.php"> Laporan Jual Per Pelanggan Detail </a></li>

@@ -2,16 +2,25 @@
 include 'header.php';
 include 'navbar.php';
 include 'db.php';
- 
+ include 'sanitasi.php';
 $q_penetapan = $db->query("SELECT * FROM penetapan_petugas");
 $v_penetapan = mysqli_fetch_array($q_penetapan);
 $nama_dokter  = $v_penetapan['nama_dokter'];
 
-$settt = $db->query("SELECT tampil_ttv FROm setting_registrasi");
+$settt = $db->query("SELECT tampil_ttv FROM setting_registrasi");
 $datasett = mysqli_fetch_array($settt);
 
 ?>
+<script type="text/javascript">
+  function isNumberKey(evt)
+      {
+         var charCode = (evt.which) ? evt.which : event.keyCode
+         if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
 
+         return true;
+      }
+</script>
  
 
 <!-- Modal Untuk Confirm LAYANAN PERUSAHAAN-->
@@ -60,6 +69,9 @@ $datasett = mysqli_fetch_array($settt);
 
 
  <form role="form" id="formku" action="proses_pendaftaran.php" method="POST" >
+
+  <input style="height: 20px;" type="hidden" class="form-control" id="token" name="token" value="Kosasih" autocomplete="off"> 
+
 
 <div class="form-group">
     <input style="height: 20px;" type="hidden" class="form-control" id="no_rm_lama" name="no_rm_lama" readonly="">
@@ -122,12 +134,12 @@ $datasett = mysqli_fetch_array($settt);
 
 <div class="form-group">
     <label for="tanggal_lahir">Tanggal Lahir:</label>
-    <input style="height: 20px;" type="text" class="form-control" id="tanggal_lahir" name="tanggal_lahir" required="" autocomplete="off">
+    <input style="height: 20px;" type="text" required="" class="form-control" id="tanggal_lahir" name="tanggal_lahir" autocomplete="off">
 </div>
 
 <div class="form-group">
     <label for="umur">Umur:</label>
-    <input style="height: 20px;" type="text" class="form-control" id="umur" name="umur" autocomplete="off">
+    <input style="height: 20px;" type="text" required="" class="form-control" id="umur" name="umur" autocomplete="off">
 </div>
 
 
@@ -162,7 +174,7 @@ $datasett = mysqli_fetch_array($settt);
 
 <div class="form-group">
     <label for="no_telepon">No Telpon / HP:</label>
-    <input style="height: 20px;" type="text" class="form-control" id="no_telepon" name="no_telepon" autocomplete="off">
+    <input style="height: 20px;" type="text" onkeypress="return isNumberKey(event)" class="form-control" id="no_telepon" name="no_telepon" autocomplete="off">
 </div>
 
 
@@ -180,7 +192,7 @@ $datasett = mysqli_fetch_array($settt);
 
 <div class="form-group">
     <label for="no_ktp">No KTP:</label>
-    <input style="height: 20px;" type="text" class="form-control" id="no_ktp" name="no_ktp" autocomplete="off">
+    <input style="height: 20px;" type="text" onkeypress="return isNumberKey(event)" class="form-control" id="no_ktp" name="no_ktp" autocomplete="off">
   </div>
 
 
@@ -274,7 +286,7 @@ $datasett = mysqli_fetch_array($settt);
 
 <div class="form-group">
     <label for="no_hp_penanggung">No Hp Penganggung Jawab :</label>
-    <input style="height: 20px;" type="text" class="form-control" id="no_hp_penanggung" name="no_hp_penanggung" autocomplete="off">
+    <input style="height: 20px;" type="text" onkeypress="return isNumberKey(event)" class="form-control" id="no_hp_penanggung" name="no_hp_penanggung" autocomplete="off">
 </div>
 
 <div class="form-group">
@@ -325,7 +337,7 @@ $datasett = mysqli_fetch_array($settt);
     <option value="<?php echo $nama_dokter; ?>"><?php echo $nama_dokter; ?></option>
         <option value="Tidak Ada">Tidak Ada</option>
  <?php 
-  $query = $db->query("SELECT nama FROM user WHERE otoritas = 'Dokter' ORDER BY status_pakai ASC "); 
+  $query = $db->query("SELECT nama FROM user WHERE otoritas = 'Dokter' "); 
  while ( $data = mysqli_fetch_array($query))
   {
   echo "<option value='".$data['nama']."'>".$data['nama']."</option>";
@@ -335,10 +347,13 @@ $datasett = mysqli_fetch_array($settt);
 </div>
 
 
+
+
+
 </div><!-- end class="card card-block"-->
 
  <?php if ($datasett['tampil_ttv'] == 0): ?>
-    <button accesskey="d" type="submit" id="submit_daftar" class="btn btn-info hug"><i class="fa fa-plus"></i><u>D</u>aftar Rawat Jalan</button>
+    <button accesskey="d" type="submit" id="submit_daftar" class="btn btn-info hug"> <i class="fa fa-plus"> </i> <u> D</u>aftar Rawat Jalan</button>
   <?php endif ?>
 
 </div><!--penutup col sm 3-->
@@ -351,46 +366,43 @@ $datasett = mysqli_fetch_array($settt);
 <center><h4>Tanda Tanda Vital</h4></center>
 <div class="form-group">
  <label >Sistole / Diastole (mmHg)</label>
-  <input style="height: 20px;" type="text" class="form-control" id="sistole_distole" name="sistole_distole" autocomplete="off"> 
+  <input style="height: 20px;" type="text" onkeypress="return isNumberKey(event)" class="form-control" id="sistole_distole" name="sistole_distole" autocomplete="off"> 
 </div>
 
 
 <div class="form-group ">
   <label >Frekuensi Pernapasan (kali/menit)</label>
-  <input style="height: 20px;" type="text" class="form-control" id="respiratory_rate" name="respiratory_rate" autocomplete="off"> 
+  <input style="height: 20px;" type="text" onkeypress="return isNumberKey(event)" class="form-control" id="respiratory_rate" name="respiratory_rate" autocomplete="off"> 
 </div>
  
 
 <div class="form-group">
   <label >Suhu (°C)</label>
-  <input style="height: 20px;" type="text" class="form-control" id="suhu" name="suhu" autocomplete="off"> 
+  <input style="height: 20px;" type="text" onkeypress="return isNumberKey(event)" class="form-control" id="suhu" name="suhu" autocomplete="off"> 
 </div>
   
 
 <div class="form-group ">
    <label >Nadi (kali/menit)</label>
-  <input style="height: 20px;" type="text" class="form-control" id="nadi" name="nadi" autocomplete="off"> 
+  <input style="height: 20px;" type="text" onkeypress="return isNumberKey(event)" class="form-control" id="nadi" name="nadi" autocomplete="off"> 
 </div>
 
 
 <div class="form-group ">
   <label >Berat Badan (kg)</label>
-  <input style="height: 20px;" type="text" class="form-control" id="berat_badan" name="berat_badan" autocomplete="off"> 
+  <input style="height: 20px;" type="text" onkeypress="return isNumberKey(event)" class="form-control" id="berat_badan" name="berat_badan" autocomplete="off"> 
 </div>
 
 <div class="form-group ">
   <label >Tinggi Badan (cm)</label>
-  <input style="height: 20px;" type="text" class="form-control" id="tinggi_badan" name="tinggi_badan" autocomplete="off"> 
+  <input style="height: 20px;" type="text" onkeypress="return isNumberKey(event)" class="form-control" id="tinggi_badan" name="tinggi_badan" autocomplete="off"> 
 </div>
-
-  <input style="height: 20px;" type="hidden" class="form-control" id="token" name="token" value="Kosasih" autocomplete="off"> 
-
 
 
 
 </div> <!-- nutup sm-->
 
-  <button accesskey="d" type="submit" id="submit_daftar" class="btn btn-info hug"><i class="fa fa-plus"></i><u>D</u>aftar Rawat Jalan</button>
+  <button accesskey="d" type="submit" id="submit_daftar" class="btn btn-info hug"><i class="fa fa-plus"></i> <u> D</u>aftar Rawat Jalan</button>
 
 <?php endif ?>
 </div><!--panel body-->
@@ -400,9 +412,14 @@ $datasett = mysqli_fetch_array($settt);
 </div> <!--row utama--> 
 </div> <!--container-->
 
+
+
+
+
+<!--script datepicker-->
 <script>
   $(function() {
-  $( "#tanggal_lahir" ).pickadate({ selectYears: 100, format: 'dd/mm/yyyy'});
+  $( "#tanggal_lahir" ).pickadate({ selectYears: 100, format: 'dd-mm-yyyy'});
   });
   </script>
 <!--end script datepicker-->
@@ -432,55 +449,56 @@ $(".ss").chosen({no_results_text: "Oops, Tidak Ada !"});
               $("#nama_lengkap").focus();
 // untuk update umur ketika sudah beda bulan dan tahun
 
-          function hitung_umur(tanggal_input){
+  
+function hitung_umur(tanggal_input){
 
-          var now = new Date(); //Todays Date   
-          var birthday = tanggal_input;
-          birthday=birthday.split("/");   
+var now = new Date(); //Todays Date   
+var birthday = tanggal_input;
+birthday=birthday.split("-");   
 
-          var dobMonth= birthday[0]; 
-          var dobDay= birthday[1];
-          var dobYear= birthday[2];
+var dobMonth= birthday[0]; 
+var dobDay= birthday[1];
+var dobYear= birthday[2];
 
-          var nowDay= now.getDate();
-          var nowMonth = now.getMonth() + 1;  //jan=0 so month+1
-          var nowYear= now.getFullYear();
+var nowDay= now.getDate();
+var nowMonth = now.getMonth() + 1;  //jan=0 so month+1
+var nowYear= now.getFullYear();
 
-          var ageyear = nowYear- dobYear;
-          var agemonth = nowMonth - dobMonth;
-          var ageday = nowDay- dobDay;
-          if (agemonth < 0) {
-                 ageyear--;
-                 agemonth = (12 + agemonth);
-                  }
-          if (nowDay< dobDay) {
-                agemonth--;
-                ageday = 30 + ageday;
-                }
-
-
-          if (ageyear <= 0) {
-           var val = agemonth + " Bulan";
-          }
-          else {
-
-           var val = ageyear + " Tahun";
-          }
-          return val;
-          }
+var ageyear = nowYear- dobYear;
+var agemonth = nowMonth - dobMonth;
+var ageday = nowDay- dobDay;
+if (agemonth < 0) {
+       ageyear--;
+       agemonth = (12 + agemonth);
+        }
+if (nowDay < dobDay) {
+      agemonth--;
+      ageday = 30 + ageday;
+      }
 
 
+if (ageyear <= 0) {
+ var val = agemonth + " Bulan";
+}
+else {
 
-              var tanggal_lahir = $("#tanggal_lahir").val();
-              var umur = hitung_umur(tanggal_lahir);
-          if (tanggal_lahir == '')
-          {
+ var val = ageyear + " Tahun";
+}
+return val;
+}
 
-          }
-          else
-          {
-            $("#umur").val(umur);
-          }
+
+
+    var tanggal_lahir = $("#tanggal_lahir").val();
+    var umur = hitung_umur(tanggal_lahir);
+if (tanggal_lahir == '')
+{
+
+}
+else
+{
+  $("#umur").val(umur);
+}
 
   });
 
@@ -491,64 +509,61 @@ $(".ss").chosen({no_results_text: "Oops, Tidak Ada !"});
 <!--end script ambil data pasien modal-->
 
 
-<!--   script untuk hitung umur -->
-<script>
-     $("#tanggal_lahir").change(function(){
+<script type="text/javascript">
+$("#tanggal_lahir").change(function(){
 
-   function hitung_umur(tanggal_input){
+function hitung_umur(tanggal_input){
 
-          var now = new Date(); //Todays Date   
-          var birthday = tanggal_input;
-          birthday=birthday.split("/");   
+var now = new Date(); //Todays Date   
+var birthday = tanggal_input;
+birthday=birthday.split("-");   
 
-          var dobMonth= birthday[0]; 
-          var dobDay= birthday[1];
-          var dobYear= birthday[2];
+var dobDay = birthday[0]; 
+var dobMonth = birthday[1];
+var dobYear = birthday[2];
 
-          var nowDay= now.getDate();
-          var nowMonth = now.getMonth() + 1;  //jan=0 so month+1
-          var nowYear= now.getFullYear();
+var nowDay= now.getDate();
+var nowMonth = now.getMonth() + 1;  //jan=0 so month+1
+var nowYear= now.getFullYear();
 
-          var ageyear = nowYear- dobYear;
-          var agemonth = nowMonth - dobMonth;
-          var ageday = nowDay- dobDay;
-          if (agemonth < 0) {
-                 ageyear--;
-                 agemonth = (12 + agemonth);
-                  }
-          if (nowDay< dobDay) {
-                agemonth--;
-                ageday = 30 + ageday;
-                }
-
-
-          if (ageyear <= 0) {
-           var val = agemonth + " Bulan";
-          }
-          else {
-
-           var val = ageyear + " Tahun";
-          }
-          return val;
-          }
+var ageyear = nowYear- dobYear;
+var agemonth = nowMonth - dobMonth;
+var ageday = nowDay- dobDay;
+if (agemonth < 0) {
+       ageyear--;
+       agemonth = (12 + agemonth);
+        }
+if (nowDay< dobDay) {
+      agemonth--;
+      ageday = 30 + ageday;
+      }
 
 
+if (ageyear <= 0) {
+ var val = agemonth + " Bulan";
+}
+else {
 
-              var tanggal_lahir = $("#tanggal_lahir").val();
-              var umur = hitung_umur(tanggal_lahir);
-          if (tanggal_lahir == '')
-          {
+ var val = ageyear + " Tahun";
+}
+return val;
+}
 
-          }
-          else
-          {
-            $("#umur").val(umur);
-          }
+
+    var tanggal_lahir = $("#tanggal_lahir").val();
+    var umur = hitung_umur(tanggal_lahir);
+if (tanggal_lahir == '')
+{
+
+}
+else
+{
+  $("#umur").val(umur);
+}
 
   });
-// tabel lookup mahasiswa
+
 </script>
-<!--   script untuk hitung umur -->
 
 
 
@@ -569,7 +584,11 @@ $(".ss").chosen({no_results_text: "Oops, Tidak Ada !"});
 <!--  end script untuk akhir detail layanan PERUSAHAAN -->
 
 
-
+ <script type="text/javascript">
+          $("#umur").focus(function(){
+          $("#tanggal_lahir").focus();    
+        });
+</script>
 
 
 

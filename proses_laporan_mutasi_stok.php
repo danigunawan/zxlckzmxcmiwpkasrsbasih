@@ -9,7 +9,7 @@ $sampai_tanggal = stringdoang($_POST['sampai_tanggal']);
 
 
 
-$barang = $db->query("SELECT nama_barang, kode_barang, satuan FROM barang");
+$barang = $db->query("SELECT b.nama_barang, b.kode_barang, b.satuan, s.nama FROM barang b INNER JOIN satuan s ON b.satuan = s.id");
 
 
  ?>
@@ -34,7 +34,7 @@ th {
 </style>
 
 <div class="card card-block">
-
+<center><b><h3>Data Laporan Mutasi Stok <br> (<?php echo $dari_tanggal ?>) s/d (<?php echo $sampai_tanggal ?>)</h3></b></center>
 <div class="table-responsive">
  <table id="tableuser" class="table table-hover">
             <thead>
@@ -98,10 +98,13 @@ th {
 
 
 		//menampilkan data
-			echo "<tr>
-			<td>". $data_barang['kode_barang'] ."</td>
+			echo "<tr>";
+
+			if ($nilai_akhir != '' OR $nilai_akhir != '0')
+			{
+			echo "<td>". $data_barang['kode_barang'] ."</td>
 			<td>". $data_barang['nama_barang'] ."</td>
-			<td>". $data_barang['satuan'] ."</td>
+			<td>". $data_barang['nama'] ."</td>
 			<td style='text-align: right'>".rp($awal)."</td>
 			<td style='text-align: right'>".rp($nilai_awal)."</td>
 			<td style='text-align: right'>".rp($masuk)."</td>
@@ -109,8 +112,9 @@ th {
 			<td style='text-align: right'>".rp($keluar)."</td>
 			<td style='text-align: right'>".rp($nilai_keluar)."</td>
 			<td style='text-align: right'>".rp($akhir)."</td>
-			<td style='text-align: right'>".rp($nilai_akhir)."</td>
-			</tr>";
+			<td style='text-align: right'>".rp($nilai_akhir)."</td>";
+		}
+			echo"</tr>";
 
 
 			$sub_nilai_akhir = $sub_nilai_akhir + $nilai_akhir;

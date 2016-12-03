@@ -15,7 +15,7 @@ $perintah = $db->query("SELECT p.id,p.no_faktur,p.total,p.suplier,p.tanggal,p.ta
 
 
 
-<div class="container"> <!--start of container-->
+<div style="padding-left:5%; padding-right:5%;"> <!--start of container-->
 
 <div id="modal_alert" class="modal fade" role="dialog">
   <div class="modal-dialog">
@@ -150,7 +150,7 @@ echo '<a href="formpembelian.php"  class="btn btn-info"> <i class="fa fa-plus"> 
 
 <div class="table-responsive"><!--membuat agar ada garis pada tabel disetiap kolom-->
 <span id="table-baru" > 
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
 		<thead>
 			<th> Detail </th>
 
@@ -359,14 +359,12 @@ else {
 						var id = $(this).attr("data-id");
 						var no_faktur = $("#faktur_hapus").val();
 
-						$.post("hapus_data_pembelian.php", {id:id, no_faktur:no_faktur}, function(data){
-						if (data == 'sukses') {
-						
 						$("#modal_hapus").modal("hide");
 						$(".tr-id-"+id).remove();
+
+						$.post("hapus_data_pembelian.php", {id:id, no_faktur:no_faktur}, function(data){
 						
-						}
-						
+
 						});
 						
 						

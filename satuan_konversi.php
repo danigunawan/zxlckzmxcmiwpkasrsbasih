@@ -6,6 +6,8 @@
  include 'sanitasi.php';
 
  $id_produk = angkadoang($_GET['id']);
+
+ $satuan_nama = stringdoang($_GET['nama']);
  $satuan = stringdoang($_GET['satuan']);
  $harga_pokok = stringdoang($_GET['harga']);
  $kode_produk = stringdoang($_GET['kode_barang']);
@@ -40,7 +42,7 @@
   
     <div class="form-group col-sm-3">
           <label style="font-size: 20px"> Satuan Dasar </label><br>
-          <input type="text" name="satuan_dasar" id="satuan_dasar" value="<?php echo $satuan; ?>" style="font-size: 20px" class="form-control" readonly="">
+          <input type="text" name="satuan_dasar" id="satuan_dasar" value="<?php echo $satuan_nama; ?>" style="font-size: 20px" class="form-control" readonly="">
     </div>
     
     <div class ="form-group col-sm-3">

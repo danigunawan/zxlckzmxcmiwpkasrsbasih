@@ -24,7 +24,7 @@ include 'db.php';
     </script>
 
 
-<div class="container">
+<div style="padding-right: 5%; padding-left: 5%;">
 <h3>KOMISI / PETUGAS</h3><hr>
 
 
@@ -63,11 +63,15 @@ include 'db.php';
       $perintah0 = $db->query("SELECT * FROM user");
       while ($data1 = mysqli_fetch_array($perintah0))
       {
-      echo "<tr  class='pilih' data-petugas='". $data1['nama'] ."'>
+
+        $data_j = $db->query("SELECT j.nama AS jabatan FROM jabatan j INNER JOIN user u ON j.id = u.jabatan WHERE j.id = '$data1[jabatan]' ");
+      $data = mysqli_fetch_array($data_j);
+
+      echo "<tr  class='pilih' data-petugas='". $data1['nama'] ."' data-petugas-value='". $data1['id'] ."'>
       <td>". $data1['username'] ."</td>
       <td>". $data1['nama'] ."</td>
       <td>". $data1['alamat'] ."</td>
-      <td>". $data1['jabatan'] ."</td>
+      <td>". $data['jabatan'] ."</td>
       <td>". $data1['otoritas'] ."</td>
       <td>". $data1['status'] ."</td>
 
@@ -100,7 +104,10 @@ mysqli_close($db);
               
                   <div class="form-group"> 
 
-                  <input type="text" name="nama_petugas" id="nama_petugas" class="form-control" placeholder="Nama Petugas" required="">
+                  <input type="hidden" name="nama_petugas" id="nama_petugas" class="form-control" placeholder="Nama Petugas" required="">
+
+                  <input type="text" name="nama_petugas_value" id="nama_petugas_value" class="form-control" placeholder="Nama Petugas" required="">
+
                   </div>                  
 
                   <div class="form-group"> 
@@ -124,7 +131,7 @@ mysqli_close($db);
 
 <h3><center><b>Komisi Faktur / Petugas</b></center></h3><br><br>
 <div class="table-responsive">
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
             <thead>
                   <th style="background-color: #4CAF50; color: white;"> Nama Petugas </th>
                   <th style="background-color: #4CAF50; color: white;"> Nomor Faktur </th>
@@ -149,7 +156,7 @@ mysqli_close($db);
 
 <h3><center><b>Komisi Produk / Petugas</b></center></h3><br><br>
 <div class="table-responsive">
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
             <thead>
                   <th style="background-color: #4CAF50; color: white;"> Nama Petugas </th>
                   <th style="background-color: #4CAF50; color: white;"> Nomor Faktur </th>
@@ -185,7 +192,8 @@ $(document).ready(function(){
 
 // jika dipilih, nim akan masuk ke input dan modal di tutup
   $(document).on('click', '.pilih', function (e) {
-  document.getElementById("nama_petugas").value = $(this).attr('data-petugas');
+  document.getElementById("nama_petugas_value").value = $(this).attr('data-petugas');
+  document.getElementById("nama_petugas").value = $(this).attr('data-petugas-value');
 
   $('#myModal').modal('hide');
   });

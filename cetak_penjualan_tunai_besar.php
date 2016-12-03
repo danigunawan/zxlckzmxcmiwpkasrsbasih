@@ -8,7 +8,7 @@ include 'db.php';
 
   $no_faktur = $_GET['no_faktur'];
 
-    $query0 = $db->query("SELECT p.id,p.no_faktur,p.total,p.kode_pelanggan,p.keterangan,p.cara_bayar,p.tanggal,p.tanggal_jt,p.jam,p.user,p.sales,p.kode_meja,p.status,p.potongan,p.tax,p.sisa,p.kredit,p.kode_gudang,p.tunai,pl.nama_pelanggan,pl.wilayah,dp.satuan,dp.jumlah_barang,dp.subtotal,dp.nama_barang,dp.harga, da.nama_daftar_akun FROM penjualan p INNER JOIN detail_penjualan dp ON p.no_faktur = dp.no_faktur INNER JOIN pelanggan pl ON p.kode_pelanggan = pl.kode_pelanggan INNER JOIN daftar_akun da ON p.cara_bayar = da.kode_daftar_akun WHERE p.no_faktur = '$no_faktur' ORDER BY p.id DESC");
+    $query0 = $db->query("SELECT p.no_reg,p.biaya_admin,p.id,p.no_faktur,p.total,p.kode_pelanggan,p.keterangan,p.cara_bayar,p.tanggal,p.tanggal_jt,p.jam,p.user,p.sales,p.kode_meja,p.status,p.potongan,p.tax,p.sisa,p.kredit,p.kode_gudang,p.tunai,pl.nama_pelanggan,pl.wilayah,dp.satuan,dp.jumlah_barang,dp.subtotal,dp.nama_barang,dp.harga, da.nama_daftar_akun, s.nama, pl.alamat_sekarang AS alamat, s.nama AS nama_satuan FROM penjualan p INNER JOIN detail_penjualan dp ON p.no_faktur = dp.no_faktur INNER JOIN pelanggan pl ON p.kode_pelanggan = pl.kode_pelanggan INNER JOIN daftar_akun da ON p.cara_bayar = da.kode_daftar_akun INNER JOIN satuan s ON dp.satuan = s.id WHERE p.no_faktur = '$no_faktur' ORDER BY p.id DESC");
      $data_inner = mysqli_fetch_array($query0);
 
 
@@ -29,7 +29,13 @@ include 'db.php';
 
     $query05 = $db->query("SELECT SUM(subtotal) as t_subtotal FROM detail_penjualan WHERE no_faktur = '$no_faktur'");
     $data05 = mysqli_fetch_array($query05);
-    $t_subtotal = $data05['t_subtotal'];
+    $t_awal_subtotal = $data05['t_subtotal'];
+
+    $query_orp = $db->query("SELECT SUM(harga_jual) as t_operasi FROM hasil_operasi WHERE no_reg = '$data_inner[no_reg]'");
+    $data_or = mysqli_fetch_array($query_orp);
+    $t_operasi = $data_or['t_operasi'];
+
+    $t_subtotal = $t_awal_subtotal + $t_operasi;
 
     $setting_bahasa = $db->query("SELECT * FROM setting_bahasa WHERE kata_asal = 'Sales' ");
     $data20 = mysqli_fetch_array($setting_bahasa);
@@ -41,6 +47,7 @@ include 'db.php';
 
 
  ?>
+
 <style type="text/css">
 /*unTUK mengatur ukuran font*/
    .satu {
@@ -79,8 +86,7 @@ include 'db.php';
   <tbody>
       <tr><td width="25%"><font class="satu">No Faktur</font></td> <td> :&nbsp;</td> <td><font class="satu"><?php echo $data_inner['no_faktur']; ?></font> </tr>
       <tr><td  width="25%"><font class="satu"><?php echo $data200['kata_ubah']; ?></font></td> <td> :&nbsp;</td> <td> <font class="satu"><?php echo $data_inner['nama_pelanggan']; ?></font> </td></tr>
-      <tr><td  width="25%"><font class="satu">Alamat</font></td> <td> :&nbsp;</td> <td><font class="satu"> <?php echo $data_inner['wilayah']; ?> </font></td></tr>
-      <tr><td  width="25%"><font class="satu"><?php echo $data20['kata_ubah']; ?></font></td> <td> :&nbsp;</td> <td><font class="satu"> <?php echo $data_inner['sales']; ?></font></td></tr>
+      <tr><td  width="25%"><font class="satu">Alamat</font></td> <td> :&nbsp;</td> <td><font class="satu"> <?php echo $data_inner['alamat']; ?> </font></td></tr>
       <tr><td  width="25%"><font class="satu">Ket.</font></td> <td> :&nbsp;</td> <td><font class="satu"> <?php echo $data_inner['keterangan']; ?> </font></td></tr>
 
             
@@ -124,10 +130,10 @@ include 'db.php';
 
 </style>
 
-<table id="tableuser" class="table1">
+<table id="tableuser" class="table table-bordered table-sm">
         <thead>
             <th class="table1" style="width: 3%"> <center> No. </center> </th>
-            <th class="table1" style="width: 50%"> <center> Nama Barang </center> </th>
+            <th class="table1" style="width: 50%"> <center> Nama Produk </center> </th>
             <th class="table1" style="width: 5%"> <center> Qty </center> </th>
             <th class="table1" style="width: 5%"> <center> Satuan </center> </th>
             <th class="table1" style="width: 15%"> <center> Harga </center> </th>
@@ -148,25 +154,69 @@ include 'db.php';
             {
 
               $no_urut ++;
-              $kode = $db->query("SELECT satuan FROM barang WHERE kode_barang = '$data5[kode_barang]' ");
-              $satuan_b = mysqli_fetch_array($kode);
-              $satuan = $satuan_b['satuan'];
 
-            echo "<tr>
-            <td class='table1' align='center'>".$no_urut."</td>
+              $kode = $db->query("SELECT dp.satuan, s.nama FROM detail_penjualan dp INNER JOIN satuan s ON dp.satuan = s.id  WHERE dp.kode_barang = '$data5[kode_barang]' ");
+              $satuan_b = mysqli_fetch_array($kode);
+              $satuan = $satuan_b['nama'];
+
+
+
+
+           echo "<tr>";
+
+           echo "
+
+           <td class='table1' align='center'>".$no_urut."</td>
             <td class='table1'>". $data5['nama_barang'] ."</td>
-            <td class='table1' align='right'>". rp($data5['jumlah_barang']) ."</td>
-            <td class='table1'>". $data_inner['satuan'] ."</td>
+            <td class='table1' align='center'>". rp($data5['jumlah_barang']) ."</td>
+            <td class='table1'>". $satuan ."</td>
             <td class='table1' align='right'>". rp($data5['harga']) ."</td>
             <td class='table1' align='right'>". rp($data5['potongan']) ."</td>
             <td class='table1' align='right'>". rp($data5['tax']) ."</td>
             <td class='table1' align='right'>". rp($data5['subtotal']) ."</td>
-            <tr>";
+            </tr>";
 
+            
             }
 
-//Untuk Memutuskan Koneksi Ke Database
 
+// OPERASI TABLE
+ $take_data_or = $db->query("SELECT * FROM hasil_operasi WHERE no_reg = '$data_inner[no_reg]'");
+
+    while($out_operasi = mysqli_fetch_array($take_data_or))
+      {
+                   
+        $select_or = $db->query("SELECT id_operasi,nama_operasi FROM operasi WHERE id_operasi = '$out_operasi[operasi]'");
+        $outin = mysqli_fetch_array($select_or);
+        
+        $nomor = $no_urut +1;
+
+        echo"<tr>
+                    
+            <td class='table1' align='center'>".$nomor."</td>";
+
+            if($out_operasi['operasi'] == $outin['id_operasi'])
+            {
+              echo"<td class='table1' align='left'>". $outin['nama_operasi'] ."</td>";
+            }
+            else{
+              echo "<td> </td>";
+            }
+            
+
+            echo " 
+            <td class='table1' align='center'>-</td>
+            <td class='table1' align='center'>-</td>
+            <td class='table1' align='right'>". rp($out_operasi['harga_jual']) ."</td>
+            <td class='table1' align='right'>-</td>
+            <td class='table1' align='right'>-</td>
+            <td class='table1' align='right'>". rp($out_operasi['harga_jual']) ."</td>
+      </tr>";
+
+                    
+                  
+    }
+//Untuk Memutuskan Koneksi Ke Database
 mysqli_close($db); 
 
         ?>
@@ -175,6 +225,7 @@ mysqli_close($db);
     </table>
 
 
+<br>
         <div class="col-sm-6">
             
             <i><b><font class="satu">Terbilang :</font></b> <?php echo kekata($data_inner['total']); ?> </i> <br>
@@ -204,6 +255,7 @@ div.mix {border-style: dotted dashed solid double;}
 
       <tr><td width="50%"><font class="satu">Sub Total</font></td> <td> :&nbsp;</td> <td><font class="satu"> <?php echo rp($t_subtotal); ?> </font></tr>
       <tr><td width="50%"><font class="satu">Diskon</font></td> <td> :&nbsp;</td> <td><font class="satu"> <?php echo rp($data_inner['potongan']); ?></font> </tr>
+      <tr><td width="50%"><font class="satu">Biaya Admin</font></td> <td> :&nbsp;</td> <td><font class="satu"> <?php echo rp($data_inner['biaya_admin']); ?></font> </tr>
       <tr><td  width="50%"><font class="satu">Tax</font></td> <td> :&nbsp;</td> <td><font class="satu"> <?php echo rp($data_inner['tax']); ?> </font></td></tr>
       <tr><td  width="50%"><font class="satu">Total Akhir</font></td> <td> :&nbsp;</td> <td><font class="satu"> <?php echo rp($data_inner['total']); ?></font>  </td></tr>
 

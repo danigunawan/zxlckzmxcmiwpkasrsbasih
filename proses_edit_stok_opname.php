@@ -27,8 +27,7 @@ $perintah1 = $db->query("INSERT INTO tbs_stok_opname (no_faktur, kode_barang, na
 
 
 }
-
- header ('location:edit_form_stok_opname.php?no_faktur='.$no_faktur.'&tanggal='.$tanggal.'');
+echo '<META HTTP-EQUIV="Refresh" Content="0; URL=edit_form_stok_opname.php?no_faktur='.$no_faktur.'&tanggal='.$tanggal.'">';
 
 
 //Untuk Memutuskan Koneksi Ke Database

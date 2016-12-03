@@ -7,7 +7,7 @@ include 'db.php';
 
 
 
-<table id="tabeluser" class="table table-bordered">
+<table id="tabeluser" class="table table-bordered table-sm">
         <thead> <!-- untuk memberikan nama pada kolom tabel -->
         
             <th> Kode Barang </th>
@@ -29,7 +29,7 @@ include 'db.php';
         {
         
         // menampilkan data
-        echo "<tr class='pilih' data-kode='". $data1['kode_barang'] ."' nama-barang='". $data1['nama_barang'] ."'
+        echo "<tr class='pilih' data-kode='". $data1['kode_barang'] ."(". $data1['nama_barang'] .")' nama-barang='". $data1['nama_barang'] ."'
         satuan='". $data1['satuan'] ."' harga='". $data1['harga_jual'] ."' jumlah-barang='". $data1['stok_barang'] ."'>
         
             <td>". $data1['kode_barang'] ."</td>

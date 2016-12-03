@@ -1,12 +1,15 @@
-<?php 
+<?php session_start();
     // memasukan file db.php
     include 'db.php';
     // mengirim data(file) no_faktur, menggunakan metode GET 
-    $no_faktur = $_GET['no_faktur'];
+
+    $session_id = session_id();
+
     // menghapus data pada tabel tbs_pembelian berdasarkan no_faktur 
-    $query = $db->query("DELETE FROM tbs_pembelian WHERE no_faktur='$no_faktur'");
+    $query = $db->query("DELETE FROM tbs_pembelian WHERE session_id = '$session_id'");
+
     // logika $query => jika $query benar maka akan menuju ke formpemebelain.php
-	// dan jika salah maka akan menampilkan kalimat failed
+    // dan jika salah maka akan menampilkan kalimat failed
     
     if ($query == TRUE)
     {

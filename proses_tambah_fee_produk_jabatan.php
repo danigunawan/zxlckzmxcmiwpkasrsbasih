@@ -8,7 +8,7 @@ $jabatan = stringdoang($_POST['jabatan']);
 
 $query = $db->query("SELECT * FROM user WHERE jabatan = '$jabatan'");
 while ($cek = mysqli_fetch_array($query)){
-$nama = $cek['nama'];
+$nama = $cek['id'];
 
     $query1 = $db->query("SELECT * FROM fee_produk WHERE nama_petugas = '$cek[nama]'");
     $cek1 = mysqli_fetch_array($query1);

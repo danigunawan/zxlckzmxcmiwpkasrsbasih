@@ -44,9 +44,13 @@ $total_fee = $cek0['total_fee'];
                   while ($data1 = mysqli_fetch_array($perintah))
 
                   {
+
+                  $userr = $db->query("SELECT nama FROM user WHERE id = '$nama_petugas'");
+                  $data_user = mysqli_fetch_array($userr);
+
                   
                   echo "<tr class='pilih' data-petugas='". $data1['nama_petugas'] ."'>
-                  <td>". $data1['nama_petugas'] ."</td>
+                  <td>". $data_user['nama'] ."</td>
                   <td>". $data1['no_faktur'] ."</td>
                   <td>". rp($data1['jumlah_fee']) ."</td>
                   <td>". tanggal($data1['tanggal']) ."</td>
@@ -64,7 +68,7 @@ $total_fee = $cek0['total_fee'];
 </div>
 
 
-      <a href='cetak_lap_fee_faktur.php?nama_petugas=<?php echo $nama_petugas; ?>&dari_tanggal=<?php echo $dari_tanggal; ?>&sampai_tanggal=<?php echo $sampai_tanggal; ?>' class='btn btn-success'><i class='fa fa-print'> </i> Cetak Komisi / Faktur </a>
+      <a href='cetak_lap_fee_faktur.php?nama_petugas=<?php echo urlencode ($nama_petugas); ?>&dari_tanggal=<?php echo $dari_tanggal; ?>&sampai_tanggal=<?php echo $sampai_tanggal; ?>' class='btn btn-success'><i class='fa fa-print'> </i> Cetak Komisi / Faktur </a>
 
 
 </div>

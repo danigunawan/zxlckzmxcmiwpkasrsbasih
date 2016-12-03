@@ -141,12 +141,12 @@
                   <form class="form-inline" action="proses_tbs_stok_opname.php" role="form" id="formtambahproduk">
                   
                   <div class="form-group">
-                  <input type="text" class="form-control" name="kode_barang" id="kode_barang" placeholder="Kode Produk" autocomplete="off">
+                  <input type="text" class="form-control" name="kode_barang" id="kode_barang" placeholder="Ketikkan Kode Produk" autocomplete="off">
                   </div>
                   
                   <div class="form-group"> <!-- agar tampilan berada pada satu group -->
                   <!-- memasukan teks pada kolom kode barang -->
-                  <input type="text" class="form-control" name="nama_barang" id="nama_barang" placeholder="Nama Barang" readonly="">
+                  <input type="hidden" class="form-control" name="nama_barang" id="nama_barang" >
                   </div>
                   
                   
@@ -266,11 +266,11 @@
                   
                   
                   <br>
-                  <br> 
+
                   <span id="result">  
                   
                   <div class="table-responsive">    
-                  <table id="tableuser" class="table table-bordered">
+                  <table id="tableuser" class="table table-bordered table-sm">
                   <thead>
                   
                   <th> Nomor Faktur </th>
@@ -291,7 +291,7 @@
                   <?php
                   
                   
-      $perintah = $db->query("SELECT * FROM tbs_stok_opname");
+      $perintah = $db->query("SELECT tio.no_faktur,tio.kode_barang,tio.nama_barang,s.nama,tio.id,tio.stok_sekarang,tio.fisik,tio.selisih_fisik,tio.harga,tio.selisih_harga,tio.hpp FROM tbs_stok_opname tio INNER JOIN satuan s ON tio.satuan = s.id ORDER BY tio.id DESC");
                   
                   //menyimpan data sementara yang ada pada $perintah
                   while ($data1 = mysqli_fetch_array($perintah))
@@ -303,7 +303,7 @@
                   <td>". $data1['no_faktur'] ."</td>
                   <td>". $data1['kode_barang'] ."</td>
                   <td>". $data1['nama_barang'] ."</td>
-                  <td>". $data1['satuan'] ."</td>
+                  <td>". $data1['nama'] ."</td>
                   <td><span id='text-stok-sekarang-".$data1['id']."'>". rp($data1['stok_sekarang']) ."</span></td>
 
                   <td class='edit-jumlah' data-id='".$data1['id']."'><span id='text-jumlah-".$data1['id']."'>". $data1['fisik'] ."</span> <input type='hidden' id='input-jumlah-".$data1['id']."' value='".$data1['fisik']."' class='input_jumlah' data-id='".$data1['id']."' autofocus='' data-faktur='".$data1['no_faktur']."' data-harga='".$data1['harga']."' data-kode='".$data1['kode_barang']."' data-selisih-fisik='".$data1['selisih_fisik']."' data-stok-sekarang='".$data1['stok_sekarang']."'> </td>
@@ -398,7 +398,15 @@
                   
                   </script> <!--tag penutup perintah java script-->
                   
-                  
+                  <script>
+                  $(function() {
+                      $( "#kode_barang" ).autocomplete({
+                          source: 'kode_barang_autocomplete.php'
+                      });
+                  });
+                  </script>
+
+
                   <script>
                   //perintah javascript yang diambil dari form tbs pembelian dengan id=form tambah produk
                   
@@ -407,28 +415,18 @@
                   
                   var no_faktur = $("#nomorfaktur").val();
                   var kode_barang = $("#kode_barang").val();
+                  var kode_barang = kode_barang.substr(0, kode_barang.indexOf('('));
                   var nama_barang = $("#nama_barang").val();
                   var fisik = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#jumlah_fisik").val()))));
                   var satuan = $("#satuan").val();
 
-                  $("#kode_barang").val('');
-                  $("#nama_barang").val('');
-                  $("#jumlah_fisik").val('');
-                  
-
-
-                  if (fisik == ""){
-                  alert("Jumlah Fisik Harus Diisi");
-                  }
-
-                  else if (kode_barang == ""){
+                  if (kode_barang == ""){
                   alert("Kode Barang Harus Diisi");
                   }
-
-                  else if (nama_barang == ""){
-                  alert("Nama Barang Harus Diisi");
+                  else if (fisik == ""){
+                  alert("Jumlah Fisik Harus Diisi");
                   }
-                  
+       
                   else
                   {
                   
@@ -437,7 +435,7 @@
                   
                   
                   $("#kode_barang").focus();
-                  $("#result").load('tabel_stok_opname.php');
+                  $("#result").html(info);
                   $("#kode_barang").val('');
                   $("#nama_barang").val('');
                   $("#jumlah_fisik").val('');
@@ -457,24 +455,17 @@
                   
                   $.post("cek_total_selisih_harga.php",
                   {
-                  no_faktur: no_faktur
+                  no_faktur:no_faktur
                   },
                   function(data){
+                   data = data.replace(/\s+/g, '');
                   $("#total_selisih_harga"). val(data);
                   });
                   
                   
                   });
                                        
-                 
-                  $("#cari_produk_pembelian").click(function() {
-                        $.get('no_faktur_SO.php', function(data) {
 
-                        $("#nomorfaktur1").val(data);
-                        $("#nomorfaktur").val(data);
-                        
-                        });
-                        
                   //menyembunyikan notif berhasil
                   $("#alert_berhasil").hide();
 
@@ -489,7 +480,7 @@
                   
                   });
                   
-                  });
+
                   
                   
                   </script>
@@ -501,10 +492,11 @@
                     
                     $.post("cek_total_selisih_harga.php",
                     {
-                    no_faktur: no_faktur
+                    no_faktur:no_faktur
                     },
                     function(data){
-                    $("#total_selisih_harga"). val(data);
+                       data = data.replace(/\s+/g, '');
+                    $("#total_selisih_harga").val(data);
                     });
 
 
@@ -513,10 +505,11 @@
                   
                   $.post("cek_total_selisih_harga.php",
                   {
-                  no_faktur: no_faktur
+                  no_faktur:no_faktur
                   },
                   function(data){
-                  $("#total_selisih_harga"). val(data);
+                     data = data.replace(/\s+/g, '');
+                  $("#total_selisih_harga").val(data);
                   });
                   
                   
@@ -526,20 +519,20 @@
                 </script>
 
                 <script type="text/javascript">
-                  $(document).ready(function(){
+                 
                   $("#kode_barang").focus(function(){
                   var no_faktur = $("#nomorfaktur").val();
                   
                   $.post("cek_total_selisih_harga.php",
                   {
-                  no_faktur: no_faktur
+                  no_faktur:no_faktur
                   },
                   function(data){
-                  $("#total_selisih_harga"). val(data);
+                     data = data.replace(/\s+/g, '');
+                  $("#total_selisih_harga").val(data);
                   });
                   
                   
-                  });
                   });
 
                 </script>
@@ -558,7 +551,6 @@
                   $.post("proses_selesai_stok_opname.php",{no_faktur:no_faktur,total_selisih_harga:total_selisih_harga},function(info) {
                   
                   $("#demo").html(info);
-                  $("#result").html(info);
                   $("#total_selisih_harga").val('');
                    
   
@@ -591,14 +583,20 @@
     var nama_barang = $(this).attr("data-nama-barang");
     var kode_barang = $(this).attr("data-kode-barang");
     var id = $(this).attr("data-id");
+    var no_faktur = $("#nomorfaktur").val();
+                  
+                  $.post("cek_total_selisih_harga.php",
+                  {
+                  no_faktur:no_faktur
+                  },
+                  function(data){
+                     data = data.replace(/\s+/g, '');
+                  $("#total_selisih_harga").val(data);
+                  });
 
-    $.post("hapus_tbs_stok_opname.php",{kode_barang:kode_barang},function(data){
-    if (data == "sukses") {
     $(".tr-id-"+id).remove();
-    $("#modal_hapus").modal('hide');
-    
-    }
-
+    $.post("hapus_tbs_stok_opname.php",{kode_barang:kode_barang},function(data){
+   
     
     });
     
@@ -665,10 +663,12 @@
         $(document).ready(function(){
           $("#kode_barang").blur(function(){
 
-          var no_faktur = $("#nomorfaktur").val();
-          var kode_barang = $("#kode_barang").val();
+          var kode_barang = $('#kode_barang').val();
+          var kode_barang = kode_barang.substr(0, kode_barang.indexOf('('));
+        var no_faktur = $("#nomorfaktur").val();
+
         
-        
+
         $.post('cek_kode_barang_tbs_stok_opname.php',{kode_barang:kode_barang,no_faktur:no_faktur}, function(data){
         
         if(data == 1){
@@ -679,12 +679,10 @@
         
         });////penutup function(data)
 
-
-      $.getJSON('lihat_stok_opname.php',{kode_barang:$(this).val()}, function(json){
+    $.getJSON('lihat_stok_opname.php',{kode_barang:kode_barang}, function(json){
       
       if (json == null)
       {
-        
         $('#nama_barang').val('');
         $('#satuan').val('');
       }
@@ -695,7 +693,8 @@
         $('#satuan').val(json.satuan);
       }
                                               
-        });
+      });
+      
         
         });
         });

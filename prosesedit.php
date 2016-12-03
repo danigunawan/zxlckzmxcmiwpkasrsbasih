@@ -31,7 +31,7 @@ if (!$query)
 }
 else 
 {
-      header ('location:user.php');    
+      echo '<META HTTP-EQUIV="Refresh" Content="0; URL=user.php">';
 }
 
 //Untuk Memutuskan Koneksi Ke Database

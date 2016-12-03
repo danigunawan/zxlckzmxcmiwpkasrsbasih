@@ -5,11 +5,12 @@ include 'sanitasi.php';
 include 'db.php';
 $session_id = session_id();
 //menampilkan seluruh data yang ada pada tabel penjualan
-$perintah = $db->query("SELECT * FROM fee_faktur");
+//menampilkan seluruh data yang ada pada tabel penjualan
+$perintah = $db->query("SELECT f.nama_petugas, f.jumlah_prosentase, f.jumlah_uang, f.user_buat, f.id, u.nama FROM fee_faktur f INNER JOIN user u ON f.nama_petugas = u.id");
 
  ?>
 
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
     <thead>
       <th style='background-color: #4CAF50; color: white'> Nama Petugas </th>
       <th style='background-color: #4CAF50; color: white'> Jumlah Prosentase </th>
@@ -47,7 +48,7 @@ $fee_faktur_hapus = mysqli_num_rows($pilih_akses_fee_faktur_hapus);
       {
         //menampilkan data
       echo "<tr>
-      <td>". $data1['nama_petugas'] ."</td>
+      <td>". $data1['nama'] ."</td>
       <td>". persen($data1['jumlah_prosentase']) ."</td>
       <td>". rp($data1['jumlah_uang']) ."</td>
       <td>". $data1['user_buat'] ."</td>";
@@ -55,7 +56,7 @@ $fee_faktur_hapus = mysqli_num_rows($pilih_akses_fee_faktur_hapus);
 
 include 'db.php';
 
-$pilih_akses_fee_faktur_edit = $db->query("SELECT komisi_fakrur_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND komisi_fakrur_edit = '1'");
+$pilih_akses_fee_faktur_edit = $db->query("SELECT komisi_faktur_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND komisi_faktur_edit = '1'");
 $fee_faktur_edit = mysqli_num_rows($pilih_akses_fee_faktur_edit);
 
     if ($fee_faktur_edit > 0) {   

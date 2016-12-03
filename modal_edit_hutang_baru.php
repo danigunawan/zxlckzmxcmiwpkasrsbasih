@@ -38,24 +38,25 @@ include 'db.php';
         while ($data1 = mysqli_fetch_array($perintah))
         {
 
-        	 $query00 = $db->query("SELECT tb.no_faktur_pembelian,dh.jumlah_bayar AS jumlah_detail ,IFNULL(tb.jumlah_bayar,0) AS jumlah_tbs FROM detail_pembayaran_hutang dh LEFT JOIN tbs_pembayaran_hutang tb ON dh.no_faktur_pembayaran = tb.no_faktur_pembayaran WHERE dh.no_faktur_pembelian = '$data1[no_faktur]' AND dh.no_faktur_pembayaran = '$no_faktur_pembayaran'");
+           $query00 = $db->query("SELECT tb.suplier,tb.no_faktur_pembelian,dh.jumlah_bayar AS jumlah_detail ,IFNULL(tb.jumlah_bayar,0) AS jumlah_tbs FROM detail_pembayaran_hutang dh LEFT JOIN tbs_pembayaran_hutang tb ON dh.no_faktur_pembayaran = tb.no_faktur_pembayaran WHERE dh.no_faktur_pembelian = '$data1[no_faktur]' AND dh.no_faktur_pembayaran = '$no_faktur_pembayaran'");
 
          
           $data01 = mysqli_fetch_array($query00);
+          
           $jumlah_detail = $data01['jumlah_detail'];
           $jumlah_tbs = $data01['jumlah_tbs'];
           $sisa_hutang = ($data1['kredit'] + $jumlah_detail) - $jumlah_tbs; 
 
 
-        if ($jumlah_tbs > 0 OR $sisa_hutang == 0 ) 
+         $query00 = $db->query("SELECT no_faktur_pembelian FROM tbs_pembayaran_hutang WHERE no_faktur_pembelian = '$data1[no_faktur]'");
+          $data00 = mysqli_fetch_array($query00);
+          
+        if ($data00['no_faktur_pembelian'] == $data1['no_faktur'])
         {
           
         }
 
         else{
-
-
-
 
        echo "<tr class='pilih' no-faktur='". $data1['no_faktur'] ."' kredit='". $sisa_hutang ."' total='". $data1['total'] ."' tanggal_jt='". $data1['tanggal_jt'] ."'  >
       

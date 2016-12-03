@@ -16,16 +16,7 @@
   $query002->execute();
 
 
-  $query = $db->prepare("UPDATE penjualan SET kredit = kredit - ? WHERE no_faktur = ?");
 
-  $query->bind_param("is",
-    $jumlah_bayar, $no_faktur_penjualan);
-
-  
-  $jumlah_bayar = angkadoang($_POST['jumlah_bayar']);
-  $no_faktur_penjualan = stringdoang($_POST['no_faktur_penjualan']);
-
-  $query->execute();
    
 $cek = $db->query("SELECT * FROM tbs_pembayaran_piutang WHERE no_faktur_penjualan = '$no_faktur_penjualan'");
 
@@ -48,14 +39,15 @@ $jumlah = mysqli_num_rows($cek);
   }
 
 else{
-  $perintah = $db->prepare("INSERT INTO tbs_pembayaran_piutang (no_faktur_pembayaran,no_faktur_penjualan,tanggal,tanggal_jt,kredit,potongan,total,jumlah_bayar) VALUES (?,?,now(),?,?,?,?,?)");
+  $perintah = $db->prepare("INSERT INTO tbs_pembayaran_piutang (no_faktur_pembayaran,no_faktur_penjualan,tanggal,tanggal_jt,kredit,potongan,total,jumlah_bayar, kode_pelanggan) VALUES (?,?,now(),?,?,?,?,?,?)");
 
-  $perintah->bind_param("sssiiii",
-    $no_faktur_pembayaran, $no_faktur_penjualan, $tanggal_jt, $kredit, $potongan, $total, $jumlah_bayar);
+  $perintah->bind_param("sssiiiis",
+    $no_faktur_pembayaran, $no_faktur_penjualan, $tanggal_jt, $kredit, $potongan, $total, $jumlah_bayar, $kode_pelanggan);
 
 
     $no_faktur_pembayaran = stringdoang($_POST['no_faktur_pembayaran']);
     $no_faktur_penjualan = stringdoang($_POST['no_faktur_penjualan']);
+    $kode_pelanggan = stringdoang($_POST['kode_pelanggan']);
     $tanggal_jt = stringdoang($_POST['tanggal_jt']);
     $kredit = angkadoang($_POST['kredit']);
     $potongan = angkadoang($_POST['potongan']);

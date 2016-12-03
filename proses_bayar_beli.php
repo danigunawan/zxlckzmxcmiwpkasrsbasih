@@ -66,7 +66,7 @@ $no_faktur = $nomor."/BL/".$data_bulan_terakhir."/".$tahun_terakhir;
            $sisa = angkadoang($_POST['sisa']);
            $sisa_kredit = angkadoang($_POST['kredit']);
            $a = $total_1 - $potongan;
-           $tax_persen = $tax * $a / 100;
+           $tax_persen = angkadoang($_POST['tax_rp']);
            $suplier = stringdoang($_POST['suplier']);
 
 $select_suplier = $db->query("SELECT id,nama FROM suplier WHERE id = '$suplier'");

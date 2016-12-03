@@ -6,8 +6,7 @@ include 'db.php';
 
  $no_faktur = $_POST['no_faktur'];
 
- $query = $db->query ("SELECT * FROM detail_item_masuk WHERE no_faktur = '$no_faktur'");
-
+ $query = $db->query ("SELECT *,s.nama FROM detail_item_masuk dim INNER JOIN  satuan s ON dim.satuan = s.id WHERE no_faktur = '$no_faktur'");;
  
  ?>
 
@@ -43,7 +42,7 @@ include 'db.php';
 			<td>". $data1['kode_barang'] ."</td>
 			<td>". $data1['nama_barang'] ."</td>
 			<td>". rp($data1['jumlah']) ."</td>
-			<td>". $data1['satuan'] ."</td>
+			<td>". $data1['nama'] ."</td>
 			<td>". rp($data1['harga']) ."</td>
 			<td>". rp($data1['subtotal']) ."</td>
 

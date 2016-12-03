@@ -41,7 +41,9 @@ include 'db.php';
                   jika tidak maka nomor terakhir ditambah dengan 1
                   
                   */
-                  if ($v_bulan_terakhir['bulan'] != $v_bulan['bulan']) {
+                  if ($v_bulan_terakhir['bulan'] != $v_bulan['bulan']) 
+                  {
+
                   # code...
                   echo $no_faktur = "1/SO/".$data_bulan_terakhir."/".$tahun_terakhir;
                   
@@ -51,7 +53,6 @@ include 'db.php';
                   {
                   
                   $nomor = 1 + $ambil_nomor ;
-                  
                   echo $no_faktur = $nomor."/SO/".$data_bulan_terakhir."/".$tahun_terakhir;
                   
                   

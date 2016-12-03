@@ -360,7 +360,8 @@ $saldo = $tambah_jumlah0 - $kurang_jumlah0;
 <td></td>
 <td><?php echo $saldo; ?></td>
 <td></td>
-</tr>
+
+
 <?php 
 
 

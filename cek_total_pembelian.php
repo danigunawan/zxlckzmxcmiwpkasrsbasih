@@ -3,9 +3,8 @@
 // memasukan file db.php
 include 'db.php';
 
-
  // mengirim data no faktur menggunakan metode POST
- $session_id = $_POST['session_id'];
+  $session_id = $_GET['session_id'];
 
  
  // menampilakn hasil penjumlahan subtotal dengan ALIAS total pembelian, pada tabel tbs pembelian

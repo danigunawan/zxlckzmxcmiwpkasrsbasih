@@ -8,7 +8,7 @@
  ?>
 
 
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
 		<thead> 
 			
 			<th style="background-color: #4CAF50; color: white"> Nama Kategori </th>
@@ -33,14 +33,14 @@ $pilih_akses_otoritas = $db->query("SELECT hak_otoritas_hapus FROM otoritas_mast
 $otoritas = mysqli_num_rows($pilih_akses_otoritas);
 
     if ($otoritas > 0) {
-echo "<td><button class='btn btn-danger btn-hapus' data-id='". $data['id'] ."' data-kategori='". $data['nama_kategori'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>";
+echo "<td><button class='btn btn-danger btn-hapus' data-id='". $data['id'] ."' data-kategori='". $data['nama_kategori'] ."'> <i class='fa fa-trash'> </i> Hapus </button> </td>";
 }
 
 $pilih_akses_otoritas = $db->query("SELECT hak_otoritas_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND hak_otoritas_edit = '1'");
 $otoritas = mysqli_num_rows($pilih_akses_otoritas);
 
     if ($otoritas > 0) {
-echo "<td> <button class='btn btn-info btn-edit' data-kategori='". $data['nama_kategori'] ."' data-id='". $data['id'] ."'> <span class='glyphicon glyphicon-edit'> </span> Edit </button> </td>";
+echo "<td> <button class='btn btn-info btn-edit' data-kategori='". $data['nama_kategori'] ."' data-id='". $data['id'] ."'> <i class='fa fa-edit'> </i> Edit </button> </td>";
 }
 			echo "</tr>";
 		

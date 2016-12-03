@@ -1,4 +1,5 @@
-<?php include 'session_login.php';
+  <?php include 'session_login.php';
+
 
 
 //memasukkan file session login, header, navbar, db.php
@@ -8,7 +9,9 @@ include 'sanitasi.php';
 include 'db.php';
 
 //menampilkan seluruh data yang ada pada tabel penjualan
-$perintah = $db->query("SELECT pel.nama_pelanggan ,p.total, p.no_faktur ,p.kode_pelanggan ,p.tanggal ,p.jam ,p.user ,p.status ,p.potongan ,p.tax ,p.sisa FROM penjualan p INNER JOIN pelanggan pel ON p.kode_pelanggan = pel.kode_pelanggan ORDER BY p.no_faktur DESC");
+
+$perintah = $db->query("SELECT * FROM penjualan  ORDER BY id DESC");
+
 
 
 $jumlah_total_bersih = $db->query("SELECT SUM(total) AS total_bersih FROM penjualan");
@@ -32,6 +35,9 @@ $ambil_tax = mysqli_fetch_array($jumlah_total_tax);
 
 $sub_total_tax = $ambil_tax['total_tax'];
 
+$pilih_akses_penjualan = $db->query("SELECT penjualan_lihat, penjualan_tambah, penjualan_edit, penjualan_hapus FROM otoritas_penjualan WHERE id_otoritas = '$_SESSION[otoritas_id]'");
+$penjualan = mysqli_fetch_array($pilih_akses_penjualan);
+
  ?>
 
 <style>
@@ -44,14 +50,118 @@ tr:nth-child(even){background-color: #f2f2f2}
 
  <h3><b>DAFTAR DATA PENJUALAN</b></h3><hr>
 
+<div id="modal_detail" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
 
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"><center><b>Detail Penjualan</b></center></h4>
+      </div>
+
+      <div class="modal-body">
+      <div class="table-responsive">
+      <span id="modal-detail"> </span>
+      </div>
+
+     </div>
+
+      <div class="modal-footer">
+        
+  <center> <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button></center> 
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<div id="modal_alert" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h3 style="color:orange" class="modal-title"><span class="glyphicon glyphicon-info-sign">Info</span></h3>
+        
+      </div>
+
+      <div class="modal-body">
+      <div class="table-responsive">
+      <span id="modal-alert">
+       </span>
+      </div>
+
+     </div>
+
+      <div class="modal-footer">
+        <h6 style="text-align: left"><i> * jika ingin menghapus atau mengedit data,<br>
+        silahkan hapus terlebih dahulu Transaksi Yang Di Atas !!</h6>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- Modal Hapus data -->
+<div id="modal_hapus" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Konfirmsi Hapus Data Penjualan</h4>
+      </div>
+
+      <div class="modal-body">
+   
+   <p>Apakah Anda yakin Ingin Menghapus Data ini ?</p>
+   <form >
+    <div class="form-group">
+    <label>Kode Pelanggan :</label>
+     <input type="text" id="kode_pelanggan" class="form-control" readonly=""> 
+     <input type="hidden" id="id_hapus" class="form-control" > 
+     <input type="hidden" id="kode_meja" class="form-control" > 
+     <input type="hidden" id="faktur_hapus" class="form-control" > 
+    </div>
+   
+   </form>
+   
+  <div class="alert alert-success" style="display:none">
+   <strong>Berhasil!</strong> Data berhasil Di Edit
+  </div>
+ 
+
+     </div>
+
+      <div class="modal-footer">
+        <button type="button" data-id="" class="btn btn-info" id="btn_jadi_hapus">Ya</button>
+        <button type="button" class="btn btn-warning" data-dismiss="modal">Batal</button>
+      </div>
+    </div>
+
+  </div>
+</div><!-- end of modal hapus data  -->
+
+
+<div class="row">
+
+<div class="col-sm-2">
 <div class="dropdown">
              <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="width:150px"> Jenis Laporan <span class="caret"></span></button>
 
-             <ul class="dropdown-menu">
-				<li><a href="lap_penjualan_rekap.php"> Laporan Penjualan Rekap </a></li> 
-				<li><a href="lap_penjualan_detail.php"> Laporan Penjualan Detail </a></li>
-				<li><a href="lap_penjualan_harian.php"> Laporan Penjualan Harian </a></li>
+             <ul class="dropdown-menu dropdown-ins">
+			<li><a class="dropdown-item" href="lap_penjualan_rekap.php"> Laporan Penjualan Rekap </a></li> 
+			<li><a class="dropdown-item" href="lap_penjualan_detail.php"> Laporan Penjualan Detail </a></li>
+			<li><a class="dropdown-item" href="lap_penjualan_harian.php"> Laporan Penjualan Harian </a></li>
+      <li><a class="dropdown-item" href="lap_operasi.php"> Laporan Operasi </a></li>
+      <li><a  class="dropdown-item" href="lap_detail_operasi.php"> Laporan Detail Operasi </a></li>
+
 				<!--
 				
 				<li><a href="lap_pelanggan_rekap.php"> Laporan Jual Per Pelanggan Rekap </a></li>
@@ -61,25 +171,146 @@ tr:nth-child(even){background-color: #f2f2f2}
 
              </ul>
 </div> <!--/ dropdown-->
+</div>
 
+<div class="col-sm-3">
+<!--Dropdown kategori (tenant)-->
+<div class="dropdown">
+
+    <!--Trigger-->
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Cari Berdasarkan Kategori</button>
+
+    <!--Menu-->
+    <div class="dropdown-menu dropdown-secondary" aria-labelledby="dropdownMenu4" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
+        <a class="dropdown-item" id="nav_faktur" href="#">Rekap (Per Kategori)</a>
+        <a class="dropdown-item" id="nav_detail" href="#">Detail (Per Kategori)</a>
+        <a class="dropdown-item" id="nav_all" href="#">Rekap Seluruh</a>
+    </div>
+</div>
+<!--/Dropdown untuk search kategori (tenant)-->
+</div>
+  
+</div>
+
+<!--span untuk cari bersarkan TANEN / KATEGORI Rekap-->
+<span id="show_faktur">
+<form class="form-inline" role="form" id="form_no_faktur" >
+
+<div class="form-group ">
+<br>
+    <select class="form-control " id="tenant_faktur" style="width:170px" name="tenant_faktur" required="">
+    <option value="">Pilih Kategori</option>
+      <?php 
+      $query = $db->query("SELECT nama_kategori FROM kategori");
+      while ( $icd = mysqli_fetch_array($query))
+      {
+      echo "<option value='".$icd['nama_kategori']."'>".$icd['nama_kategori']."</option>";
+      }
+      ?>
+    </select>
+</div>
+
+<div class="form-group"> 
+  <input type="text" name="dari_tanggal_faktur" id="dari_tanggal_faktur" autocomplete="off" class="form-control tanggal_cari" placeholder="Dari Tanggal">
+</div>
+
+<div class="form-group"> 
+  <input type="text" name="sampai_tanggal_faktur" id="sampai_tanggal_faktur" autocomplete="off" value="<?php echo date("Y-m-d"); ?>" class="form-control tanggal_cari" placeholder="Sampai Tanggal">
+</div>
+
+<button type="submit" name="submit" id="lihat_faktur" class="btn btn-default " style="background-color:#0277bd"><i class="fa fa-eye"> </i> Lihat Per Faktur </button>
+</form>
+</span>
+<!--Akhir span untuk cari bersarkan TANEN / KATEGORI Rekap-->
+
+<!--span untuk cari bersarkan TANEN / KATEGORI  detail-->
+<span id="show_detail">
+<form class="form-inline" role="form" id="form_no_faktur" >
+
+<div class="form-group ">
+    <select class="form-control " id="tenant_detail" style="width:170px" name="tenant_detail" required="">
+    <option value="">Pilih Kategori</option>
+      <?php 
+      $query = $db->query("SELECT nama_kategori FROM kategori");
+      while ( $icd = mysqli_fetch_array($query))
+      {
+      echo "<option value='".$icd['nama_kategori']."'>".$icd['nama_kategori']."</option>";
+      }
+      ?>
+    </select>
+</div>
+
+
+<div class="form-group"> 
+  <input type="text" name="dari_tanggal_detail" id="dari_tanggal_detail" autocomplete="off" class="form-control tanggal_cari" placeholder="Dari Tanggal">
+</div>
+
+<div class="form-group"> 
+  <input type="text" name="sampai_tanggal_detail" id="sampai_tanggal_detail" autocomplete="off" value="<?php echo date("Y-m-d"); ?>" class="form-control tanggal_cari" placeholder="Sampai Tanggal">
+</div>
+
+
+<button type="submit" name="submit" id="lihat_detail" class="btn btn-default " style="background-color:#0277bd"><i class="fa fa-eye"> </i> Lihat Detail </button>
+</form>
+</span>
+<!--Akhir span untuk cari bersarkan TANEN / KATEGORI detail-->
+
+<!--span untuk cari bersarkan tanggal-->
+<span id="show_all">
+<form class="form-inline" role="form" id="form_all">
+<div class="form-group"> 
+	<input type="text" name="dari_tanggal" id="dari_tanggal" autocomplete="off" class="form-control tanggal_cari" placeholder="Dari Tanggal">
+</div>
+
+<div class="form-group"> 
+	<input type="text" name="sampai_tanggal" id="sampai_tanggal" autocomplete="off" value="<?php echo date("Y-m-d"); ?>" class="form-control tanggal_cari" placeholder="Sampai Tanggal">
+</div>
+
+<button type="submit" name="submit" id="lihat_all" class="btn btn-default" style="background-color:#0277bd"><i class="fa fa-eye"> </i> Lihat </button>
+</form>
+</span>
+<!--Akhir span untuk cari bersarkan tanggal-->
 
 <br>
+
+<span id="table-tenant">
  <div class="table-responsive"><!--membuat agar ada garis pada tabel disetiap kolom-->
 <span id="table-baru">
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
 		<thead>
-			<th style="background-color: #4CAF50; color: white;"> Nomor Faktur </th>
-			<th style="background-color: #4CAF50; color: white;"> Kode Pelanggan</th>
-			<th style="background-color: #4CAF50; color: white;"> Total Kotor </th>
-			<th style="background-color: #4CAF50; color: white;"> Total Bersih </th>
+
+       <th style="background-color: #4CAF50; color: white;"> Edit  </th>
+
+        <?php 
+
+        $pilih_akses_penjualan_hapus = $db->query("SELECT penjualan_hapus FROM otoritas_penjualan WHERE id_otoritas = '$_SESSION[otoritas_id]' AND penjualan_hapus = '1'");
+        $penjualan_hapus = mysqli_num_rows($pilih_akses_penjualan_hapus);
+
+
+            if ($penjualan_hapus > 0){
+
+              echo "<th style='background-color: #4CAF50; color:white'> Hapus </th>";
+
+            }
+        ?>
+
+      <th style="background-color: #4CAF50; color: white;"> Detail  </th>
+
+      <th style="background-color: #4CAF50; color: white;"> Cetak Tunai </th>
+      <th style="background-color: #4CAF50; color: white;"> Cetak Piutang </th>
+			<th style="background-color: #4CAF50; color: white;"> No. Faktur </th>
+			<th style="background-color: #4CAF50; color: white;"> No. RM</th>
+			<th style="background-color: #4CAF50; color: white;"> No. REG </th>
+      <th style="background-color: #4CAF50; color: white;"> Nama </th>
+      <th style="background-color: #4CAF50; color: white;"> Dokter </th>
+			<th style="background-color: #4CAF50; color: white;"> Penjamin </th>
 			<th style="background-color: #4CAF50; color: white;"> Tanggal </th>
-			<th style="background-color: #4CAF50; color: white;"> Jam </th>
-			<th style="background-color: #4CAF50; color: white;"> User </th>
-			<th style="background-color: #4CAF50; color: white;"> Status </th>
-			<th style="background-color: #4CAF50; color: white;"> Potongan </th>
-			<th style="background-color: #4CAF50; color: white;"> Tax </th>
-			<th style="background-color: #4CAF50; color: white;"> Kembalian </th>
-						
+			<th style="background-color: #4CAF50; color: white;"> Petugas </th>
+			<th style="background-color: #4CAF50; color: white;"> Total Penjualan </th>
+      <th style="background-color: #4CAF50; color: white;"> Jenis Penjualan </th>
+      <th style="background-color: #4CAF50; color: white;"> Status </th>
+
+      
 		</thead>
 		
 		<tbody>
@@ -90,29 +321,165 @@ tr:nth-child(even){background-color: #f2f2f2}
 
 			{
 
+
+        $query_pel = $db->query("SELECT nama_pelanggan FROM pelanggan WHERE kode_pelanggan = '$data1[kode_pelanggan]' ");
+        $data_pelanggan = mysqli_fetch_array($query_pel);
+
+        $query_dok = $db->query("SELECT u.nama FROM penjualan p INNER JOIN user u ON p.dokter = u.id WHERE jenis_penjualan = '$data1[jenis_penjualan]' ");
+        $data_dok = mysqli_fetch_array($query_dok);
+
 				$sum_subtotal = $db->query("SELECT SUM(subtotal) AS total_kotor FROM detail_penjualan WHERE no_faktur = '$data1[no_faktur]' ");
 
 				$ambil_sum_subtotal = mysqli_fetch_array($sum_subtotal);
 				$total_kotor = $ambil_sum_subtotal['total_kotor'];
 
 
-				//menampilkan data
-			echo "<tr>
-			<td>". $data1['no_faktur'] ."</td>
-			<td>". $data1['kode_pelanggan'] ." ". $data1['nama_pelanggan'] ."</td>
-			<td>". rp($total_kotor) ."</td>
-			<td>". rp($data1['total']) ."</td>
-			<td>". $data1['tanggal'] ."</td>
-			<td>". $data1['jam'] ."</td>
-			<td>". $data1['user'] ."</td>
-			<td>". $data1['status'] ."</td>
-			<td>". rp($data1['potongan']) ."</td>
-			<td>". rp($data1['tax']) ."</td>
-			<td>". rp($data1['sisa']) ."</td>
-			</tr>";
+			echo "<tr class='tr-id-".$data1['id']."'>";
+
+
+
+
+if ($penjualan['penjualan_edit'] > 0) {
+
+  if ($data1['status'] == 'Simpan Sementara') {
+    echo "<td> </td>";
+  }
+  else{
+
+        if ($data1['jenis_penjualan'] == 'Rawat Jalan')
+        {
+        
+        echo '<td> <a href="cek_edit_penjualan_rj.php?id='.$data1["id"].'&no_faktur='.$data1["no_faktur"].'&no_rm='.$data1["kode_pelanggan"].'&no_reg='.$data1["no_reg"].'" class="btn btn-warning btn-floating"> <i class="fa fa-edit"> </i></a></td>';
+        }
+        elseif ($data1['jenis_penjualan'] == 'Rawat Inap')
+        {
+        
+        
+        echo '<td> <a href="cek_edit_penjualan_ri.php?id='.$data1["id"].'&no_faktur='.$data1["no_faktur"].'&no_rm='.$data1["kode_pelanggan"].'&no_reg='.$data1["no_reg"].'" class="btn btn-danger btn-floating"> <i class="fa fa-edit"> </i></a></td>';
+        
+        }
+        elseif ($data1['jenis_penjualan'] == 'UGD')
+        {
+        
+        echo '<td> <a href="cek_edit_penjualan_ugd.php?id='.$data1["id"].'&no_faktur='.$data1["no_faktur"].'&no_rm='.$data1["kode_pelanggan"].'&no_reg='.$data1["no_reg"].'" class="btn btn-info btn-floating"> <i class="fa fa-edit"> </i></a></td>';
+        
+        }
+        elseif ($data1['jenis_penjualan'] == 'Apotek')
+        {
+        
+        echo '<td> <a href="cek_edit_penjualan_apotek.php?id='.$data1["id"].'&no_faktur='.$data1["no_faktur"].'&no_rm='.$data1["kode_pelanggan"].'" class="btn btn-success btn-floating"> <i class="fa fa-edit"> </i></a></td>';
+        
+        }
+
+  }
+
+
+}
+else{
+  echo "<td> </td>";
+}
+
+
+// Start Tombol Hapus
+
+$pilih_akses_penjualan_hapus = $db->query("SELECT penjualan_hapus FROM otoritas_penjualan WHERE id_otoritas = '$_SESSION[otoritas_id]' AND penjualan_hapus = '1'");
+$penjualan_hapus = mysqli_num_rows($pilih_akses_penjualan_hapus);
+
+
+  if ($penjualan_hapus > 0){
+
+      $pilih = $db->query("SELECT no_faktur_penjualan FROM detail_retur_penjualan WHERE no_faktur_penjualan = '$data1[no_faktur]'");
+      $row_retur = mysqli_num_rows($pilih);
+      
+      $pilih = $db->query("SELECT no_faktur_penjualan FROM detail_pembayaran_piutang WHERE no_faktur_penjualan = '$data1[no_faktur]'");
+      $row_piutang = mysqli_num_rows($pilih);
+
+// if untuk sumputin tombol Hapus
+if ($data1['status'] == 'Simpan Sementara') 
+{
+    echo "<td> </td>";
+}
+else
+{
+      if ($row_retur > 0 || $row_piutang > 0) {
+      
+      echo "<td> <button class='btn btn-danger btn-floating btn-alert' data-id='".$data1['id']."' data-faktur='".$data1['no_faktur']."'> <i class='fa fa-trash'> </i></button></td>";
+      
+      } 
+      
+      else {
+      
+      echo "<td> <button class='btn btn-danger btn-floating btn-hapus' data-id='".$data1['id']."' data-pelanggan='".$data1['kode_pelanggan']."' data-faktur='".$data1['no_faktur']."' kode_meja='".$data1['kode_meja']."'> <i class='fa fa-trash'> </i></button></td>";
+      }
+
+}// END breaket if untuk sumputin tombol Hapus
+
+
+    }
+// End Tombol Hapus
+
+// Tampilan Detail
+          echo "<td><button class='btn btn-floating  btn-info detail-penjualan' data-faktur='".$data1['no_faktur']."' data-id='". $data1['id']."' data-reg='". $data1['no_reg']."'><i class='fa fa-list'></i></button></td>";
+
+
+// Cetak Tunai
+if ($data1['status'] == 'Lunas') {
+  echo'<td>
+<div class="dropdown">
+
+    <button class="btn btn-success btn-floating dropdown-toggle" type="button" id="dropdownMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <i class="fa fa-print"> </i>
+    </button>
+
+    <div class="dropdown-menu dropdown-primary" aria-labelledby="dropdownMenu4" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
+
+        <a class="dropdown-item" href="cetak_ulang_penjualan_detail.php?no_faktur='.$data1["no_faktur"].'&id='.$data1["id"].'">Print Detail</a>
+
+        <a class="dropdown-item" href="cetak_ulang_penjualan_kategori.php?no_faktur='.$data1["no_faktur"].'">Print Kategori</a>
+
+        <a class="dropdown-item" href="cetak_penjualan_tunai.php?no_faktur='.$data1["no_faktur"].'">Print Penjualan Post</a>
+
+        <a class="dropdown-item" href="cetak_penjualan_tunai_besar.php?no_faktur='.$data1["no_faktur"].'">Print Penjualan Besar</a>
+
+    </div>
+</div>
+ </td>';
+}
+else
+{
+  echo "<td></td>";
+}
+// End Cetak Tunai
+
+// Start Cetak Piutang
+if ($data1['status'] == 'Piutang') {
+  echo "<td> <a href='cetak_lap_penjualan_piutang.php?no_faktur=".$data1['no_faktur']."' id='cetak_piutang' class='btn btn-warning btn-floating' target='blank'><i class='fa fa-print'> </i></a> </td>";
+}
+else
+{
+  echo "<td>  </td>";
+}
+// end cetak piutang
+
+
+         echo "<td>". $data1['no_faktur'] ."</td>
+          <td>". $data1['kode_pelanggan'] ."</td>
+          <td>". $data1['no_reg'] ."</td>
+          <td>". $data_pelanggan['nama_pelanggan'] ."</td>
+          <td>". $data_dok['nama']."</td>
+          <td>". $data1['penjamin']."</td>
+          <td>". $data1['tanggal'] ."</td>
+          <td>". $data1['user'] ."</td>
+          <td align='right'>". rp($data1['total']) ."</td>
+          <td>". $data1['jenis_penjualan']."</td>
+          <td>". $data1['status']."</td>";
+
+
+			echo "</tr>";
 
 
 			}
+
 
 			//Untuk Memutuskan Koneksi Ke Database
 			mysqli_close($db);   
@@ -122,15 +489,248 @@ tr:nth-child(even){background-color: #f2f2f2}
 	</table>
 </span>
 </div> <!--/ responsive-->
+
+<!--
 <h3><i> Sub. Total Bersih : <b>Rp. <?php echo rp($sub_total_bersih); ?></b> --- Sub. Total Kotor : <b>Rp. <?php echo rp($sub_total_kotor); ?></b></i></h3> 
 <h3><i> Total Potongan : <b>Rp. <?php echo rp($sub_total_potongan); ?></b> --- Total Pajak : <b>Rp. <?php echo rp($sub_total_tax); ?></b></i></h3> 
-</div> <!--/ container-->
+</div> --> <!--/ container-->
+</span>
 
 		<script>
 		
 		$(document).ready(function(){
-		$('#tableuser').DataTable();
+		$('#tableuser').DataTable({"ordering":false});
 		});
 		</script>
+
+		<!--menampilkan detail penjualan-->
+	
+<script type="text/javascript">
+   $(document).ready(function(){
+      $("#show_faktur").hide();
+      $("#show_detail").hide();
+      $("#show_all").hide();
+
+  });
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $("#nav_faktur").click(function(){    
+    $("#show_faktur").show();
+    $("#show_detail").hide();
+    $("#show_all").hide();  
+    });
+
+    $("#nav_detail").click(function(){    
+    $("#show_detail").show();  
+    $("#show_faktur").hide();
+    $("#show_all").hide();  
+
+    });
+
+    $("#nav_all").click(function(){    
+    $("#show_all").show();  
+    $("#show_faktur").hide();
+    $("#show_detail").hide();
+    $("#table-baru").html(info); 
+    });
+
+});
+</script>	
+
+		<script type="text/javascript">
+		
+		$(".detail-penjualan").click(function(){
+		var no_faktur = $(this).attr('data-faktur');
+		var no_reg = $(this).attr('data-reg');
+
+		
+		$("#modal_detail").modal('show');
+		
+		$.post('proses_detail_penjualan.php',{no_reg:no_reg,no_faktur:no_faktur},function(info) {
+		
+		$("#modal-detail").html(info);
+		
+		
+		});
+		
+		});
+		
+		</script>
+
+<script>
+  $(function() {
+  $( ".tanggal_cari" ).pickadate({ selectYears: 100, format: 'yyyy-mm-dd'});
+  });
+  </script>
+
+
+<!--Start 3 proses tenan (kategori)-->
+<script type="text/javascript">
+//berdasrkan Faktur
+        $("#lihat_faktur").click(function(){
+
+        var tenant_faktur = $("#tenant_faktur").val();        
+        var dari_tanggal = $("#dari_tanggal_faktur").val();        
+        var sampai_tanggal = $("#sampai_tanggal_faktur").val(); 
+
+if(dari_tanggal == '')
+{
+  alert("Isi Dahulu Kolom Dari Tanggal !!");
+  $("#dari_tanggal_faktur").focus(); 
+}
+else if (sampai_tanggal == '')
+{
+ alert("Isi Dahulu Kolom Sampai Tanggal !!");
+  $("#sampai_tanggal_faktur").focus(); 
+}
+else
+{
+
+$.post("show_kategori_faktur.php", {tenant_faktur:tenant_faktur,dari_tanggal:dari_tanggal,
+sampai_tanggal:sampai_tanggal},function(info){
+        
+        $("#table-tenant").html(info);
+
+        });
+        
+        }
+        });      
+        $("form").submit(function(){
+        
+        return false;
+        
+        });
+        
+</script>
+
+<script type="text/javascript">
+//berdasrkan Detail
+        $("#lihat_detail").click(function(){
+        var tenant_detail = $("#tenant_detail").val();        
+        var dari_tanggal = $("#dari_tanggal_detail").val();        
+        var sampai_tanggal = $("#sampai_tanggal_detail").val(); 
+
+if(dari_tanggal == '')
+{
+  alert("Isi Dahulu Kolom Dari Tanggal !!");
+  $("#dari_tanggal_detail").focus(); 
+}
+else if (sampai_tanggal == '')
+{
+ alert("Isi Dahulu Kolom Sampai Tanggal !!");
+  $("#sampai_tanggal_detail").focus(); 
+}
+else
+{
+        $.post("show_kategori_detail.php", {tenant_detail:tenant_detail,dari_tanggal:dari_tanggal,sampai_tanggal:sampai_tanggal},function(info){
+        
+        $("#table-tenant").html(info);
+
+        });
+        }
+        
+        });      
+        $("form").submit(function(){
+        
+        return false;
+        
+        });
+        
+</script>
+
+<script type="text/javascript">
+//berdasrkan Detail
+        $("#lihat_all").click(function(){
+        var dari_tanggal = $("#dari_tanggal").val();        
+        var sampai_tanggal = $("#sampai_tanggal").val();        
+        $.post("show_kategori_all.php", {dari_tanggal:dari_tanggal,sampai_tanggal:sampai_tanggal},function(info){
+        
+        $("#table-tenant").html(info);
+
+        });
+        
+        
+        });      
+        $("form").submit(function(){
+        
+        return false;
+        
+        });
+        
+</script>
+<!--end 3 proses tenan (kategori)-->
+
+<!--Hapus untuk penjualan (cek untuk retur)-->
+<script type="text/javascript">
+  
+    $(document).on('click', '.btn-alert', function (e) {
+    var no_faktur = $(this).attr("data-faktur");
+
+    $.post('modal_retur_piutang.php',{no_faktur:no_faktur},function(data){
+
+
+    $("#modal_alert").modal('show');
+    $("#modal-alert").html(data);
+
+    });
+
+    
+    });
+
+</script>
+<!--cek untuk return-->
+
+<!--Hapus pemberitahuan dan fungsi-->
+<script type="text/javascript">
+      $(document).ready(function(){
+//fungsi hapus data
+
+    $(document).on('click', '.btn-hapus', function (e) {
+    var kode_pelanggan = $(this).attr("data-pelanggan");
+    var id = $(this).attr("data-id");
+    var no_faktur = $(this).attr("data-faktur");
+    var kode_meja = $(this).attr("kode_meja");
+    $("#kode_pelanggan").val(kode_pelanggan);
+    $("#faktur_hapus").val(no_faktur);
+    $("#kode_meja").val(kode_meja);
+    $("#modal_hapus").modal('show');
+    $("#btn_jadi_hapus").attr("data-id", id);
+    
+    
+    });
+    
+    $("#btn_jadi_hapus").click(function(){
+    
+    
+    var id = $(this).attr("data-id");
+    var no_faktur = $("#faktur_hapus").val();
+    var kode_meja = $("#kode_meja").val();
+    $.post("hapus_data_penjualan.php",{id:id,no_faktur:no_faktur,kode_meja:kode_meja},function(data){
+    if (data != '') {
+
+    
+    $("#modal_hapus").modal('hide');
+    $(".tr-id-"+id).remove();
+    
+    }
+    
+    });
+    
+    
+    });
+
+
+
+
+            $('form').submit(function(){
+            
+            return false;
+            });
+});
+
+    </script>
+<!--Ending Hapus pemberitahuan dan fungsi-->
 
 <?php include 'footer.php'; ?>

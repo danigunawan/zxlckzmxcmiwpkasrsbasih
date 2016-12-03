@@ -34,7 +34,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 				data-darah='". $data['gol_darah']."'
 				data-no='". $data['kode_pelanggan']."'
 				data-nama='".$data['nama_pelanggan']."'
-				data-lahir='". tanggal($data['tgl_lahir'])."'
+				data-lahir='". tanggal_terbalik($data['tgl_lahir'])."'
 				data-alamat='". $data['alamat_sekarang']."' 
 				data-jenis-kelamin='". $data['jenis_kelamin']. "'
 				data-hp ='". $data['no_telp']."'

@@ -17,8 +17,7 @@ $perintah1 = $db->query("INSERT INTO tbs_jurnal (session_id, kode_akun_jurnal, n
 
 
 }
-
- header ('location:edit_jurnal_manual.php?no_faktur='.$no_faktur.'&session_id='.$session_id.'');
+echo '<META HTTP-EQUIV="Refresh" Content="0; URL=edit_jurnal_manual.php?no_faktur='.$no_faktur.'&session_id='.$session_id.'">';
 
 
 //Untuk Memutuskan Koneksi Ke Database

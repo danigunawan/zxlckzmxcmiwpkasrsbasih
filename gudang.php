@@ -5,10 +5,7 @@ include 'navbar.php';
 include 'sanitasi.php';
 include 'db.php';
 
-
 $query = $db->query("SELECT * FROM gudang");
-
-
 
  ?>
 
@@ -164,7 +161,7 @@ echo '<button type="button" class="btn btn-info " data-toggle="modal" data-targe
 
 <div class="table-responsive">
 <span id="table-baru">
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm" >
 		<thead>
 			<th style="background-color: #4CAF50; color: white"> Kode Gudang </th>
 			<th style="background-color: #4CAF50; color: white"> Nama Gudang </th>
@@ -196,7 +193,7 @@ $pilih_akses_otoritas = $db->query("SELECT gudang_hapus FROM otoritas_master_dat
 $otoritas = mysqli_num_rows($pilih_akses_otoritas);
 
     if ($otoritas > 0) {
-echo "<td> <button class='btn btn-danger btn-hapus' data-id='". $data['id'] ."' data-gudang='". $data['kode_gudang'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>";
+echo "<td> <button class='btn btn-danger btn-hapus' data-id='". $data['id'] ."' data-gudang='". $data['kode_gudang'] ."'> <i class='fa fa-trash'> </i> Hapus </button> </td>";
 }			
 
 			echo "</tr>";
@@ -215,7 +212,27 @@ mysqli_close($db);
 </div>
 
 
-							 
+<script type="text/javascript">
+$("#kode_gudang").blur(function(){
+
+var kode = $("#kode_gudang").val();
+// cek kodenya
+ $.post('cek_kode_gudang.php',{kode:kode}, function(data){
+
+        if(data == 1){
+          alert('Kode Gudang Sudah Ada!');
+          $("#kode_gudang").val('');
+          $("#kode_gudang").focus();
+        }
+        else{
+
+// Finish Proses
+        }
+
+      }); // end post dari cek nama
+
+});
+</script>							 
 
 
 <script>
@@ -310,12 +327,12 @@ mysqli_close($db);
                                     var input_nama = $(this).val();
 
 
-                                     $.post("update_gudang.php",{id:id, input_nama:input_nama ,jenis_nama:"nama_gudang"},function(data){
-
                                     $("#text-nama-"+id+"").show();
                                     $("#text-nama-"+id+"").text(input_nama);
+                                    $("#input-nama-"+id+"").attr("type", "hidden");      
 
-                                    $("#input-nama-"+id+"").attr("type", "hidden");           
+                                     $.post("update_gudang.php",{id:id, input_nama:input_nama ,jenis_nama:"nama_gudang"},function(data){
+
 
                                     });
                                  });

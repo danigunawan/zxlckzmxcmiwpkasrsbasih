@@ -130,7 +130,8 @@ if ($row_retur > 0) {
 } 
 
 else{
-      echo "<td> <button class='btn btn-danger btn-hapus-tbs' data-id='". $data1['id'] ."' data-faktur='". $data1['no_faktur_penjualan'] ."' data-kode-barang='". $data1['kode_barang'] ."' data-barang='". $data1['nama_barang'] ."'><span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>";
+       echo "<td> <button id='btn-hapus-".$data1['id']."' class='btn btn-danger btn-hapus-tbs' data-id='". $data1['id'] ."' data-faktur='". $data1['no_faktur_penjualan'] ."' data-kode-barang='". $data1['kode_barang'] ."' data-barang='". $data1['nama_barang'] ."' data-subtotal='".$data1['subtotal']."'><span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>";
+
 }
 
       echo "</tr>";
@@ -182,7 +183,7 @@ else{
                                     subtotal_penjualan = parseInt(subtotal_penjualan,10) - parseInt(subtotal_lama,10) + parseInt(subtotal,10);
 
                                     var tax_tbs = tax / subtotal_lama * 100;
-                                    var jumlah_tax = tax_tbs * subtotal / 100;
+                                    var jumlah_tax = Math.round(tax_tbs) * subtotal / 100;
 
                                     if (jumlah_baru == 0) {
                                       alert ("Jumlah Retur Tidak Boleh 0!");
@@ -216,8 +217,9 @@ else{
                                     $("#text-jumlah-"+id+"").show();
                                     $("#text-jumlah-"+id+"").text(jumlah_baru);
                                     $("#text-subtotal-"+id+"").text(tandaPemisahTitik(subtotal));
+                                     $("#btn-hapus-"+id+"").attr("data-subtotal",subtotal);
                                     $("#input-jumlah-"+id+"").attr("type", "hidden"); 
-                                    $("#text-tax-"+id+"").text(jumlah_tax);
+                                    $("#text-tax-"+id+"").text(Math.round(jumlah_tax));
                                     $("#total_retur_pembelian").val(tandaPemisahTitik(subtotal_penjualan)); 
                                     $("#total_retur_pembelian1").val(tandaPemisahTitik(subtotal_penjualan)); 
 
@@ -236,22 +238,3 @@ else{
                                  });
 
                              </script>
-
-<script type="text/javascript">
-    $(document).ready(function(){
-      
-//fungsi hapus data 
-    $(".btn-hapus-tbs").click(function(){
-    var kode_barang = $(this).attr("data-kode-barang");
-    var no_faktur = $(this).attr("data-faktur");
-    var id = $(this).attr("data-id");
-    $("#hapus_faktur").val(no_faktur);
-    $("#hapus_kode").val(kode_barang);
-    $("#id_hapus").val(id);
-    $("#modal_hapus").modal('show');
-    
-    
-    });
-  });
-
-</script>

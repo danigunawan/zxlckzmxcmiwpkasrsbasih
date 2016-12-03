@@ -5,7 +5,6 @@ include_once'sanitasi.php';
 
 $id = angkadoang($_POST['id']);
 $status = stringdoang($_POST['status']);
-$no_urut = angkadoang($_POST['no_urut']);
 
 
 $tanggal = date("Y-m-d");

@@ -38,16 +38,26 @@ tr:nth-child(even){background-color: #f2f2f2}
 </div>
 <!--modal end Confirm Delete-->
 
+<?php 
 
-<h3><b> DATA POLI </b></h3> <hr>
+$pilih_akses_poli_tambah = $db->query("SELECT poli_tambah FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND poli_tambah = '1'");
+$poli_tambah = mysqli_num_rows($pilih_akses_poli_tambah);
+
+
+ ?>
+
+<h3><b> DATA POLI </b></h3>
+<?php if ($poli_tambah > 0): ?>
   <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal"><i class="fa fa-plus"> </i> POLI </button>
 <br>
 <br>
+<?php endif ?>
+
 
 
 <span id="table_baru">  
 <div class="table-responsive">
-  <table id="table-pelamar" class="table table-bordered">
+  <table id="table-pelamar" class="table table-bordered table-sm">
  
     <thead>
       <tr>
@@ -63,11 +73,32 @@ tr:nth-child(even){background-color: #f2f2f2}
    $query = $db->query("SELECT * FROM poli ");
    while($data = mysqli_fetch_array($query))      
       {
-      echo "<tr class='tr-id-".$data['id']."'>
-      <td class='edit-nama' data-id='".$data['id']."'><span id='text-nama-".$data['id']."'>". $data['nama'] ."</span> <input type='hidden' id='input-nama-".$data['id']."' value='".$data['nama']."' class='input_nama' data-id='".$data['id']."' autofocus=''> </td>
+      echo "<tr class='tr-id-".$data['id']."'>";
+  $pilih_akses_poli_edit = $db->query("SELECT poli_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND poli_edit = '1'");
+$poli_edit = mysqli_num_rows($pilih_akses_poli_edit);
+  if ($poli_edit > 0) {
+      
+      echo "<td class='edit-nama' data-id='".$data['id']."'><span id='text-nama-".$data['id']."'>". $data['nama'] ."</span> <input type='hidden' id='input-nama-".$data['id']."' value='".$data['nama']."' class='input_nama' data-id='".$data['id']."' data-nama='".$data['nama']."' autofocus=''> </td>";
+}
+else{
 
-      <td><button data-id='".$data['id']."' class='btn btn-danger delete'><span class='glyphicon glyphicon-trash'></span> Hapus </button>
-      </td>
+  echo "<td>". $data['nama'] ." </td>";
+
+}
+
+$pilih_akses_poli_hapus = $db->query("SELECT poli_hapus FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND poli_hapus = '1'");
+$poli_hapus = mysqli_num_rows($pilih_akses_poli_hapus);
+  if ($poli_hapus > 0) {
+
+    echo "<td><button data-id='".$data['id']."' class='btn btn-danger delete'><span class='glyphicon glyphicon-trash'></span> Hapus </button></td>";
+    
+  }
+  else{
+
+    echo "<td> </td>";
+
+  }
+      echo "
       </tr>";
       }
     ?>
@@ -167,23 +198,50 @@ $.post('table_baru_poli.php',{q:q},function(data)
 
 <!-- cari untuk pegy natio -->
 <script type="text/javascript">
-  $("#submit_tmbh").click(function(){
+  $(document).on('click','#submit_tmbh',function(e){
+
   var nama = $("#nama").val();
   
+
+ if (nama == '') {
+
+      alert('Nama Belum Terisi');
+    }
+    
+    else{
+
+// cek namanya
+ $.post('cek_nama_poli.php',{nama:nama}, function(data){
+
+        if(data == 1){
+          alert('Nama Poli yang anda masukkan sudah ada!');
+          $("#nama").val('');
+          $("#nama").focus();
+        }
+        else{
+
+// Start Proses
+     $("#modal").modal('hide');
   $.post('proses_tambah_poli.php',{nama:nama},function(data)
   {
-  $("#modal").modal('hide');
+  
   $("#tbody").prepend(data);
   $("#nama").val('');
   
   });
+// Finish Proses
+        }
+
+      }); // end post dari cek nama
+
+    } // end else breket
+
 });
 
             
-                $('form').submit(function(){
-                
-                return false;
-                });
+     $('form').submit(function(){
+     return false;
+     });
 
 
 </script>
@@ -200,36 +258,61 @@ $(document).ready(function(){
 
 
 
-                          <script type="text/javascript">
-                                 
-                                 $(".edit-nama").dblclick(function(){
+<script type="text/javascript">
+$(".edit-nama").dblclick(function(){
+  
+var id = $(this).attr("data-id");
+$("#text-nama-"+id+"").hide();
+ $("#input-nama-"+id+"").attr("type", "text");
 
-                                    var id = $(this).attr("data-id");
+ });
 
-                                    $("#text-nama-"+id+"").hide();
+$(".input_nama").blur(function(){
+var nama_lama = $(this).attr("data-nama");
+var id = $(this).attr("data-id");
+var input_nama = $(this).val();
 
-                                    $("#input-nama-"+id+"").attr("type", "text");
+if (input_nama == '') {
+      alert('Nama Tidak Boleh Kosong !!');
 
-                                 });
+    }
+    
+    else{
 
-                                 $(".input_nama").blur(function(){
+// cek namanya
+ $.post('cek_nama_poli.php',{nama:input_nama}, function(data){
 
-                                    var id = $(this).attr("data-id");
+        if(data == 1){
+          alert('Nama Poli anda masukkan sudah ada!');
+$("#text-nama-"+id+"").show();
+$("#text-nama-"+id+"").text(nama_lama);
+$("#input-nama-"+id+"").attr("type", "hidden");
 
-                                    var input_nama = $(this).val();
+$("#input-nama-"+id+"").val(nama_lama);
+
+        }
+        else{
+
+// Start Proses
+$.post("update_data_poli.php",{id:id, input_nama:input_nama,jenis_edit:"nama_poli"},function(data){
+
+$("#text-nama-"+id+"").show();
+$("#text-nama-"+id+"").text(input_nama);
+$("#input-nama-"+id+"").attr("type", "hidden");           
+$("#input-nama-"+id+"").val(input_nama);
+
+});
+// Finish Proses
+        }
+
+      }); // end post dari cek nama
+
+    } // end else breket
 
 
-                                    $.post("update_data_poli.php",{id:id, input_nama:input_nama,jenis_edit:"nama_poli"},function(data){
+});
 
-                                    $("#text-nama-"+id+"").show();
-                                    $("#text-nama-"+id+"").text(input_nama);
-
-                                    $("#input-nama-"+id+"").attr("type", "hidden");           
-
-                                    });
-                                 });
-
-                             </script>
+</script>
 
 <!--FOOTER-->
 <?php 

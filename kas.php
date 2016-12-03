@@ -71,7 +71,7 @@ $query = $db->query("SELECT id, kode_daftar_akun, nama_daftar_akun FROM daftar_a
 
 <div class="table-responsive"> 
 <span id="tabel_baru">
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
 		<thead>
 			<th style="background-color: #4CAF50; color: white;"> Nama  </th>
 			<th style="background-color: #4CAF50; color: white;"> Jumlah </th>
@@ -124,7 +124,7 @@ $kas_edit = mysqli_fetch_array($pilih_akses_kas_edit);
             
     if ($kas_edit['kas_edit'] > 0) {
             
-            echo "<td> <button class='btn btn-info btn-edit-default' data-id='".$data['id']."' data-kode='".$data['kode_daftar_akun']."'> <span class='glyphicon glyphicon-edit'></span> Edit</button> </td>";
+            echo "<td> <button class='btn btn-info btn-edit-default' data-id='".$data['id']."' data-kode='".$data['kode_daftar_akun']."'> <i class='fa fa-edit'></i> Edit</button> </td>";
             
             }
 

@@ -1,6 +1,5 @@
 <?php 
 
-include 'header.php';
 include 'db.php';
 
 $no_faktur = $_POST['no_faktur'];
@@ -64,5 +63,4 @@ mysqli_close($db);
     
     </tbody>
 </table>
-
 

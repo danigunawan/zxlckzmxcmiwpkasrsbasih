@@ -127,19 +127,19 @@
 <form action="proses_tbs_kas_keluar.php" role="form" method="post" id="formtambahproduk">
 <div class="row">
 
-					<div class="form-group col-sm-6">
+					<div class="form-group col-sm-2">
 					<label> Tanggal </label><br>
-					<input type="text" name="tanggal" id="tanggal1" placeholder="Tanggal" value="<?php echo date("Y-m-d"); ?>" class="form-control" required="" >
+					<input style="height:15px;" type="text" name="tanggal" id="tanggal1" placeholder="Tanggal" value="<?php echo date("Y-m-d"); ?>" class="form-control" required="" >
 					</div>
 
-					<div class="form-group col-sm-6">
-          <input type="hidden" name="session_id" id="session_id" class="form-control" readonly="" value="<?php echo $session_id; ?>" required="" >
+          <input style="height:15px;" type="hidden" name="session_id" id="session_id" class="form-control" readonly="" value="<?php echo $session_id; ?>" required="" >  
 
-					</div>
+     
+    
 
-          <div class="form-group col-sm-6" id="col_sm_6">
-          <label> Jumlah Total </label><br>
-          <input type="text" name="jumlah" id="jumlahtotal" readonly="" placeholder="Jumlah Total" class="form-control">
+          <div class="form-group col-sm-5">
+          <label> Keterangan </label><br>
+          <textarea style="height:40px;" type="text" name="keterangan" id="keterangan" autocomplete="off" placeholder="Keterangan" class="form-control" > </textarea>
           </div>
 
 </div> <!-- tag penutup div row -->
@@ -148,7 +148,7 @@
 
  <?php if ($data_tbs > 0): ?>
     
-          <div class="form-group col-sm-6">
+          <div class="form-group col-sm-3">
           <label> Dari Akun </label><br>
           <select type="text" name="dari_akun" id="dariakun" class="form-control" disabled="true">
           <option value="<?php echo $data_tbs1['dari_akun']; ?>"><?php echo $data_tbs1['nama_daftar_akun']; ?></option>
@@ -171,7 +171,7 @@
 <?php else: ?>
 
 
-					<div class="form-group col-sm-6">
+					<div class="form-group col-sm-3">
 					<label> Dari Akun </label><br>
 					<select type="text" name="dari_akun" id="dariakun" class="form-control">
 					<option value="">--SILAHKAN PILIH--</option>
@@ -190,26 +190,17 @@
              ?>
             </select>
    					</div>
-<?php endif ?>         
+<?php endif ?>     
 
-          <div class="form-group col-sm-6">
-          <label> Keterangan </label><br>
-          <input type="text" name="keterangan" id="keterangan" autocomplete="off" placeholder="Keterangan" class="form-control">
-          </div>
+          <input style="height:15px;" type="hidden" name="jumlah_kas" id="jumlah_kas" autocomplete="off" placeholder="" class="form-control">
+   
 
+          <div class="form-group col-sm-3">
+          <label> Ke Akun </label><br>
+          <select type="text" name="ke_akun" id="keakun" class="form-control" >
+          <option value="">--SILAHKAN PILIH--</option>
 
-
-</div> 
-
-
-<div class="row">
-
-					<div class="form-group col-sm-3">
-					<label> Ke Akun </label><br>
-					<select type="text" name="ke_akun" id="keakun" class="form-control" >
-					<option value="">--SILAHKAN PILIH--</option>
-
-					 <?php 
+           <?php 
 
     
     $query = $db->query("SELECT * FROM daftar_akun ");
@@ -221,15 +212,16 @@
     
     
     ?>
-   					</select>
-					</div>
+            </select>
+          </div>
 
-					<div class="form-group col-sm-3">
+
+
+
+					<div class="form-group col-sm-2">
 					<label> Jumlah </label><br>
-					<input type="text" name="jumlah" id="jumlah" autocomplete="off" placeholder="Jumlah" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" class="form-control"  >
+					<input style="height:15px;" type="text" name="jumlah" id="jumlah" autocomplete="off" placeholder="Jumlah" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" class="form-control"  >
 					</div>
-
-
 
 					
 					<div class="form-group col-sm-3">
@@ -252,9 +244,7 @@
 </style>
 
       
-  <!--membuat tombol submit bayar & Hutang-->
-      <button type="submit" id="submit_kas_keluar" class="btn btn-info"> <i class='fa fa-send'> </i> Submit </a> </button>
-     <a class="btn btn-info" href="form_kas_keluar.php" id="transaksi_baru" style="display: none"> <i class="fa fa-refresh"></i> Transaksi Baru</a>
+
 
           </form><!--tag penutup form-->
   <!--untuk mendefinisikan sebuah bagian dalam dokumen-->  
@@ -266,7 +256,7 @@
       
 <div class="table-responsive">
       <!--tag untuk membuat garis pada tabel-->     
-  <table id="tableuser" class="table table-bordered">
+  <table id="tableuser" class="table table-bordered table-sm">
     <thead>
       <th> Dari Akun </th>
       <th> Ke Akun </th>
@@ -321,19 +311,22 @@ mysqli_close($db);
   </table>
   </div>
         </span>
+<br>
+
+    <div class="form-group col-sm-2" id="col_sm_6">
+          <label> Jumlah Total </label><br>
+          <input style="height:15px;" type="text" name="jumlah" id="jumlahtotal" readonly="" placeholder="Jumlah Total" class="form-control">
+    </div> <br>  
+
+  <!--membuat tombol submit bayar & Hutang-->
+    <button type="submit" id="submit_kas_keluar" class="btn btn-info"> <i class='fa fa-send'> </i> Submit </a> </button>
+     <a class="btn btn-info" href="form_kas_keluar.php" id="transaksi_baru" style="display: none"> <i class="fa fa-refresh"></i> Transaksi Baru</a>
 
 
 </div> <!-- tag penutup div container -->
 
 
-<script>
 
-// untk menampilkan datatable atau filter seacrh
-$(document).ready(function(){
-    $("#tableuser").DataTable();
-});
-
-</script>
 
 
 <script>
@@ -349,68 +342,87 @@ $(document).ready(function(){
    	var ke_akun = $("#keakun").val();
     var jumlah = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#jumlah").val()))));
     var total = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#jumlahtotal").val()))));
+    var jumlah_kas = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#jumlah_kas").val()))));
    	var tanggal = $("#tanggal1").val();
 
-
-        if (total == '') 
+  if (total == '') 
         {
           total = 0;
-        }
-        else if(jumlah == '')
+        };
+   if(jumlah == '')
         {
           jumlah = 0;
         };
-        var subtotal = parseInt(total,10) + parseInt(jumlah,10);
+   if(jumlah_kas == '')
+        {
+          jumlah_kas = 0;
+        };
 
 
-     $("#keakun").val('');
-     $("#jumlah").val('');
-     $("#keterangan").val('');
 
-if (ke_akun == "") {
+         var subtotal = parseInt(total,10) + parseInt(jumlah,10);
+         var sisa_kas = parseInt(jumlah_kas, 10) - parseInt(subtotal,10);
+         
+         
+         $("#keakun").val('');
+         $("#jumlah").val('');
+         
+         if (ke_akun == "") {
+         
+         alert('Data Ke Akun Harus Di Isi');
+         
+         }
+         else if (dari_akun == "") {
+         
+         alert('Data Dari Akun Harus Di Isi');
+         
+         }
+         
+         else if (jumlah == "")
+         {
+         
+         alert('Data Jumlah Harus Di Isi');
+         }
 
-alert('Data Ke Akun Harus Di Isi');
+         else if(sisa_kas < 0){
+          alert('Jumlah Kas Tidak Mencukupi !');
+          $("#jumlah").val('');
+          $("#jumlah").focus();
+         }
+         
+         
+         else {
+         
+         
+         $("#jumlahtotal").val(tandaPemisahTitik(subtotal))
+         
+         $.post("proses_tbs_kas_keluar.php", {session_id:session_id,keterangan:keterangan,dari_akun:dari_akun,ke_akun:ke_akun,jumlah:jumlah,tanggal:tanggal}, function(info) {
+         
+         
+         $("#result").html(info);
+         $("#result").load("tabel_kas_keluar.php");
+         $("#keakun").val('');
+         $("#jumlah").val('');
+         $("#result").load('tabel_kas_keluar.php');
+         
+         var dari_akun = $("#dariakun").val();
+         
+         if (dari_akun != ""){
+         $("#dariakun").attr("disabled", true);
+         }
+         
+         });
+         }
 
-}
-else if (dari_akun == "") {
-
-alert('Data Dari Akun Harus Di Isi');
-
-}
-
-else if (jumlah == "")
-{
-
-	alert('Data Jumlah Harus Di Isi');
-}
-else {
 
 
-  $("#jumlahtotal").val(tandaPemisahTitik(subtotal))
-
-	$.post("proses_tbs_kas_keluar.php", {session_id:session_id,keterangan:keterangan,dari_akun:dari_akun,ke_akun:ke_akun,jumlah:jumlah,tanggal:tanggal}, function(info) {
-
-      
-     $("#result").html(info);
-     $("#result").load("tabel_kas_keluar.php");
-     $("#keakun").val('');
-     $("#jumlah").val('');
-     $("#keterangan").val('');
-     $("#result").load('tabel_kas_keluar.php');
-       
-   });
-}
 
 
       $("#formtambahproduk").submit(function(){
       return false;
       });
       
-var dari_akun = $("#dariakun").val();
 
-if (dari_akun != ""){
-$("#dariakun").attr("disabled", true);
-}
 
 
   });
@@ -428,6 +440,7 @@ $("#dariakun").attr("disabled", true);
           var dariakun = $("#dariakun").val();
           
           $.post("cek_tbs_kas_keluar.php",{session_id:session_id,keakun:keakun, dariakun:dariakun},function(data){
+            data = data.replace(/\s+/g, '');
           if (data == "ya") {
           
             alert("Akun Sudah Ada, Silakan Pilih Akun lain!");
@@ -453,6 +466,7 @@ $.post("cek_jumlah_kas_keluar.php",
         session_id: session_id
     },
     function(data){
+      data = data.replace(/\s+/g, '');
         $("#jumlahtotal").val(data);
     });
 
@@ -460,6 +474,8 @@ $.post("cek_jumlah_kas_keluar.php",
 
 
 </script>
+
+
 
 
 <script>
@@ -484,7 +500,6 @@ $.post("cek_jumlah_kas_keluar.php",
          $("#keterangan").val('');
          $("#jumlahtotal").val('');
 
-
     if (jumlah == "") {
 
       alert("Tidak Ada Kas Yang Di Keluarkan");
@@ -497,6 +512,15 @@ $.post("cek_jumlah_kas_keluar.php",
 
     else
       {
+
+   $.post("cek_submit_kas_keluar.php", {session_id:session_id}, function(data){
+
+if (data == 'kosong')
+{
+  alert("Anda Belum Memasukan Transaksi ");
+}
+else{
+
         $("#transaksi_baru").show();
         $("#submit_kas_keluar").hide();
 
@@ -510,12 +534,15 @@ $.post("cek_jumlah_kas_keluar.php",
          $("#keterangan").val('');
          $("#jumlahtotal").val('');
         });
+
          $("#form_submit").submit(function(){
          return false;
          });
 
-    }      
+}
 
+});
+    }      
 
 
   
@@ -709,6 +736,39 @@ alert("Nama Akun Tidak Boleh Sama");
                                     });
                                     
                                     </script>
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+  var dari_akun = $("#dariakun").val();
+      
+      //metode POST untuk mengirim dari file cek_jumlah_kas.php ke dalam variabel "dari akun"
+      $.post('cek_jumlah_kas.php', {dari_akun: dari_akun}, function(data) {
+        data = data.replace(/\s+/g, '');      
+      $("#jumlah_kas").val(data);
+      });
+  });
+
+</script>
+
+<script>
+      
+      //untuk mengambil data jumlah dari tabel kas bertdasarkan id dari akun1
+      $(document).ready(function(){
+      $("#dariakun").change(function(){
+      var dari_akun = $("#dariakun").val();
+      
+      //metode POST untuk mengirim dari file cek_jumlah_kas.php ke dalam variabel "dari akun"
+      $.post('cek_jumlah_kas.php', {dari_akun: dari_akun}, function(data) {
+        data = data.replace(/\s+/g, '');      
+      $("#jumlah_kas").val(data);
+      });
+      
+      });
+});
+
+</script>
+
 
 
 <?php 

@@ -11,7 +11,7 @@ if ($db->query($update) === TRUE) {
 } else {
     echo "Error: " . $update . "<br>" . $db->error;
 }
-header('location:setting_printer.php');
 
+echo '<META HTTP-EQUIV="Refresh" Content="0; URL=setting_printer.php">';
 
  ?>

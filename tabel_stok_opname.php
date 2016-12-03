@@ -76,7 +76,7 @@
                   <th> Selisih Fisik </th>
                   <th> Hpp </th>
                   <th> Selisih Harga </th>
-                  <th> Harga </th>
+                  <th> Harga </th>  
                   <th> Hapus </th>
                   
                   </thead>
@@ -90,10 +90,7 @@
                   //menyimpan data sementara yang ada pada $perintah
                   while ($data1 = mysqli_fetch_array($perintah))
                   {
-                  
-                  
-                  
-                  
+
                   echo "<tr class='tr-id-".$data1['id']."'>
                   
                   <td>". $data1['no_faktur'] ."</td>
@@ -155,19 +152,16 @@
 <script type="text/javascript">
 
                                   
+                                  
 //fungsi hapus data 
     $(".btn-hapus").click(function(){
     var nama_barang = $(this).attr("data-nama-barang");
     var kode_barang = $(this).attr("data-kode-barang");
     var id = $(this).attr("data-id");
 
-    $.post("hapus_tbs_stok_opname.php",{kode_barang:kode_barang},function(data){
-    if (data == "sukses") {
     $(".tr-id-"+id).remove();
-    $("#modal_hapus").modal('hide');
-    
-    }
-
+    $.post("hapus_tbs_stok_opname.php",{kode_barang:kode_barang},function(data){
+   
     
     });
     

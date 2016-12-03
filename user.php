@@ -6,7 +6,7 @@ include 'sanitasi.php';
 include 'db.php';
 
 
-$perintah = $db->query("SELECT * FROM user");
+$perintah = $db->query("SELECT u.status, u.username, u.password, u.nama, u.alamat, u.jabatan, u.otoritas, u.tipe, u.status_sales, u.id, j.nama FROM user u INNER JOIN jabatan j ON u.jabatan = j.id");
 
 
 
@@ -88,7 +88,7 @@ echo '<button type="button" class="btn btn-info" data-toggle="modal" data-target
     while($data = mysqli_fetch_array($query))
     {
     
-    echo "<option>".$data['nama'] ."</option>";
+    echo "<option value='".$data['id']."' >".$data['nama'] ."</option>";
     }
     
     
@@ -123,10 +123,11 @@ $ambil_otoritas = $db->query("SELECT * FROM hak_otoritas");
 					<label>Tipe User</label><br>
 					<select type="text" name="tipe" id="tipe" class="form-control" required="" >
 					<option value="">Silahkan Pilih</option>
+					<option value="4">Admin</option>
 					<option value="1">Dokter</option>
 					<option value="2" >Paramedik</option>
 					<option value="3">Farmasi</option>
-					<option value="4">Admin</option>
+					<option value="4">Lain - Lain</option>
 					</select>
 					</div>
 
@@ -250,7 +251,7 @@ $ambil_otoritas = $db->query("SELECT * FROM hak_otoritas");
 
 <div class="table-responsive">
 <span id="table-baru">
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
 		<thead>
 
 			<th style='background-color: #4CAF50; color: white'> Reset Password </th>
@@ -304,7 +305,7 @@ $user_edit= mysqli_num_rows($pilih_akses_user_edit);
 			<td>". $data1['password'] ."</td>
 			<td>". $data1['nama'] ."</td>
 			<td>". $data1['alamat'] ."</td>
-			<td>". $data1['jabatan'] ."</td>
+			<td>". $data1['nama'] ."</td>
 			<td>". $data1['otoritas'] ."</td>
 			";
 
@@ -323,6 +324,10 @@ $user_edit= mysqli_num_rows($pilih_akses_user_edit);
 			elseif ($data1['tipe'] == '4')
 			{
 			echo "<td> Admin </td>";
+			}
+			elseif ($data1['tipe'] == '5')
+			{
+			echo "<td> Lain Lain</td>";
 			}
 			echo "<td>". $data1['status'] ."</td>";
 

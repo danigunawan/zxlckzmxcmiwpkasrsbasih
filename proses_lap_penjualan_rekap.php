@@ -22,7 +22,7 @@ $perintah = $db->query("SELECT pel.nama_pelanggan,dp.tanggal,dp.no_faktur,dp.kod
             <thead>
 			<th style="background-color: #4CAF50; color: white;"> Tanggal </th>
 			<th style="background-color: #4CAF50; color: white;"> Nomor Faktur </th>
-			<th style="background-color: #4CAF50; color: white;"> Kode Pelanggan</th>
+			<th style="background-color: #4CAF50; color: white;">No RM</th>
 			<th style="background-color: #4CAF50; color: white;"> Total </th>
 			<th style="background-color: #4CAF50; color: white;"> Jam </th>
 			<th style="background-color: #4CAF50; color: white;"> User </th>

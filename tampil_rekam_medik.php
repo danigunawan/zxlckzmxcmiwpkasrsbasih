@@ -1,3 +1,5 @@
+
+
 <?php 
 include 'db.php';
 
@@ -8,19 +10,28 @@ $cari_berdasarkan = stringdoang($_POST['cari_berdasarkan']);
 $pencarian = stringdoang($_POST['pencarian']);
 
 
+
 switch ($cari_berdasarkan) {
     case "nama":
-        $query1= $db->query("SELECT * FROM rekam_medik  WHERE nama LIKE '%$pencarian%' ");
+        $query1= $db->query("SELECT * FROM rekam_medik  WHERE nama LIKE '%$pencarian%' AND tanggal_periksa >= '$dari_tanggal' AND tanggal_periksa <= '$sampai_tanggal' ");
         echo "<div class='table-responsive'>";
-       echo"<table id='table-group' class='table table-bordered'>
+       echo"<table id='table-group' class='table table-bordered table-sm'>
+
+
+<style>
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+</style>
+
 
     <thead>
       <tr>
-          <th>No Reg </th>
-         <th>Nama Pasien</th>
-         <th>Tanggal Periksa</th>
-         <th>Nama Dokter</th>
-         <th>Poli</th>
+        <th  style='background-color: #4CAF50; color: white' >No Reg </th>
+         <th style='background-color: #4CAF50; color: white' >Nama Pasien</th>
+         <th style='background-color: #4CAF50; color: white' >Tanggal Periksa</th>
+         <th style='background-color: #4CAF50; color: white' >Nama Dokter</th>
+         <th style='background-color: #4CAF50; color: white' >Poli</th>
     </tr>
     </thead>
     <tbody>";
@@ -43,16 +54,16 @@ switch ($cari_berdasarkan) {
  </div>";
         break;
     case "no_rm":
-        $query2= $db->query("SELECT * FROM rekam_medik  WHERE no_rm  LIKE '%$pencarian%'");
-        echo"<table id='table-group' class='table table-bordered'>
+        $query2= $db->query("SELECT * FROM rekam_medik  WHERE no_rm  LIKE '%$pencarian%' AND tanggal_periksa >= '$dari_tanggal' AND tanggal_periksa <= '$sampai_tanggal' ");
+        echo"<table id='table-group' class='table table-bordered table-sm'>
 
     <thead>
       <tr>
-          <th>No Reg </th>
-         <th>Nama Pasien</th>
-         <th>Tanggal Periksa</th>
-         <th>Nama Dokter</th>
-         <th>Poli</th>
+          <th style='background-color: #4CAF50; color: white' >No Reg </th>
+         <th style='background-color: #4CAF50; color: white' >Nama Pasien</th>
+         <th style='background-color: #4CAF50; color: white' >Tanggal Periksa</th>
+         <th style='background-color: #4CAF50; color: white' >Nama Dokter</th>
+         <th style='background-color: #4CAF50; color: white' >Poli</th>
     </tr>
     </thead>
     <tbody>";

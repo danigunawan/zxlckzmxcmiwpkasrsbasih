@@ -70,7 +70,7 @@ $no_faktur_retur = $nomor."/RJ/".$data_bulan_terakhir."/".$tahun_terakhir;
 
   // hubungkan "data" dengan prepared statements
         $stmt->bind_param("ssssiiissiis", 
-        $no_faktur_retur, $tanggal_sekarang, $jam_sekarang, $kode_pelanggan , $total, $potongan, $tax_jadi, $user_buat, $cara_bayar, $pembayaran, $sisa, $ppn_input);        
+        $no_faktur_retur, $tanggal_sekarang, $jam_sekarang, $kode_pelanggan , $total, $potongan, $tax_jadi, $user_buat, $cara_bayar, $pembayaran, $kembalian, $ppn_input);        
 
   // siapkan "data" query
     $kode_pelanggan = stringdoang($_POST['kode_pelanggan']);
@@ -82,6 +82,7 @@ $no_faktur_retur = $nomor."/RJ/".$data_bulan_terakhir."/".$tahun_terakhir;
     $pembayaran = angkadoang($_POST['pembayaran']);
     $ppn_input = stringdoang($_POST['ppn_input']);
     $sisa = angkadoang($_POST['sisa']);
+    $kembalian = angkadoang($_POST['kembalian']);
     $user_buat = $_SESSION['user_name'];
 
     $a = $total1 - $potongan;

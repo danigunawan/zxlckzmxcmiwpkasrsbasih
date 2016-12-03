@@ -6,7 +6,8 @@ include 'db.php';
 
  $no_faktur_retur = $_POST['no_faktur_retur'];
 
- $query = $db->query ("SELECT dp.no_faktur_penjualan, dp.no_faktur_retur, dp.id, dp.nama_barang, dp.kode_barang, dp.jumlah_beli, dp.jumlah_retur, dp.harga, dp.potongan, dp.tax, dp.subtotal, sk.id_satuan, s.nama, dp.jumlah_retur / sk.konversi AS jumlah_produk, st.nama AS satuan_jual FROM detail_retur_penjualan dp LEFT JOIN satuan_konversi sk ON dp.satuan = sk.id_satuan LEFT JOIN satuan s ON dp.satuan = s.id LEFT JOIN detail_penjualan dpen ON dp.no_faktur_penjualan = dpen.no_faktur LEFT JOIN satuan st ON dpen.satuan = st.id WHERE dp.no_faktur_retur = '$no_faktur_retur'");
+ $query = $db->query("SELECT drp.no_faktur_retur,drp.no_faktur_penjualan,drp.nama_barang,drp.kode_barang,drp.jumlah_beli,drp.jumlah_retur,drp.harga,drp.potongan,drp.tax,drp.subtotal,drp.satuan,s.nama,ss.nama AS satuan_jual FROM detail_retur_penjualan drp INNER JOIN satuan s ON drp.satuan = s.id INNER JOIN satuan ss ON drp.asal_satuan = ss.id WHERE no_faktur_retur = '$no_faktur_retur' ");
+
 
  ?>
 
@@ -41,6 +42,10 @@ include 'db.php';
 			//menyimpan data sementara yang ada pada $perintah
 			while ($data1 = mysqli_fetch_array($query))
 			{
+
+			$ss = $db->query("SELECT konversi FROM satuan_konversi WHERE kode_produk = '$data1[kode_barang]' AND id_satuan = '$data1[satuan]' ");
+			$cek = mysqli_num_rows($ss);
+			$sid = mysqli_fetch_array($ss);
 				//menampilkan data
 			echo "<tr>
 			<td>". $data1['no_faktur_retur'] ."</td>
@@ -49,8 +54,9 @@ include 'db.php';
 			<td>". $data1['kode_barang'] ."</td>
 			<td>". rp($data1['jumlah_beli']) ." ". $data1['satuan_jual'] ."</td>";
 
-			if ($data1['jumlah_produk'] > 0) {
-				echo "<td>". $data1['jumlah_produk'] ."</td>";
+			if ($cek > 0) {
+				$jumlah_produk = $data1['jumlah_retur'] / $sid['konversi'];
+				echo "<td>". $jumlah_produk  ."</td>";
 			}
 			else{
 				echo "<td>". rp($data1['jumlah_retur']) ."</td>";

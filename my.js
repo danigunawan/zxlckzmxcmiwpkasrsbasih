@@ -87,3 +87,6 @@ function bersihPemisah(ini){
 	//a = a.replace(".","");
 	return a;
 }
+
+
+      

@@ -18,19 +18,15 @@
 
  ?>
 
- 
 <style type="text/css">
-	.disabled {
+  .disabled {
     opacity: 0.6;
     cursor: not-allowed;
     disabled: true;
 }
 </style>
 
-
-
-
-  		<script>
+<script type="text/javascript">
   $(function() {
     $( "#tanggal1" ).datepicker({dateFormat: "yy-mm-dd"});
   });
@@ -124,28 +120,48 @@
   </div>
 </div><!-- end of modal edit data  -->
 
-<form action="proses_tbs_kas_masuk.php" role="form" method="post" id="formtambahproduk">
+<form  role="form" method="post" id="formtambahproduk">
 <div class="row">
 
-					<div class="form-group col-sm-6">
+					<div class="form-group col-sm-2">
 					<label> Tanggal </label><br>
-					<input type="text" name="tanggal" id="tanggal1" placeholder="Tanggal" value="<?php echo date("Y-m-d"); ?>" class="form-control" required="" >
-					</div>
+					<input style="height:15px" type="text" name="tanggal" id="tanggal1" placeholder="Tanggal" value="<?php echo date("Y-m-d"); ?>" class="form-control" required="" >
 
-					<div class="form-group col-sm-6">
-					<input type="hidden" name="session_id" id="session_id" class="form-control" readonly="" value="<?php echo $session_id; ?>" required="" >
+			   <!--HIDDEN SESSION-->		
+          <input style="height:15px" type="hidden" name="session_id" id="session_id" class="form-control" readonly="" value="<?php echo $session_id; ?>" required="" >
 
-					</div>
-
-
-          <div class="form-group col-sm-6" id="col_sm_6">
-          <label> Jumlah Total </label><br>
-          <input type="text" name="jumlah" id="jumlahtotal" readonly="" placeholder="Jumlah Total" class="form-control">
           </div>
+
+          <div class="form-group col-sm-6">
+          <label> Keterangan </label><br>
+          <input style="height:15px" type="text" name="keterangan" autocomplete="off" id="keterangan" placeholder="Keterangan" class="form-control">
+          </div>
+
 
 </div> <!-- tag penutup div row -->
 
 <div class="row">
+
+
+<div class="form-group col-sm-3">
+          <label> Dari Akun </label><br>
+          <select type="text" name="dari_akun" id="dariakun" class="form-control" >
+          <option value="">--SILAHKAN PILIH--</option>
+
+           <?php 
+
+    
+    $query = $db->query("SELECT * FROM daftar_akun ");
+    while($data = mysqli_fetch_array($query))
+    {
+    
+    echo "<option value='".$data['kode_daftar_akun'] ."'>".$data['nama_daftar_akun'] ."</option>";
+    }
+    
+    
+    ?>
+            </select>
+</div>
 
  <?php if ($data_tbs > 0): ?>
             
@@ -170,7 +186,7 @@
             </div>
 
 <?php else: ?>
-					<div class="form-group col-sm-6">
+					<div class="form-group col-sm-3">
 					<label> Ke Akun </label><br>
 					<select type="text" name="ke_akun" id="keakun" class="form-control" >
 					<option value="">--SILAHKAN PILIH--</option>
@@ -192,52 +208,27 @@
 
 <?php endif ?>   
 
-          <div class="form-group col-sm-6">
-          <label> Keterangan </label><br>
-          <input type="text" name="keterangan" autocomplete="off" id="keterangan" placeholder="Keterangan" class="form-control">
-          </div>
 
 
+<div class="form-group col-sm-3">
+    <label> Jumlah </label><br>
+    <input style="height:15px" type="text" name="jumlah" id="jumlah" autocomplete="off" placeholder="Jumlah" class="form-control" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" style="height: 20px" >
+</div>
 
-</div> 
+<div class="form-group col-sm-3">
+    <label><br><br><br></label>
+    <button type="submit" id="submit_produk" class="btn btn-success"> <i class='fa fa-plus'> </i> Tambah </button>
+</div>
+
+</div><!--div row closed-->
+
 <div class="row">
 
-					<div class="form-group col-sm-3">
-					<label> Dari Akun </label><br>
-					<select type="text" name="dari_akun" id="dariakun" class="form-control" >
-					<option value="">--SILAHKAN PILIH--</option>
-
-					 <?php 
-
-    
-    $query = $db->query("SELECT * FROM daftar_akun ");
-    while($data = mysqli_fetch_array($query))
-    {
-    
-    echo "<option value='".$data['kode_daftar_akun'] ."'>".$data['nama_daftar_akun'] ."</option>";
-    }
-    
-    
-    ?>
-   					</select>
-					</div>
-
-					<div class="form-group col-sm-3">
-					<label> Jumlah </label><br>
-					<input type="text" name="jumlah" id="jumlah" autocomplete="off" placeholder="Jumlah" class="form-control" onkeydown="return numbersonly(this, event);" onkeyup="javascript:tandaPemisahTitik(this);" style="height: 20px" >
-					</div>
-
-
-
-					
-					<div class="form-group col-sm-3">
-					<label><br><br><br></label>
-					<button type="submit" id="submit_produk" class="btn btn-success"> <i class='fa fa-plus'> </i> Tambah </button>
-					</div>
-					
-					
+<div class="form-group col-sm-6" id="col_sm_6">
+    <label> Jumlah Total </label><br>
+    <input style="height:15px" type="text" name="jumlah" id="jumlahtotal" readonly="" placeholder="Jumlah Total" class="form-control">
+</div>
 </div> <!-- tag penutup div row-->
-
 
 </form>
 
@@ -251,7 +242,8 @@
 </style>
 
       
-  <!--membuat tombol submit bayar & Hutang-->
+
+           <!--membuat tombol submit bayar & Hutang-->
      
 
       <a class="btn btn-info" href="form_kas_masuk.php" id="transaksi_baru" style="display: none"> <i class="fa fa-refresh"></i> Transaksi Baru</a>
@@ -267,7 +259,7 @@
       
         <div class="table-responsive">
       <!--tag untuk membuat garis pada tabel-->     
-  <table id="tableuser" class="table table-bordered">
+  <table id="tableuser" class="table table-bordered table-sm">
     <thead>
       <th> Dari Akun </th>
       <th> Ke Akun </th>
@@ -348,8 +340,17 @@ $(document).ready(function(){
           var keakun = $("#keakun").val();
           var session_id = $("#session_id").val();
           var dariakun = $("#dariakun").val();
-          
+if (dariakun == keakun)
+{
+
+alert("Nama Akun Tidak Boleh Sama");
+$("#dariakun").val('');
+}
+else
+{
+
           $.post("cek_tbs_kas_masuk.php",{session_id:session_id,keakun:keakun,dariakun:dariakun},function(data){
+            data = data.replace(/\s+/g, '');
           if (data == "ya") {
           
             alert("Akun Sudah Ada, Silakan Pilih Akun lain!");
@@ -360,14 +361,14 @@ $(document).ready(function(){
           }
 
 });
-
+}
         });
 });
 
 </script>
 
 
-<script>
+<script type="text/javascript">
    //perintah javascript yang diambil dari form tbs pembelian dengan id=form tambah produk
 
   
@@ -392,9 +393,7 @@ if (total == '')
         };
         var subtotal = parseInt(total,10) + parseInt(jumlah,10);
 
-     $("#dariakun").val('');
-     $("#jumlah").val('');
-     $("#keterangan").val('');
+
 
 if (ke_akun == "") {
 
@@ -421,12 +420,11 @@ else {
 	$.post("proses_tbs_kas_masuk.php", {session_id:session_id, keterangan:keterangan,dari_akun:dari_akun,ke_akun:ke_akun,jumlah:jumlah,tanggal:tanggal}, function(info) {
 
 
-     
+     $("#result").html(info);
      $("#result").load('tabel_kas_masuk.php');
      $("#dariakun").val('');
      $("#jumlah").val('');
      $("#keterangan").val('');
-     
        
    });
 }
@@ -446,7 +444,7 @@ $("#keakun").attr("disabled", true);
 
 </script>
 
-<script>
+<script type="text/javascript">
 
 $(document).ready(function(){
     var session_id = $("#session_id").val();
@@ -454,6 +452,7 @@ $.post("cek_jumlah_kas_masuk.php",
     {
         session_id: session_id
     }, function(data){
+      data = data.replace(/\s+/g, '');
         $("#jumlahtotal"). val(data);
     });
 
@@ -479,18 +478,27 @@ alert("Nama Akun Tidak Boleh Sama");
 });
 </script>
 
+
+
 <script>
 $(document).ready(function(){
     $("#dariakun").change(function(){
       var dari_akun = $("#dariakun").val();
-      var ke_akun = $("#keakun").val();
+      var session_id = $("#session_id").val();
 
-if (ke_akun == dari_akun)
-{
+      $.post("cek_tbs_kas_masuk.php",{session_id:session_id,dariakun:dariakun},function(data){
+      data = data.replace(/\s+/g, '');
+      
+          if (data == "ya") {          
+            alert("Akun Sudah Ada, Silakan Pilih Akun lain!");
+            $("#keterangan").val(data);
+          }
+          else{
+          $("#jumlah").val(data);
+          }
 
-alert("Nama Akun Tidak Boleh Sama");
-    $("#dariakun").val('');  
-}
+});
+
         
     });
 });
@@ -498,10 +506,8 @@ alert("Nama Akun Tidak Boleh Sama");
 
 
 
-<script>
+<script type="text/javascript">
  
-
-  
    $("#submit_kas_masuk").click(function(){
 
    	var session_id = $("#session_id").val();
@@ -527,6 +533,13 @@ alert("Nama Akun Tidak Boleh Sama");
     }
     else {
 
+   $.post("cek_submit_kas_masuk.php", {session_id:session_id}, function(data){
+if (data == 'kosong')
+{
+  alert("Anda Belum Memasukan Transaksi ");
+}
+else{
+
       $("#submit_kas_masuk").hide();
       $("#transaksi_baru").show();
    	
@@ -538,10 +551,13 @@ $.post("proses_kas_masuk.php", {session_id:session_id,no_faktur:no_faktur,ketera
 		$("#keakun").val('');
 		$("#jumlah").val('');
 		$("#keterangan").val('');
-       	$("#jumlahtotal").val('');
+    $("#jumlahtotal").val('');
    });
+
       $("#form_submit").submit(function(){
-    return false;
+        return false;
+      });
+  }
 });
 
 }

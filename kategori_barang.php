@@ -1,7 +1,5 @@
 <?php include 'session_login.php';
 
-	
-	
 	include 'header.php';
 	include 'navbar.php';
 	include 'sanitasi.php';
@@ -9,7 +7,7 @@
 
 	$query = $db->query("SELECT * FROM kategori");
 	
-	?>
+?>
 
 <style>
 tr:nth-child(even){background-color: #f2f2f2}
@@ -118,7 +116,7 @@ tr:nth-child(even){background-color: #f2f2f2}
    </div>
    
    
-   <button type="submit" id="submit_edit" class="btn btn-primary">Submit</button>
+   <button type="submit" id="submit_edit" data-nama="" class="btn btn-primary">Submit</button>
   </form>
   <div class="alert alert-success" style="display:none">
    <strong>Berhasil!</strong> Data Berhasil Di Edit
@@ -152,7 +150,7 @@ echo '<button type="button" class="btn btn-info " data-toggle="modal" data-targe
 
 <div class="table-responsive"><!-- membuat agar ada garis pada tabel, disetiap kolom -->
 <span id="table_baru">
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
 		<thead> 
 			
 			<th style="background-color: #4CAF50; color: white"> Nama Kategori </th>
@@ -177,14 +175,14 @@ $pilih_akses_otoritas = $db->query("SELECT hak_otoritas_hapus FROM otoritas_mast
 $otoritas = mysqli_num_rows($pilih_akses_otoritas);
 
     if ($otoritas > 0) {
-echo "<td><button class='btn btn-danger btn-hapus' data-id='". $data['id'] ."' data-kategori='". $data['nama_kategori'] ."'> <span class='glyphicon glyphicon-trash'> </span> Hapus </button> </td>";
+echo "<td><button class='btn btn-danger btn-hapus' data-id='". $data['id'] ."' data-kategori='". $data['nama_kategori'] ."'> <i class='fa fa-trash'> </i> Hapus </button> </td>";
 }
 
 $pilih_akses_otoritas = $db->query("SELECT hak_otoritas_edit FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND hak_otoritas_edit = '1'");
 $otoritas = mysqli_num_rows($pilih_akses_otoritas);
 
     if ($otoritas > 0) {
-echo "<td> <button class='btn btn-info btn-edit' data-kategori='". $data['nama_kategori'] ."' data-id='". $data['id'] ."'> <span class='glyphicon glyphicon-edit'> </span> Edit </button> </td>";
+echo "<td> <button class='btn btn-info btn-edit' data-kategori='". $data['nama_kategori'] ."' data-id='". $data['id'] ."'> <i class='fa fa-edit'> </i> Edit </button> </td>";
 }
 			echo "</tr>";
 		
@@ -214,9 +212,9 @@ mysqli_close($db);
 <script>
     $(document).ready(function(){
 
-
 //fungsi untuk menambahkan data
-		$("#submit_tambah").click(function(){
+ $(document).on('click','#submit_tambah',function(e){
+
 		var nama = $("#nama_kategori").val();
 
 		if (nama == ""){
@@ -225,7 +223,18 @@ mysqli_close($db);
 		
 		else {
 		
-		$.post('proses_tambah_kategori.php',{nama:nama},function(data){
+		// cek namanya
+ $.post('cek_nama_kategori_barang.php',{nama:nama}, function(data){
+
+        if(data == 1){
+          alert('Nama Yang Anda Masukkan Sudah Ada!');
+          $("#nama_kategori").val('');
+          $("#nama_kategori").focus();
+        }
+        else{
+
+// Start Proses
+   $.post('proses_tambah_kategori.php',{nama:nama},function(data){
 
 		if (data != '') {
 		$("#nama_kategori").val('');
@@ -238,8 +247,14 @@ mysqli_close($db);
 		}
 		
 		
-		});										
-									}
+		});
+// Finish Proses
+        }
+
+      }); // end post dari cek nama
+
+
+	}
 
 		function tutupmodal() {
 		
@@ -282,27 +297,38 @@ mysqli_close($db);
 // end fungsi hapus data
 
 //fungsi edit data 
-		$(".btn-edit").click(function(){
-		
+    $(document).on('click','.btn-edit',function(e){
+
 		$("#modal_edit").modal('show');
 		var nama = $(this).attr("data-kategori"); 
 		var id  = $(this).attr("data-id");
 		$("#kategori_edit").val(nama);
 		$("#id_edit").val(id);
-		
+		$("#submit_edit").attr("data-nama",nama);
+
 		
 		});
 		
 		$("#submit_edit").click(function(){
 		var nama = $("#kategori_edit").val();
 		var id = $("#id_edit").val();
+    	var show_name = $(this).attr("data-nama"); 
 
 		if (nama == ""){
 			alert("Nama Harus Diisi");
 		}
 		else {
+// cek namanya
+ $.post('cek_nama_kategori_barang.php',{nama:nama}, function(data){
+        if(data == 1){
+          alert('Nama yang anda masukan sudah ada!');
+          $("#kategori_edit").val(show_name); // menampilkan NAMA yang sebelumnya
+          $("#kategori_edit").focus();
+        }
+        else{
 
-					$.post("update_kategori.php",{id:id,nama:nama},function(data){
+// mulai proses edit
+$.post("update_kategori.php",{id:id,nama:nama},function(data){
 		if (data != '') {
 		$(".alert").show('fast');
 		$("#table_baru").load('tabel-kategori.php');
@@ -313,6 +339,13 @@ mysqli_close($db);
 		
 		
 		});
+// end proses edit
+
+        }
+
+      }); // end post dari cek nama
+		
+
 		}
 									
 

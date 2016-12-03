@@ -10,8 +10,6 @@ include 'sanitasi.php';
 $perintah = $db->query("SELECT * FROM item_keluar");
 
 
-
-
  ?>
 
 
@@ -35,7 +33,56 @@ echo '<a href="form_item_keluar.php" class="btn btn-info"> <i class="fa fa-plus"
 }
 
 ?>
-<br><br>
+<br>
+
+<button type="submit" name="submit" id="filter_1" class="btn btn-primary" > Filter Faktur </button>
+<button type="submit" name="submit" id="filter_2" class="btn btn-primary" > Filter Detail </button>
+
+
+<!--START FILTER FAKTUR-->
+<span id="fil_faktur">
+<form class="form-inline" action="show_filter_item_keluar.php" method="post" role="form">
+					
+					<div class="form-group"> 
+					
+					<input type="text" name="dari_tanggal" id="dari_tanggal" class="form-control" placeholder="Dari Tanggal" required="">
+					</div>
+					
+					<div class="form-group"> 
+					
+					<input type="text" name="sampai_tanggal" id="sampai_tanggal" class="form-control" placeholder="Sampai Tanggal" value="<?php echo date("Y-m-d"); ?>" required="">
+					</div>
+					
+					<button type="submit" name="submit" id="submit_filter_1" class="btn btn-success" ><i class="fa fa-eye"> </i> Lihat Faktur </button>
+
+					
+</form>
+<span id="result"></span>  
+</span>
+<!--END FILTER FAKTUR-->
+
+<!--START FILTER DETAIl-->
+<span id="fil_detail">
+<form class="form-inline" action="show_filter_item_keluar_detail.php" method="post" role="form">
+					
+					<div class="form-group"> 
+					
+					<input type="text" name="dari_tanggal" id="dari_tanggal2" class="form-control" placeholder="Dari Tanggal" required="">
+					</div>
+					
+					<div class="form-group"> 
+					
+					<input type="text" name="sampai_tanggal" id="sampai_tanggal2" class="form-control" placeholder="Sampai Tanggal" value="<?php echo date("Y-m-d"); ?>" required="">
+					</div>
+					
+					<button type="submit" name="submit" id="submit_filter_2" class="btn btn-success" ><i class="fa fa-eye"> </i> Lihat Detail </button>
+
+					
+</form>
+<span id="result"></span>  
+</span>
+<!--END FILTER DETAIl-->
+<br>
 
 <!-- Modal Hapus data -->
 <div id="modal_hapus" class="modal fade" role="dialog">
@@ -249,6 +296,102 @@ if ($item_masuk['item_keluar_hapus'] > 0) {
 // end fungsi hapus data
 
 		</script>
+<!=======H>
+
+<script>
+    $(function() {
+    $( "#dari_tanggal" ).datepicker({dateFormat: "yy-mm-dd"});
+    });
+    </script>
+
+
+    <script>
+    $(function() {
+    $( "#sampai_tanggal" ).datepicker({dateFormat: "yy-mm-dd"});
+    });
+    </script>
+
+    <script>
+    $(function() {
+    $( "#dari_tanggal2" ).datepicker({dateFormat: "yy-mm-dd"});
+    });
+    </script>
+
+
+    <script>
+    $(function() {
+    $( "#sampai_tanggal2" ).datepicker({dateFormat: "yy-mm-dd"});
+    });
+    </script>
+
+
+<script type="text/javascript">
+//fil FAKTUR
+$("#submit_filter_1").click(function() {
+$.post($("#formtanggal").attr("action"), $("#formtanggal :input").serializeArray(), function(info) { $("#dataabsen").html(info); });
+    
+});
+
+$("#formtanggal").submit(function(){
+    return false;
+});
+
+function clearInput(){
+    $("#formtanggal :input").each(function(){
+        $(this).val('');
+    });
+};
+
+
+</script>
+
+<script type="text/javascript">
+//fill DETAIL
+$("#submit_filter_2").click(function() {
+$.post($("#formtanggal").attr("action"), $("#formtanggal :input").serializeArray(), function(info) { $("#dataabsen").html(info); });
+    
+});
+
+$("#formtanggal").submit(function(){
+    return false;
+});
+
+function clearInput(){
+    $("#formtanggal :input").each(function(){
+        $(this).val('');
+    });
+};
+
+
+
+</script>
+
+<script type="text/javascript">
+		$(document).ready(function(){
+			$("#fil_faktur").hide();
+			$("#fil_detail").hide();
+	});
+</script>
+
+
+<script type="text/javascript">
+		$(document).ready(function(){
+				$("#filter_1").click(function(){		
+			$("#fil_faktur").show();
+			$("#filter_2").show();
+			$("#filter_1").hide();	
+			$("#fil_detail").hide();
+			});
+
+				$("#filter_2").click(function(){		
+			$("#fil_detail").show();	
+			$("#fil_faktur").hide();
+			$("#filter_2").hide();
+			$("#filter_1").show();
+			});
+
+	});
+</script>
 
 
 <?php 

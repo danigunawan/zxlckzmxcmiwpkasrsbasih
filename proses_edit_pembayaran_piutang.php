@@ -24,12 +24,12 @@ while ($data = mysqli_fetch_array($perintah))
 {
 
 
-$perintah1 = $db->query("INSERT INTO tbs_pembayaran_piutang (no_faktur_pembayaran, no_faktur_penjualan, tanggal, tanggal_jt, kredit, potongan, total, jumlah_bayar) VALUES ( '$data[no_faktur_pembayaran]', '$data[no_faktur_penjualan]', now(), '$data[tanggal_jt]', '$data[kredit]', '$data[potongan]', '$data[total]', '$data[jumlah_bayar]')");
+$perintah1 = $db->query("INSERT INTO tbs_pembayaran_piutang (no_faktur_pembayaran, no_faktur_penjualan, tanggal, tanggal_jt, kredit, potongan, total, jumlah_bayar, kode_pelanggan) VALUES ( '$data[no_faktur_pembayaran]', '$data[no_faktur_penjualan]', now(), '$data[tanggal_jt]', '$data[kredit]', '$data[potongan]', '$data[total]', '$data[jumlah_bayar]', '$data[kode_pelanggan]')");
 
 
 }
 
- header ('location:edit_pembayaran_piutang.php?no_faktur_pembayaran='.$no_faktur_pembayaran.'');
+   echo '<META HTTP-EQUIV="Refresh" Content="0; URL=edit_pembayaran_piutang.php?no_faktur_pembayaran='.$no_faktur_pembayaran.'">';
 
 //Untuk Memutuskan Koneksi Ke Database
 mysqli_close($db);   

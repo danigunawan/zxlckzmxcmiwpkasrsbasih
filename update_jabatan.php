@@ -4,13 +4,13 @@ include 'db.php';
 
 
 
-$query = $db->prepare("UPDATE jabatan SET id = ?, nama = ? 
+$query = $db->prepare("UPDATE jabatan SET nama = ? 
 WHERE id = ?");
 
-$query->bind_param("sss",
+$query->bind_param("si",
 	$id, $nama, $id);
 	
-	$id = stringdoang($_POST['id']);
+	$id = angkadoang($_POST['id']);
 	$nama = stringdoang($_POST['nama']);
 
 $query->execute();

@@ -30,13 +30,9 @@ $data1 = mysqli_fetch_array($query7);
 //total barang 1
             $total_1 = $jumlah_pembelian + $jumlah_item_masuk + $jumlah_retur_penjualan + $jumlah_stok_awal + $jumlah_fisik;
 
-
- 
-
             $query3 = $db->query("SELECT SUM(jumlah_barang) AS jumlah_penjualan FROM detail_penjualan WHERE kode_barang = '$data1[kode_barang]'");
             $cek3 = mysqli_fetch_array($query3);
             $jumlah_penjualan = $cek3['jumlah_penjualan'];
-
 
             $query4 = $db->query("SELECT SUM(jumlah) AS jumlah_item_keluar FROM detail_item_keluar WHERE kode_barang = '$data1[kode_barang]'");
             $cek4 = mysqli_fetch_array($query4);

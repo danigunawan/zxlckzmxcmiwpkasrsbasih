@@ -94,11 +94,11 @@ $ambil = mysqli_fetch_array($perintah);
   <!-- agar tampilan berada pada satu group -->
   <!-- memasukan teks pada kolom kode barang -->
   <div class="form-group"> 
-    <input type="text" class="form-control" name="kode_barang" id="kode_barang" autocomplete="off" placeholder="Kode Produk">
+    <input type="text" class="form-control" name="kode_barang" id="kode_barang" autocomplete="off" placeholder="Ketikkan Kode Produk">
   </div>
 
 <div class="form-group">
-  <input type="text" class="form-control" name="nama_barang" id="nama_barang" readonly="" placeholder="Nama Barang">
+  <input type="hidden" class="form-control" name="nama_barang" id="nama_barang" readonly="" placeholder="Nama Barang">
   </div>
 
 
@@ -313,6 +313,14 @@ $(document).ready(function(){
 
 </script>
 
+<script>
+$(function() {
+    $( "#kode_barang" ).autocomplete({
+        source: 'kode_barang_autocomplete.php'
+    });
+});
+</script>
+
 <!--untuk memasukkan perintah java script-->
 <script type="text/javascript">
 
@@ -344,6 +352,7 @@ $(document).ready(function(){
   $("#submit_produk").click(function(){
 
     var kode_barang = $("#kode_barang").val();
+    var kode_barang = kode_barang.substr(0, kode_barang.indexOf('('));
     var nama_barang = $("#nama_barang").val();
     var jumlah_barang = bersihPemisah(bersihPemisah(bersihPemisah(bersihPemisah($("#jumlah_barang").val()))));
     var jml_barang = $("#jml_barang").val();
@@ -570,14 +579,11 @@ $.post("cek_total_edit_item_keluar.php",
         $(document).ready(function(){
         $("#kode_barang").blur(function(){
 
-          var kode_barang = $(this).val();
+          var kode_barang = $('#kode_barang').val();
+    var kode_barang = kode_barang.substr(0, kode_barang.indexOf('('));
           var no_faktur = $("#nomorfaktur").val();
 
-          $.post("cek_barang_item_masuk.php",
-          {
-          kode_barang: $(this).val()
-          },
-          function(data){
+          $.post("cek_barang_item_masuk.php",{kode_barang:kode_barang},function(data){
           $("#jml_barang"). val(data);
           });
           
@@ -593,7 +599,7 @@ $.post("cek_total_edit_item_keluar.php",
           });////penutup function(data)
 
 
-      $.getJSON('lihat_item_keluar.php',{kode_barang:$(this).val()}, function(json){
+      $.getJSON('lihat_item_keluar.php',{kode_barang:kode_barang}, function(json){
       
       if (json == null)
       {

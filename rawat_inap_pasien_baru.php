@@ -33,6 +33,16 @@ $dq = mysqli_fetch_array($q);
 
 </style>
 
+<script type="text/javascript">
+  function isNumberKey(evt)
+      {
+         var charCode = (evt.which) ? evt.which : event.keyCode
+         if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+
+         return true;
+      }
+</script>
 
 <!-- Modalkamar -->
 <div id="myModal1" class="modal fade" role="dialog">
@@ -64,11 +74,19 @@ $dq = mysqli_fetch_array($q);
           $hasil = $db->query("SELECT * FROM bed WHERE sisa_bed != 0 ");
                                         
           while ($data =  $hasil->fetch_assoc()) {
+             $select_kelas = $db->query("SELECT id,nama FROM kelas_kamar");
+        while($out_kelas = mysqli_fetch_array($select_kelas))
+        {
+          if($data['kelas'] == $out_kelas['id'])
+          {
+            $kelas = $out_kelas['nama'];
+          }
+        }
           ?>
           <tr class="pilih2" 
           data-nama="<?php echo $data['nama_kamar']; ?>" 
           data-group-bed="<?php echo $data['group_bed']; ?>" >
-          <td><?php echo $data['kelas']; ?></td>
+          <td><?php echo $kelas; ?></td>
           <td><?php echo $data['nama_kamar']; ?></td>
           <td><?php echo $data['group_bed']; ?></td>
           <td><?php echo $data['fasilitas']; ?></td>
@@ -117,10 +135,11 @@ $dq = mysqli_fetch_array($q);
 <!--modal end Layanan Perusahaan-->
 
 
-<div class="container">
+<div style="padding-left:5%; padding-right:5%;">
   <h3>REGISTRASI PASIEN BARU RAWAT INAP</h3><hr>
 
-  
+
+  <a href="rawat_inap.php" class="btn btn-primary" data-toggle='tooltip' data-placement='top' title='Klik untuk kembali ke utama.'><i class="fa fa-reply"></i>Kembali</a>
 <form id="form_cari" action="proses_rawat_inap_baru.php" method="post" accept-charset="utf-8">
   
   <div class="form-group">
@@ -148,15 +167,17 @@ $dq = mysqli_fetch_array($q);
 
 <div class="card card-block">
 
+<input style="height: 20px;" type="hidden" class="form-control" id="token" name="token" value="Kosasih" autocomplete="off"> 
+ 
 <div class="form-group" >
   <label for="bed">Kamar:</label>
-  <input style="height: 20px;" type="text" class="form-control disable5" id="group_bed" name="group_bed" required="" >
+  <input style="height: 20px;" type="text" class="form-control disable5" id="group_bed" name="group_bed" autocomplete="off" required="" >
 </div>
 
 
 <div class="form-group" >
   <label for="bed">Bed:</label>
-  <input style="height: 20px;" type="text" class="form-control disable5" id="bed" name="bed" required=""  >
+  <input style="height: 20px;" type="text" class="form-control disable5" id="bed" name="bed" autocomplete="off"  required=""  >
 </div>
 </div><!--<div card card-block kamar-->
 
@@ -226,7 +247,7 @@ $dq = mysqli_fetch_array($q);
 
 <div class="form-group">
     <label for="umur">Umur:</label>
-    <input style="height: 20px;" type="text" class="form-control" id="umur" name="umur" autocomplete="off">
+    <input style="height: 20px;" type="text" required="" class="form-control" id="umur" name="umur" autocomplete="off">
 </div>
 
 
@@ -262,14 +283,14 @@ $dq = mysqli_fetch_array($q);
 
 <div class="form-group">
     <label for="no_telepon">No Telpon / HP:</label>
-    <input style="height: 20px;" type="text" class="form-control" id="no_telepon" name="no_telepon" autocomplete="off">
+    <input style="height: 20px;" type="text" required="" onkeypress="return isNumberKey(event)" class="form-control" id="no_telepon" name="no_telepon" autocomplete="off">
 </div>
 
 
 
 <div class="form-group" >
   <label for="umur">Perkiraan Menginap:</label>
-  <input style="height: 20px;" type="text" class="form-control" id="perkiraan_menginap" name="perkiraan_menginap" required=""  autocomplete="off">
+  <input style="height: 20px;" type="text" onkeypress="return isNumberKey(event)" class="form-control" id="perkiraan_menginap" name="perkiraan_menginap" required=""  autocomplete="off">
 </div>
 
 <div class="form-group" >
@@ -317,20 +338,19 @@ $dq = mysqli_fetch_array($q);
     <option value="<?php echo $nama_dokter; ?>"><?php echo $nama_dokter; ?></option>
             <option value="Tidak Ada">Tidak Ada</option>
  <?php 
-  $query = $db->query("SELECT nama FROM user WHERE otoritas = 'Dokter' ORDER BY status_pakai ASC "); 
+  $query = $db->query("SELECT nama FROM user WHERE otoritas = 'Dokter'  "); 
  while ( $data = mysqli_fetch_array($query))
   {
   echo "<option value='".$data['nama']."'>".$data['nama']."</option>";
   }
   ?>
-  <option value="">Tidak Ada</option>
   </select>
 </div>
 
 <div class="form-group">
     <label for="alamat">Dokter Pelaksana:</label>
     <select class="form-control ss" id="dokter_penanggung_jawab" name="dokter_penanggung_jawab" required="" autocomplete="off">
-          <option value="<?php echo $ss['nama_dokter'];?>"><?php echo $ss['nama_dokter'];?></option>
+  <option value="<?php echo $ss['nama_dokter'];?>"><?php echo $ss['nama_dokter'];?></option>
                   <option value="Tidak Ada">Tidak Ada</option>
     <?php 
     $query = $db->query("SELECT nama FROM user WHERE otoritas = 'Dokter' ");
@@ -377,7 +397,7 @@ $dq = mysqli_fetch_array($q);
 
 <div class="form-group">
     <label for="no_ktp">No Keluarga:</label>
-    <input style="height: 20px;" type="text" class="form-control" id="no_kk" name="no_kk" autocomplete="off">
+    <input style="height: 20px;" type="text" onkeypress="return isNumberKey(event)" class="form-control" id="no_kk" name="no_kk" autocomplete="off">
   </div>
 
   <div class="form-group">
@@ -388,7 +408,7 @@ $dq = mysqli_fetch_array($q);
 
 <div class="form-group">
     <label for="no_ktp">No KTP:</label>
-    <input style="height: 20px;" type="text" class="form-control" id="no_ktp" name="no_ktp" autocomplete="off">
+    <input style="height: 20px;" type="text" onkeypress="return isNumberKey(event)" class="form-control" id="no_ktp" name="no_ktp" autocomplete="off">
   </div>
 
 
@@ -467,7 +487,7 @@ $dq = mysqli_fetch_array($q);
 
 <div class="form-group">
     <label for="no_hp_penanggung">No Hp Penganggung Jawab :</label>
-    <input style="height: 20px;" type="text" class="form-control" id="no_hp_penanggung" name="no_hp_penanggung" autocomplete="off">
+    <input style="height: 20px;" type="text" onkeypress="return isNumberKey(event)" class="form-control" id="no_hp_penanggung" name="no_hp_penanggung" autocomplete="off">
 </div>
 
 <div class="form-group">
@@ -505,40 +525,39 @@ $dq = mysqli_fetch_array($q);
 <center><h4>Tanda Tanda Vital</h4></center>
 <div class="form-group">
  <label >Sistole / Diastole (mmHg)</label>
-  <input style="height: 20px;" type="text" class="form-control" id="sistole_distole" name="sistole_distole" autocomplete="off"> 
+  <input style="height: 20px;" type="text" onkeypress="return isNumberKey(event)" class="form-control" id="sistole_distole" name="sistole_distole" autocomplete="off"> 
 </div>
 
 
 <div class="form-group ">
   <label >Frekuensi Pernapasan (kali/menit)</label>
-  <input style="height: 20px;" type="text" class="form-control" id="respiratory_rate" name="respiratory_rate" autocomplete="off"> 
+  <input style="height: 20px;" type="text" onkeypress="return isNumberKey(event)" class="form-control" id="respiratory_rate" name="respiratory_rate" autocomplete="off"> 
 </div>
  
 
 <div class="form-group">
   <label >Suhu (°C)</label>
-  <input style="height: 20px;" type="text" class="form-control" id="suhu" name="suhu" autocomplete="off"> 
+  <input style="height: 20px;" type="text" onkeypress="return isNumberKey(event)" class="form-control" id="suhu" name="suhu" autocomplete="off"> 
 </div>
   
 
 <div class="form-group ">
    <label >Nadi (kali/menit)</label>
-  <input style="height: 20px;" type="text" class="form-control" id="nadi" name="nadi" autocomplete="off"> 
+  <input style="height: 20px;" type="text" onkeypress="return isNumberKey(event)" class="form-control" id="nadi" name="nadi" autocomplete="off"> 
 </div>
 
 
 <div class="form-group ">
   <label >Berat Badan (kg)</label>
-  <input style="height: 20px;" type="text" class="form-control" id="berat_badan" name="berat_badan" autocomplete="off"> 
+  <input style="height: 20px;" type="text" onkeypress="return isNumberKey(event)" class="form-control" id="berat_badan" name="berat_badan" autocomplete="off"> 
 </div>
 
 <div class="form-group ">
   <label >Tinggi Badan (cm)</label>
-  <input style="height: 20px;" type="text" class="form-control" id="tinggi_badan" name="tinggi_badan" autocomplete="off"> 
+  <input style="height: 20px;" type="text" onkeypress="return isNumberKey(event)" class="form-control" id="tinggi_badan" name="tinggi_badan" autocomplete="off"> 
 </div>
 
 
-<input style="height: 20px;" type="hidden" class="form-control" id="token" name="token" value="Kosasih" autocomplete="off"> 
 
 
 <center><button accesskey="d" type="submit" id="submit_daftar" class="btn btn-info hug"><i class="fa fa-plus"></i> <u>D</u>aftar Rawat Inap</button></center>
@@ -560,11 +579,11 @@ $dq = mysqli_fetch_array($q);
 <!--script datepicker-->
 <script>
   $(function() {
-  $( "#tanggal_lahir" ).pickadate({ selectYears: 100, format: 'dd/mm/yyyy'});
+  $( "#tanggal_lahir" ).pickadate({ selectYears: 100, format: 'dd-mm-yyyy'});
   });
   </script>
 <!--end script datepicker-->
-
+  
 
 
 
@@ -575,6 +594,20 @@ $(".ss").chosen({no_results_text: "Oops, Tidak Ada !"});
 <!--script end chossen-->
 
 
+ <script type="text/javascript">
+          $("#umur").focus(function(){
+          $("#tanggal_lahir").focus();    
+        });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+    // Tooltips Initialization
+    $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+    });
+    });
+</script>
 
 <!--script ambil data pasien modal-->
 <script type="text/javascript">
@@ -596,10 +629,10 @@ function hitung_umur(tanggal_input){
 
 var now = new Date(); //Todays Date   
 var birthday = tanggal_input;
-birthday=birthday.split("/");   
+birthday=birthday.split("-");   
 
-var dobMonth= birthday[0]; 
-var dobDay= birthday[1];
+var dobDay = birthday[0]; 
+var dobMonth = birthday[1];
 var dobYear= birthday[2];
 
 var nowDay= now.getDate();
@@ -676,10 +709,10 @@ function hitung_umur(tanggal_input){
 
 var now = new Date(); //Todays Date   
 var birthday = tanggal_input;
-birthday=birthday.split("/");   
+birthday=birthday.split("-");   
 
-var dobMonth= birthday[0]; 
-var dobDay= birthday[1];
+var dobDay = birthday[0]; 
+var dobMonth = birthday[1];
 var dobYear= birthday[2];
 
 var nowDay= now.getDate();

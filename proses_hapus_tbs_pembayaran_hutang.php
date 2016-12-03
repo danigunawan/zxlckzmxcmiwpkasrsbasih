@@ -5,7 +5,8 @@ include 'db.php';
 $query = $db->query("DELETE FROM tbs_pembayaran_hutang");
 
 if ($query == TRUE) {
-	header('location:form_pembayaran_hutang.php');
+
+	echo '<META HTTP-EQUIV="Refresh" Content="0; URL=form_pembayaran_hutang.php">';
 }
 else{
 	echo"gagal";

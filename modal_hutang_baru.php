@@ -37,9 +37,10 @@ include 'db.php';
         while ($data1 = mysqli_fetch_array($perintah))
         {
 
-           $query00 = $db->query("SELECT no_faktur_pembelian FROM tbs_pembayaran_hutang WHERE no_faktur_pembelian = '$data1[no_faktur]'");
-          $data00 = mysqli_num_rows($query00);
-        if ($data00 > 0) 
+           $query00 = $db->query("SELECT session_id FROM tbs_pembayaran_hutang WHERE no_faktur_pembelian = '$data1[no_faktur]'");
+          $data00 = mysqli_fetch_array($query00);
+          
+        if ($data00['session_id'] != '')
         {
           
         }

@@ -7,7 +7,7 @@ include_once 'sanitasi.php';
 $tanggal = date("Y-m-d");
 
 
-$query7 = $db->query("SELECT * FROM registrasi WHERE (jenis_pasien = 'Rawat Jalan' AND  status = 'Batal Rawat') OR status = 'Rujuk Rawat Jalan' OR status = 'Rujuk Keluar Klinik Ditangani' OR status = 'Rujuk Keluar Klinik Tidak Ditangani' ORDER BY id ASC");
+$query7 = $db->query("SELECT * FROM registrasi WHERE (jenis_pasien = 'Rawat Jalan' AND  status = 'Batal Rawat') OR status = 'Rujuk Rawat Jalan' OR status = 'Rujuk Keluar Ditangani' OR status = 'Rujuk Keluar Tidak Ditangani' ORDER BY id ASC");
 
 
 
@@ -73,12 +73,17 @@ opacity: 0.9;
 </style>
 
 
-<div class="container">
+<div style="padding-left:5%; padding-right:5%;">
+
+<h3>DATA PASIEN REGISTRASI RAWAT JALAN</h3><hr>
+
+
 <ul class="nav nav-tabs yellow darken-4" role="tablist">
-        <li class="nav-item"><a class="nav-link" href='registrasi_raja.php'> Antrian Pasien Rawat Jalan </a></li>
-        <li class="nav-item"><a class="nav-link" href='pasien_sudah_panggil.php' > Pasien Sudah Dipanggil </a></li>
-        <li class="nav-item"><a class="nav-link" href='pasien_sudah_masuk.php' > Pasien Sudah Masuk R.Dokter </a></li>
-        <li class="nav-item"><a class="nav-link  active" href='pasien_batal_rujuk.php' > Pasien Batal / Rujuk Ke Luar </a></li>
+        <li class="nav-item"><a class="nav-link" href='registrasi_raja.php'> Antrian Pasien R. Jalan </a></li>
+        <li class="nav-item"><a class="nav-link" href='pasien_sudah_panggil.php' > Pasien Dipanggil </a></li>
+        <li class="nav-item"><a class="nav-link" href='pasien_sudah_masuk.php' > Pasien Masuk R.Dokter </a></li>
+        <li class="nav-item"><a class="nav-link active" href='pasien_batal_rujuk.php' > Pasien Batal / Rujuk Ke Luar </a></li>
+        <li class="nav-item"><a class="nav-link" href='pasien_registrasi_rj_belum_selesai.php' >Pasien Belum Selesai Pembayaran </a></li>
 </ul>
 <br><br>
 

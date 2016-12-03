@@ -1,15 +1,13 @@
 <?php 
-
-include 'header.php';
 include 'db.php';
 
 $no_faktur = $_POST['no_faktur'];
 $kode_barang = $_POST['kode_barang'];
 
 
- $retur = $db->query ("SELECT no_faktur_penjualan, kode_barang, tanggal FROM detail_retur_penjualan WHERE no_faktur_penjualan = '$no_faktur' AND kode_barang = '$kode_barang'");
+ $retur = $db->query ("SELECT no_faktur_retur, kode_barang, tanggal FROM detail_retur_penjualan WHERE no_faktur_penjualan = '$no_faktur' AND kode_barang = '$kode_barang'");
 
- $piutang = $db->query ("SELECT no_faktur_penjualan, tanggal FROM detail_pembayaran_piutang WHERE no_faktur_penjualan = '$no_faktur'");
+ $piutang = $db->query ("SELECT no_faktur_pembayaran, tanggal FROM detail_pembayaran_piutang WHERE no_faktur_penjualan = '$no_faktur'");
 
  ?>
 
@@ -53,7 +51,7 @@ tr:nth-child(even){background-color: #f2f2f2}
           {
           //menampilkan data
           echo "<tr>
-          <td>". $data1['no_faktur_penjualan'] ."</td>
+          <td>". $data1['no_faktur_retur'] ."</td>
           <td>". $data1['kode_barang'] ."</td>
           <td>". $data1['tanggal'] ."</td>
           <td> Retur Penjualan </td>
@@ -74,7 +72,7 @@ tr:nth-child(even){background-color: #f2f2f2}
       {
         //menampilkan data
       echo "<tr>
-      <td>". $data1['no_faktur_penjualan'] ."</td>
+      <td>". $data1['no_faktur_pembayaran'] ."</td>
       <td> - </td>
       <td>". $data1['tanggal'] ."</td>
       <td> Pembayaran Piutang </td>
@@ -90,5 +88,4 @@ mysqli_close($db);
     
     </tbody>
 </table>
-
 

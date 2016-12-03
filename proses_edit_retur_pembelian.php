@@ -40,8 +40,7 @@ $perintah1 = $db->query("INSERT INTO tbs_retur_pembelian (no_faktur_retur, no_fa
 
 
 }
-
- header ('location:edit_retur_pembelian.php?no_faktur_retur='.$no_faktur_retur.'&nama='.$nama.'&cara_bayar='.$cara_bayar.'');
+echo '<META HTTP-EQUIV="Refresh" Content="0; URL=edit_retur_pembelian.php?no_faktur_retur='.$no_faktur_retur.'&nama='.$nama.'&cara_bayar='.$cara_bayar.'">';
 
 //Untuk Memutuskan Koneksi Ke Database
 mysqli_close($db);   

@@ -23,8 +23,7 @@ $perintah1 = $db->query("INSERT INTO tbs_item_keluar (no_faktur, kode_barang, na
 
 
 }
-
- header ('location:edit_item_keluar.php?no_faktur='.$no_faktur.'');
+echo '<META HTTP-EQUIV="Refresh" Content="0; URL=edit_item_keluar.php?no_faktur='.$no_faktur.'">';
 
 
 //Untuk Memutuskan Koneksi Ke Database

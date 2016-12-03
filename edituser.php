@@ -10,7 +10,7 @@
  $id = $_GET['id'];
  
  // menampilkan seluruh data dari tabel user berdasarkan id
- $query = $db->query("SELECT * FROM user WHERE id = '$id'");
+ $query = $db->query("SELECT u.username, u.nama, u.alamat, u.jabatan, u.otoritas, u.tipe, u.status_sales, u.id, j.nama FROM user u INNER JOIN jabatan j ON u.jabatan = j.id WHERE u.id = '$id'");
  
  // menyimpan data sementara yang ada pada $query
  $data = mysqli_fetch_array($query);
@@ -47,7 +47,7 @@
 					<div class="form-group">
 					<label>Jabatan </label><br>
 					<select type="text" name="jabatan" class="form-control" required="" >
-					<option value="<?php echo $data['jabatan']; ?>"><?php echo $data['jabatan']; ?></option>
+					<option value="<?php echo $data['jabatan']; ?>"><?php echo $data['nama']; ?></option>
 
 <?php 
 
@@ -108,13 +108,17 @@ mysqli_close($db);
 					
 					<?php elseif ($data['tipe'] == '4'): ?>
 					<option value="<?php echo $data['tipe']; ?>">Admin</option>
+
+					<?php elseif ($data['tipe'] == '5'): ?>
+					<option value="<?php echo $data['tipe']; ?>">Lain - lain</option>
 						
 					<?php endif ?>
 					
+					<option value="4">Admin</option>
 					<option value="1">Dokter</option>
 					<option value="2" >Paramedik</option>
 					<option value="3">Farmasi</option>
-					<option value="4">Admin</option>
+					<option value="5">Lain - lain</option>
 					</select>
 					</div>
 
@@ -140,6 +144,9 @@ mysqli_close($db);
 					<input type="hidden" name="id" value="<?php echo $id; ?>">
 
 					<!-- membuat tombol submit -->
-					<button type="submit" class="btn btn-info">Edit</button>
+					<button type="submit" class="btn btn-info"><i class="fa fa-save"></i> Simpan</button>
 </div> <!-- tag penutup div class container -->
 </form> <!-- tag penutup form -->
+
+
+<?php include 'footer.php'; ?>

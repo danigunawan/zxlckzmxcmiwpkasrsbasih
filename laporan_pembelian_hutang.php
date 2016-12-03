@@ -46,7 +46,7 @@ include 'db.php';
  <br>
  <div class="table-responsive"><!--membuat agar ada garis pada tabel disetiap kolom-->
 <span id="result">
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
 		<thead>
 			<th style="background-color: #4CAF50; color: white;"> Tanggal </th>
 			<th style="background-color: #4CAF50; color: white;"> Nomor Faktur </th>

@@ -24,7 +24,7 @@ $perintah1 = $db->query("INSERT INTO tbs_item_masuk (no_faktur, kode_barang, nam
 
 }
 
- header ('location:edit_item_masuk.php?no_faktur='.$no_faktur.'');
+ echo '<META HTTP-EQUIV="Refresh" Content="0; URL=edit_item_masuk.php?no_faktur='.$no_faktur.'">';
 
 //Untuk Memutuskan Koneksi Ke Database
 mysqli_close($db);   

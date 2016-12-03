@@ -5,10 +5,6 @@ include 'db.php';
 include_once 'sanitasi.php';
 
 
-
-
-
-
 // AKHIR untuk FEGY NATION
 
 ?>
@@ -26,6 +22,8 @@ tr:nth-child(even){background-color: #f2f2f2}
     <!-- Modal content-->
     <div class="modal-content">
     <div class="modal-header">
+
+    <h3><center><b>Data Layanan</b></center></h3>
         <button type="button" class="close" data-dismiss="modal">&times;</button>       
     </div>
     <div class="modal-body">
@@ -65,15 +63,24 @@ tr:nth-child(even){background-color: #f2f2f2}
 
 
 <h3><b> DATA PENJAMIN </b></h3> <hr>
+<?php 
 
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal"><span class="fa fa-plus"></span> Penjamin </button>
+$pilih_akses_penjamin_tambah = $db->query("SELECT penjamin_tambah FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]' AND penjamin_tambah = '1'");
+$penjamin_tambah = mysqli_num_rows($pilih_akses_penjamin_tambah);
+
+ ?>
+
+ <?php if ($penjamin_tambah > 0): ?>
+   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal"><span class="fa fa-plus"></span> Penjamin </button>
 <br>
 <br>
+ <?php endif ?>
+
 
 
 <span id="table_baru">
 <div class="table-responsive">  
-<table id="table-pelamar" class="table table-bordered">
+<table id="table-pelamar" class="table table-bordered table-sm">
     <thead>
       <tr>
 
@@ -100,8 +107,43 @@ tr:nth-child(even){background-color: #f2f2f2}
 
       <td>". $data['nama']."</td>
       <td>". $data['alamat']."</td>
-      <td>". $data['no_telp']."</td>
-      <td>". $data['harga']."</td>";
+      <td>". $data['no_telp']."</td>";
+
+      if ($data['harga'] == 'harga_1') {
+        
+      echo "<td>Level 1</td>";
+
+      }
+      else if ($data['harga'] == 'harga_2') {
+        
+      echo "<td>Level 2</td>";
+
+      }
+      else if ($data['harga'] == 'harga_3') {
+        
+      echo "<td>Level 3</td>";
+
+      }
+      else if ($data['harga'] == 'harga_4') {
+        
+      echo "<td>Level 4</td>";
+
+      }
+      else if ($data['harga'] == 'harga_5') {
+        
+      echo "<td>Level 5</td>";
+
+      }
+      else if ($data['harga'] == 'harga_6') {
+        
+      echo "<td>Level 6</td>";
+
+      }
+      else if ($data['harga'] == 'harga_7') {
+        
+      echo "<td>Level 7</td>";
+
+      }
       ?>
       
       <?php if ($data['jatuh_tempo'] == ''){
@@ -116,13 +158,29 @@ tr:nth-child(even){background-color: #f2f2f2}
       <?php 
 
       echo" <td><button class='btn btn-success detaili' data-id='".$data['id']."'><span class='glyphicon glyphicon-list'></span> Lihat Layanan </button>
-      </td>
-      <td><a href='edit_penjamin.php?id=".$data['id']."'class='btn btn-warning'><span class='glyphicon glyphicon-wrench'></span> Edit </a>
-      </td>
-      <td><button class='btn btn-danger delete' data-id='".$data['id']."'><span class='glyphicon glyphicon-trash'></span> Hapus </button>
-      </td>
+      </td>";
 
-      </tr>";
+$pilih_akses_penjamin = $db->query("SELECT penjamin_edit, penjamin_hapus FROM otoritas_master_data WHERE id_otoritas = '$_SESSION[otoritas_id]'");
+$penjamin = mysqli_fetch_array($pilih_akses_penjamin);
+
+if ($penjamin['penjamin_edit'] > 0) {
+echo "
+      <td><a href='edit_penjamin.php?id=".$data['id']."'class='btn btn-warning'><span class='glyphicon glyphicon-wrench'></span> Edit </a>
+      </td>";
+}
+else{
+  echo "<td> </td>";
+}
+
+if ($penjamin['penjamin_hapus'] > 0) {
+echo "<td><button class='btn btn-danger delete' data-id='".$data['id']."'><span class='glyphicon glyphicon-trash'></span> Hapus </button>
+      </td>";
+}
+else{
+  echo "<td> </td>";
+}
+
+      echo "</tr>";
       
       }
     ?> 
@@ -208,6 +266,29 @@ $(document).ready(function(){
     $('#table-pelamar').DataTable();
 });
 
+</script>
+
+
+<script type="text/javascript">
+$("#nama").blur(function(){
+
+var nama = $("#nama").val();
+// cek namanya
+ $.post('cek_penjamin.php',{nama:nama}, function(data){
+
+        if(data == 1){
+          alert('Nama Penjamin sudah ada!');
+          $("#nama").val('');
+          $("#nama").focus();
+        }
+        else{
+
+// Finish Proses
+        }
+
+      }); // end post dari cek nama
+
+});
 </script>
 
 <!--   script untuk detail layanan -->

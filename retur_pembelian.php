@@ -15,7 +15,7 @@ $perintah = $db->query("SELECT p.id,p.no_faktur_retur,p.keterangan,p.total,p.nam
 
 
 
-<div class="container"> <!--start of container-->
+<div style="padding-right:5%; padding-left:5%;"> <!--start of container-->
 
 <h3><b> DATA RETUR PEMBELIAN </b></h3><hr>
 

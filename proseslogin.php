@@ -13,6 +13,7 @@
    $data = mysqli_fetch_array($querymaster);   
    $otoritas = $data['otoritas'];
    $nama = $data['nama'];
+   $id_user = $data['id'];
 
 
    $id_otoritas =  $db->query("SELECT id FROM hak_otoritas WHERE nama = '$data[otoritas]'");
@@ -33,6 +34,7 @@
                 $_SESSION['otoritas'] = $otoritas;
                 $_SESSION['user_name'] = $username;
                 $_SESSION['nama'] = $nama;
+                $_SESSION['id'] = $id_user;
                 
                 echo '<META HTTP-EQUIV="Refresh" Content="0; URL=home.php">';
                 

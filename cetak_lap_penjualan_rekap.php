@@ -92,7 +92,7 @@ $t_barang = $cek011['total_barang'];
             <thead>
                   <th> Nomor Faktur </th>                  
                   <th> Tanggal </th>
-                  <th> Kode Pelanggan</th>
+                  <th> No RM </th>
                   <th> Jumlah Barang </th>
                   <th> Subtotal </th>
                   <th> Potongan </th>

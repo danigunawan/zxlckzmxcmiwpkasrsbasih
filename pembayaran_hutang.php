@@ -19,7 +19,7 @@ $perintah = $db->query("SELECT p.id,p.no_faktur_pembayaran,p.keterangan,p.total,
 tr:nth-child(even){background-color: #f2f2f2}
 </style>
 
-<div class="container"> <!--start of container-->
+<div style="padding-left: 5%; padding-right: 5%"> <!--start of container-->
 
 <h3><b>DATA PEMBAYARAN HUTANG</b></h3><hr>
 
@@ -86,7 +86,7 @@ echo '<a href="form_pembayaran_hutang.php"  class="btn btn-info" > <i class="fa 
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Detail Pembayaran Hutang </h4>
+        <h4 class="modal-title"><center><b>Detail Pembayaran Hutang</b></center> </h4>
       </div>
 
       <div class="modal-body">
@@ -98,7 +98,7 @@ echo '<a href="form_pembayaran_hutang.php"  class="btn btn-info" > <i class="fa 
 
       <div class="modal-footer">
         
-        <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"> Close</i></button>
+       <center> <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"> Close</i></button></center>
       </div>
     </div>
 
@@ -108,7 +108,7 @@ echo '<a href="form_pembayaran_hutang.php"  class="btn btn-info" > <i class="fa 
 
 <div class="table-responsive"><!--membuat agar ada garis pada tabel disetiap kolom-->
 <span id="table_baru">
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
 		<thead>
 			<th style="background-color: #4CAF50; color:white"> Detail </th>
 
@@ -132,7 +132,6 @@ if ($pembayaran_hutang['pembayaran_hutang_hapus'] > 0) {
 			<th style="background-color: #4CAF50; color:white"> Nomor Faktur </th>
 			<th style="background-color: #4CAF50; color:white"> Tanggal </th>
 			<th style="background-color: #4CAF50; color:white"> Jam </th>
-			<th style="background-color: #4CAF50; color:white"> Nama Suplier </th>
 			<th style="background-color: #4CAF50; color:white"> Keterangan </th>
 			<th style="background-color: #4CAF50; color:white"> Total </th>
 			<th style="background-color: #4CAF50; color:white"> User Buat </th>
@@ -174,7 +173,6 @@ if ($pembayaran_hutang['pembayaran_hutang_hapus'] > 0) {
 			<td>". $data1['no_faktur_pembayaran'] ."</td>
 			<td>". $data1['tanggal'] ."</td>
 			<td>". $data1['jam'] ."</td>
-			<td>". $data1['nama'] ."</td>
 			<td>". $data1['keterangan'] ."</td>
 			<td>". rp($data1['total']) ."</td>
 			<td>". $data1['user_buat'] ."</td>

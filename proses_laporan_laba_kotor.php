@@ -1,16 +1,12 @@
 <?php 
-
 include 'sanitasi.php';
 include 'db.php';
-
 
 $dari_tanggal = stringdoang($_POST['dari_tanggal']);
 $sampai_tanggal = stringdoang($_POST['sampai_tanggal']);
 
-
 //menampilkan seluruh data yang ada pada tabel penjualan
-$penjualan = $db->query("SELECT p.id,p.no_faktur,p.total,p.kode_pelanggan,p.tanggal,p.tanggal_jt,p.jam,p.user,p.sales,p.kode_meja,p.status,p.potongan,p.tax,p.sisa,p.kredit,pl.nama_pelanggan FROM penjualan p INNER JOIN pelanggan pl ON p.kode_pelanggan = pl.kode_pelanggan WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal'  ORDER BY p.id DESC");
-
+$penjualan = $db->query("SELECT p.id,p.no_faktur,p.total,p.kode_pelanggan,p.tanggal,p.tanggal_jt,p.jam,p.user,p.sales,p.kode_meja,p.status,p.potongan,p.tax,p.sisa,p.kredit,pl.nama_pelanggan FROM penjualan p INNER JOIN pelanggan pl ON p.kode_pelanggan = pl.kode_pelanggan WHERE tanggal >= '$dari_tanggal' AND tanggal <= '$sampai_tanggal' ORDER BY p.id DESC");
 
 
 
@@ -55,7 +51,7 @@ th {
 		<?php
 
 			//menyimpan data sementara yang ada pada $perintah
-			while ($data_penjualan = mysqli_fetch_array($penjualan))
+			while($data_penjualan = mysqli_fetch_array($penjualan))
 
 			{
 

@@ -7,8 +7,6 @@
 
     $no_faktur_pembelian = stringdoang($_POST['no_faktur_pembelian']);
     
-
-
     
     $cek2 = $db->query("SELECT * FROM tbs_pembayaran_hutang WHERE no_faktur_pembelian = '$no_faktur_pembelian'");
     $data= mysqli_num_rows($cek2); 
@@ -41,12 +39,12 @@ if ($data > 0){
 else
 {
 
-        $perintah = $db->prepare("INSERT INTO tbs_pembayaran_hutang (session_id,no_faktur_pembelian,tanggal,tanggal_jt,kredit,potongan,total,jumlah_bayar) 
-        VALUES (?,?,now(),?,?,?,?,?)");
+        $perintah = $db->prepare("INSERT INTO tbs_pembayaran_hutang (session_id,no_faktur_pembelian,tanggal,tanggal_jt,kredit,potongan,total,jumlah_bayar,suplier) 
+        VALUES (?,?,now(),?,?,?,?,?,?)");
          
          
-         $perintah->bind_param("sssiiii",
-         $session_id, $no_faktur_pembelian, $tanggal_jt, $kredit, $potongan, $total_kredit, $jumlah_bayar);
+         $perintah->bind_param("sssiiiis",
+         $session_id, $no_faktur_pembelian, $tanggal_jt, $kredit, $potongan, $total_kredit, $jumlah_bayar,$suplier);
          
            $session_id = $_POST['session_id'];
          $no_faktur_pembelian = stringdoang($_POST['no_faktur_pembelian']);
@@ -55,6 +53,7 @@ else
          $total_kredit = angkadoang($_POST['total']);            
          $jumlah_bayar = angkadoang($_POST['jumlah_bayar']);
          $potongan = angkadoang($_POST['potongan']);
+         $suplier = stringdoang($_POST['suplier']);
 
          $perintah->execute();
          
@@ -80,10 +79,16 @@ else
     //menyimpan data sementara yang ada pada $perintah
       while ($data1 = mysqli_fetch_array($perintah))
       {
-
+        $suplier = $db->query("SELECT id,nama FROM suplier WHERE id = '$data1[suplier]'");
+        $out = mysqli_fetch_array($suplier);
+        if ($data1['suplier'] == $out['id'])
+        {
+          $out['nama'];
+        }
         // menampilkan data
       echo "<tr class='tr-id-".$data1['id']."'>
       <td>". $data1['no_faktur_pembelian'] ."</td>
+      <td>". $out['nama'] ."</td>
       <td>". $data1['tanggal'] ."</td>
       <td>". $data1['tanggal_jt'] ."</td>
       <td>". rp($data1['kredit']) ."</td>

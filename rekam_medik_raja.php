@@ -8,6 +8,8 @@ include_once 'db.php';
 $query = $db->query("SELECT rekam_medik.no_reg, rekam_medik.no_rm, rekam_medik.nama, rekam_medik.alamat,
   rekam_medik.umur, rekam_medik.jenis_kelamin, rekam_medik.poli, rekam_medik.dokter, rekam_medik.jam, rekam_medik.tanggal_periksa,rekam_medik.id FROM rekam_medik INNER JOIN registrasi ON rekam_medik.no_reg = registrasi.no_reg WHERE registrasi.status != 'Batal Rawat' AND registrasi.status != 'Rujuk Keluar Klinik Tidak Ditangani' AND rekam_medik.status IS NULL ORDER BY id DESC");
 
+$pilih_akses_rekam_medik = $db->query("SELECT rekam_medik_rj_lihat, rekam_medik_rj_tambah, rekam_medik_rj_edit, rekam_medik_rj_hapus FROM otoritas_rekam_medik WHERE id_otoritas = '$_SESSION[otoritas_id]'");
+$rekam_medik = mysqli_fetch_array($pilih_akses_rekam_medik);
 
 
  ?>
@@ -64,8 +66,7 @@ th {
     color: white;
 }
 </style>
-
-<div class="container">
+<div style="padding-left:5%; padding-right:5%;">
  <h3>DATA REKAM MEDIK RAWAT JALAN</h3><hr>
 
 
@@ -81,7 +82,7 @@ th {
 
 
 <div class="table-responsive">
-<table id="table_rawat_inap" class="table table-bordered">
+<table id="table_rawat_inap" class="table table-bordered table-sm">
  
     <thead>
       <tr>
@@ -97,7 +98,6 @@ th {
          <th style='background-color: #4CAF50; color: white'>Jam</th>
          <th style='background-color: #4CAF50; color: white'>Tanggal Periksa</th> 
          <th style='background-color: #4CAF50; color: white'>Aksi Rekam Medik</th>
-         <th style='background-color: #4CAF50; color: white'>Rujuk Laboratorium</th>
         <th style='background-color: #4CAF50; color: white'>Selesai</th>
     </tr>
     </thead>
@@ -120,48 +120,39 @@ while($data = mysqli_fetch_array($query))
             <td>". $data['poli']."</td>
             <td>". $data['dokter']."</td>
             <td>". $data['jam']."</td>
-            <td>". $data['tanggal_periksa']."</td>
-      <td><a href='kepala_rekam_medik_2.php?no_reg=".$data['no_reg']."&tgl=".$data['tanggal_periksa']."&jam=".$data['jam']."' class='btn btn-warning'><span class='glyphicon glyphicon-eye-open'></span> Input Rekam Medik</a></td>";
+            <td>". $data['tanggal_periksa']."</td>";
+      if ($rekam_medik['rekam_medik_rj_lihat'] > 0) {
+        echo "<td><a href='input_rekammedik_raja.php?no_reg=".$data['no_reg']."&tgl=".$data['tanggal_periksa']."&jam=".$data['jam']."' class='btn-floating btn-info btn-small'><i class='fa fa-medkit '></i></a></td>";
+      
 
-?>
-
-<?php 
-
+        
         $table23 = $db->query("SELECT status FROM penjualan WHERE no_reg = '$data[no_reg]' ");
         $dataki = mysqli_fetch_array($table23);
-    if ($dataki['status'] == 'Lunas' OR  $dataki['status'] == 'Piutang'  OR  $dataki['status'] == 'Piutang Apotek'  )
+        if ($dataki['status'] == 'Lunas' OR  $dataki['status'] == 'Piutang'  OR  $dataki['status'] == 'Piutang Apotek'  )
             {
-$das = $db->query("SELECT dosis FROM detail_penjualan WHERE no_reg = '$data[no_reg]' ");
-        $sad = mysqli_fetch_array($das);
-          if($sad['dosis'] == '')
-        {
-        echo 
-        "<td></td>
-         <td></td>";
+
+        echo "<td><a href='selesai_rj.php?no_reg=".$data['no_reg']."' class='btn-floating btn-info btn-small'><i class='fa  fa-check'></i> </a></td>";
+        
         }
 
         else
-
         {
-        echo "<td></td>
-              <td><a href='selesai_rj.php?no_reg=".$data['no_reg']."' class='btn btn-danger'><span class='glyphicon glyphicon-send'></span> Selesai </a></td>";
+          echo 
+        "<td></td>";
         }
 
-         }
-  else
-            {
 
-         echo "<td><a href='form-rujuk-lab-rj.php?no_reg=".$data['no_reg']."' class='btn btn-success'><span class='glyphicon glyphicon-hand-right'></span> Rujuk Laboratorium</a></td>
-         <td></td>";
-            }
+      }
 
+      else{
+        echo "<td> </td>";
+        echo "<td> </td>";
+      }
+        
       
            echo  
-              "
-           
+              "</tr>";
 
-              </tr>";
-      
       }
     ?>
   </tbody>

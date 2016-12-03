@@ -10,7 +10,7 @@
     $nama = $_GET['nama'];
     $id = $_GET['id'];
 
-    $otoritas_akses = $db->query("SELECT * FROM hak_otoritas ho INNER JOIN otoritas_penjualan open ON ho.id = open.id_otoritas INNER JOIN otoritas_pembelian opem ON ho.id = opem.id_otoritas INNER JOIN otoritas_master_data omd ON ho.id = omd.id_otoritas INNER JOIN otoritas_pembayaran opemb ON ho.id = opemb.id_otoritas INNER JOIN otoritas_transaksi_kas otk ON ho.id = otk.id_otoritas INNER JOIN otoritas_kas_keluar okk ON ho.id = okk.id_otoritas INNER JOIN otoritas_kas_masuk okm ON ho.id = okm.id_otoritas INNER JOIN otoritas_kas_mutasi okmut ON ho.id = okmut.id_otoritas INNER JOIN otoritas_persediaan operse ON ho.id = operse.id_otoritas INNER JOIN otoritas_stok_opname oso ON ho.id = oso.id_otoritas INNER JOIN otoritas_stok_awal osa ON ho.id = osa.id_otoritas INNER JOIN otoritas_item_masuk oim ON ho.id = oim.id_otoritas INNER JOIN otoritas_item_keluar oik ON ho.id = oik.id_otoritas INNER JOIN otoritas_kas ok ON ho.id = ok.id_otoritas INNER JOIN otoritas_laporan ol ON ho.id = ol.id_otoritas WHERE ho.id = '$id'");
+    $otoritas_akses = $db->query("SELECT * FROM hak_otoritas ho INNER JOIN otoritas_penjualan open ON ho.id = open.id_otoritas INNER JOIN otoritas_pembelian opem ON ho.id = opem.id_otoritas INNER JOIN otoritas_master_data omd ON ho.id = omd.id_otoritas INNER JOIN otoritas_pembayaran opemb ON ho.id = opemb.id_otoritas INNER JOIN otoritas_transaksi_kas otk ON ho.id = otk.id_otoritas INNER JOIN otoritas_kas_keluar okk ON ho.id = okk.id_otoritas INNER JOIN otoritas_kas_masuk okm ON ho.id = okm.id_otoritas INNER JOIN otoritas_kas_mutasi okmut ON ho.id = okmut.id_otoritas INNER JOIN otoritas_persediaan operse ON ho.id = operse.id_otoritas INNER JOIN otoritas_stok_opname oso ON ho.id = oso.id_otoritas INNER JOIN otoritas_stok_awal osa ON ho.id = osa.id_otoritas INNER JOIN otoritas_item_masuk oim ON ho.id = oim.id_otoritas INNER JOIN otoritas_item_keluar oik ON ho.id = oik.id_otoritas INNER JOIN otoritas_kas ok ON ho.id = ok.id_otoritas INNER JOIN otoritas_laporan ol ON ho.id = ol.id_otoritas INNER JOIN otoritas_registrasi oreg ON ho.id = oreg.id_otoritas INNER JOIN otoritas_rekam_medik orm ON ho.id = orm.id_otoritas INNER JOIN otoritas_setting os ON ho.id = os.id_otoritas WHERE ho.id = '$id'");
     $data_otoritas = mysqli_fetch_array($otoritas_akses);
 
 
@@ -34,10 +34,50 @@
 <div class="form-group col-sm-12"> <!-- start otoritas pilih semua-->
     <input type="checkbox" value="1" class="cekcbox1 filled-in" id="checkbox1">
     <label for="checkbox1">Pilih Semua</label>
-</div> <!-- / of otoritas master_data -->
+</div> <!--  /start otoritas pilih semua-->
 
 
-<div class="form-group col-sm-2"> <!-- start otoritas pilih semua-->
+<div class="form-group col-sm-2"> <!-- / of otoritas registrasi -->
+<label>Registrasi</label><br>
+
+<?php 
+
+if ($data_otoritas['registrasi_lihat'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2000" name="registrasi_lihat" checked=""> 
+    <label for="checkbox2000">Lihat</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2000" name="registrasi_lihat">
+    <label for="checkbox2000">Lihat</label> <br>';  
+}
+
+ ?>
+
+</div> <!-- / of otoritas registrasi -->
+
+
+<div class="form-group col-sm-2"> <!-- / of otoritas rekam medik -->
+<label>Rekam Medik</label><br>
+
+<?php 
+
+if ($data_otoritas['rekam_medik_lihat'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="20001" name="rekam_medik_lihat" checked=""> 
+    <label for="20001">Lihat</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="20001" name="rekam_medik_lihat">
+    <label for="20001">Lihat</label> <br>';  
+}
+
+ ?>
+
+</div> <!-- / of otoritas rekam medik -->
+
+
+<div class="form-group col-sm-2"> <!-- / of otoritas master_data -->
 <label>Master Data</label><br>
 
 <?php 
@@ -192,7 +232,6 @@ else{
 
 
 
-
 <div class="form-group col-sm-2"> <!-- start otoritas akuntansi -->
 <label>Menu Akuntansi</label><br>
 
@@ -211,6 +250,107 @@ else{
  ?>
 
 </div> <!-- / of otoritas akuntansi -->
+
+
+
+<div class="form-group col-sm-2"> <!-- / of otoritas menu setting -->
+<label>Menu Setting</label><br>
+
+<?php 
+
+if ($data_otoritas['setting_lihat'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox20102" name="setting_lihat" checked=""> 
+    <label for="checkbox20102">Lihat</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox20102" name="setting_lihat">
+    <label for="checkbox20102">Lihat</label> <br>';  
+}
+
+ ?>
+
+</div> <!-- / of otoritas menu setting -->
+
+
+<div class="form-group col-sm-2"> <!-- / of otoritas setting registrasi-->
+<label>Setting Registrasi</label><br>
+
+<?php 
+
+if ($data_otoritas['setting_registrasi_lihat'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox201245" name="setting_registrasi_lihat" checked=""> 
+    <label for="checkbox201245">Lihat</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox201245" name="setting_registrasi_lihat">
+    <label for="checkbox201245">Lihat</label> <br>';  
+}
+
+ ?>
+
+</div> <!-- / of otoritas setting registrasi-->
+
+
+<div class="form-group col-sm-2"> <!-- / of otoritas setting penetapan petugas -->
+<label>Setting Penetapan Petugas</label><br>
+
+<?php 
+
+if ($data_otoritas['penetapan_petugas_lihat'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox20122" name="penetapan_petugas_lihat" checked=""> 
+    <label for="checkbox20122">Lihat</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox20122" name="penetapan_petugas_lihat">
+    <label for="checkbox20122">Lihat</label> <br>';  
+}
+
+ ?>
+
+</div> <!-- / of otoritas setting penetapan petugas -->
+
+
+<div class="form-group col-sm-2"> <!-- / of otoritas setting printer -->
+<label>Setting Printer</label><br>
+
+<?php 
+
+if ($data_otoritas['printer_lihat'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox20124" name="printer_lihat" checked=""> 
+    <label for="checkbox20124">Lihat</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox20124" name="printer_lihat">
+    <label for="checkbox20124">Lihat</label> <br>';  
+}
+
+ ?>
+
+</div> <!-- / of otoritas setting printer -->
+
+
+<div class="form-group col-sm-2"> <!-- / of otoritas master_data -->
+<label>Kartu Stok</label><br>
+
+<?php 
+
+if ($data_otoritas['kartu_stok_lihat'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2012" name="kartu_stok_lihat" checked=""> 
+    <label for="checkbox2012">Lihat</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2012" name="kartu_stok_lihat">
+    <label for="checkbox2012">Lihat</label> <br>';  
+}
+
+ ?>
+
+</div> <!-- / of otoritas master_data -->
 
 <div class="form-group col-sm-2"> <!-- start otoritas laporan_mutasi_stok -->
 <label>Laporan Mutasi Stok</label><br>
@@ -342,11 +482,439 @@ else{
 
 </div> <!-- / of otoritas laporan_neraca -->
 
+<div class="form-group col-sm-2"> <!-- start otoritas aporan kunjungan rj -->
+<label>Laporan Kunjungan R. Jalan</label><br>
+
+<?php 
+
+if ($data_otoritas['laporan_kunjungan_rj'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox1514" name="laporan_kunjungan_rj" checked="">
+    <label for="checkbox1514">Lihat</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox1514" name="laporan_kunjungan_rj">
+    <label for="checkbox1514">Lihat</label> <br>';  
+}
+
+ ?>
+
+</div> <!-- / of otoritas aporan kunjungan rj -->
+
+<div class="form-group col-sm-2"> <!-- start otoritas aporan kunjungan ri -->
+<label>Laporan Kunjungan R. Inap</label><br>
+
+<?php 
+
+if ($data_otoritas['laporan_kunjungan_ri'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox15235" name="laporan_kunjungan_ri" checked="">
+    <label for="checkbox15235">Lihat</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox15235" name="laporan_kunjungan_ri">
+    <label for="checkbox15235">Lihat</label> <br>';  
+}
+
+ ?>
+
+</div> <!-- / of otoritas aporan kunjungan ri -->
+
+<div class="form-group col-sm-2"> <!-- start otoritas laporan kunjungan UGD -->
+<label>Laporan Kunjungan UGD</label><br>
+
+<?php 
+
+if ($data_otoritas['laporan_kunjungan_ugd'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox1547" name="laporan_kunjungan_ugd" checked="">
+    <label for="checkbox1547">Lihat</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox1547" name="laporan_kunjungan_ugd">
+    <label for="checkbox1547">Lihat</label> <br>';  
+}
+
+ ?>
+
+</div> <!-- / of otoritas laporan kunjungan UGD -->
+
 
 <div class="form-group col-sm-12">
     
 </div>
 
+<div class="form-group col-sm-2"> <!-- start otoritas registrasi rawat jalan -->
+<label>Registrasi Rawat Jalan</label><br>
+
+<?php 
+
+if ($data_otoritas['registrasi_rj_lihat'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox001" name="registrasi_rj_lihat" checked="">
+    <label for="checkbox001">Lihat</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox001" name="registrasi_rj_lihat">
+    <label for="checkbox001">Lihat</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['registrasi_rj_tambah'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox002" name="registrasi_rj_tambah" checked=""> 
+    <label for="checkbox002">Tambah</label><br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox002" name="registrasi_rj_tambah"> 
+    <label for="checkbox002">Tambah</label><br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['registrasi_rj_edit'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox003" name="registrasi_rj_edit" checked="">
+    <label for="checkbox003">Edit</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox003" name="registrasi_rj_edit">
+    <label for="checkbox003">Edit</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['registrasi_rj_hapus'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox004" name="registrasi_rj_hapus" checked="">
+    <label for="checkbox004">Hapus</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox004" name="registrasi_rj_hapus">
+    <label for="checkbox004">Hapus</label> <br>';  
+}
+
+ ?>
+
+</div> <!-- / of otoritas registrasi rawat jalan -->
+
+
+<div class="form-group col-sm-2"> <!-- start otoritas registrasi rawat ri -->
+<label>Registrasi Rawat Inap</label><br>
+
+<?php 
+
+if ($data_otoritas['registrasi_ri_lihat'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox005" name="registrasi_ri_lihat" checked="">
+    <label for="checkbox005">Lihat</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox005" name="registrasi_ri_lihat">
+    <label for="checkbox005">Lihat</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['registrasi_ri_tambah'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox006" name="registrasi_ri_tambah" checked=""> 
+    <label for="checkbox006">Tambah</label><br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox006" name="registrasi_ri_tambah"> 
+    <label for="checkbox006">Tambah</label><br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['registrasi_ri_edit'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox007" name="registrasi_ri_edit" checked="">
+    <label for="checkbox007">Edit</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox007" name="registrasi_ri_edit">
+    <label for="checkbox007">Edit</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['registrasi_ri_hapus'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox008" name="registrasi_ri_hapus" checked="">
+    <label for="checkbox008">Hapus</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox008" name="registrasi_ri_hapus">
+    <label for="checkbox008">Hapus</label> <br>';  
+}
+
+ ?>
+
+</div> <!-- / of otoritas registrasi rawat inap -->
+
+
+<div class="form-group col-sm-2"> <!-- start otoritas registrasi UGD -->
+<label>Registrasi UGD</label><br>
+
+<?php 
+
+if ($data_otoritas['registrasi_ugd_lihat'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox009" name="registrasi_ugd_lihat" checked="">
+    <label for="checkbox009">Lihat</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox009" name="registrasi_ugd_lihat">
+    <label for="checkbox009">Lihat</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['registrasi_ugd_tambah'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox010" name="registrasi_ugd_tambah" checked=""> 
+    <label for="checkbox010">Tambah</label><br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox010" name="registrasi_ugd_tambah"> 
+    <label for="checkbox010">Tambah</label><br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['registrasi_ugd_edit'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox011" name="registrasi_ugd_edit" checked="">
+    <label for="checkbox011">Edit</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox011" name="registrasi_ugd_edit">
+    <label for="checkbox011">Edit</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['registrasi_ugd_hapus'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox012" name="registrasi_ugd_hapus" checked="">
+    <label for="checkbox012">Hapus</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox012" name="registrasi_ugd_hapus">
+    <label for="checkbox012">Hapus</label> <br>';  
+}
+
+ ?>
+
+</div> <!-- / of otoritas registrasi UGD -->
+
+
+
+<div class="form-group col-sm-2"> <!-- start otoritas registrasi rawat jalan -->
+<label>Rekam Medik Rawat Jalan</label><br>
+
+<?php 
+
+if ($data_otoritas['rekam_medik_rj_lihat'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox013" name="rekam_medik_rj_lihat" checked="">
+    <label for="checkbox013">Lihat</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox013" name="rekam_medik_rj_lihat">
+    <label for="checkbox013">Lihat</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['rekam_medik_rj_tambah'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox014" name="rekam_medik_rj_tambah" checked=""> 
+    <label for="checkbox014">Tambah</label><br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox014" name="rekam_medik_rj_tambah"> 
+    <label for="checkbox014">Tambah</label><br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['rekam_medik_rj_edit'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox015" name="rekam_medik_rj_edit" checked="">
+    <label for="checkbox015">Edit</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox015" name="rekam_medik_rj_edit">
+    <label for="checkbox015">Edit</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['rekam_medik_rj_hapus'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox016" name="rekam_medik_rj_hapus" checked="">
+    <label for="checkbox016">Hapus</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox016" name="rekam_medik_rj_hapus">
+    <label for="checkbox016">Hapus</label> <br>';  
+}
+
+ ?>
+
+</div> <!-- / of otoritas rekam_medik rawat jalan -->
+
+
+<div class="form-group col-sm-2"> <!-- start otoritas rekam_medik rawat ri -->
+<label>Rekam Medik Rawat Inap</label><br>
+
+<?php 
+
+if ($data_otoritas['rekam_medik_ri_lihat'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox017" name="rekam_medik_ri_lihat" checked="">
+    <label for="checkbox017">Lihat</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox017" name="rekam_medik_ri_lihat">
+    <label for="checkbox017">Lihat</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['rekam_medik_ri_tambah'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox018" name="rekam_medik_ri_tambah" checked=""> 
+    <label for="checkbox018">Tambah</label><br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox018" name="rekam_medik_ri_tambah"> 
+    <label for="checkbox018">Tambah</label><br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['rekam_medik_ri_edit'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox019" name="rekam_medik_ri_edit" checked="">
+    <label for="checkbox019">Edit</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox019" name="rekam_medik_ri_edit">
+    <label for="checkbox019">Edit</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['rekam_medik_ri_hapus'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox020" name="rekam_medik_ri_hapus" checked="">
+    <label for="checkbox020">Hapus</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox020" name="rekam_medik_ri_hapus">
+    <label for="checkbox020">Hapus</label> <br>';  
+}
+
+ ?>
+
+</div> <!-- / of otoritas rekam_medik rawat inap -->
+
+
+<div class="form-group col-sm-2"> <!-- start otoritas rekam_medik UGD -->
+<label>Rekam Medik UGD</label><br>
+
+<?php 
+
+if ($data_otoritas['rekam_medik_ugd_lihat'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox021" name="rekam_medik_ugd_lihat" checked="">
+    <label for="checkbox021">Lihat</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox021" name="rekam_medik_ugd_lihat">
+    <label for="checkbox021">Lihat</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['rekam_medik_ugd_tambah'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox022" name="rekam_medik_ugd_tambah" checked=""> 
+    <label for="checkbox022">Tambah</label><br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox022" name="rekam_medik_ugd_tambah"> 
+    <label for="checkbox022">Tambah</label><br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['rekam_medik_ugd_edit'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox023" name="rekam_medik_ugd_edit" checked="">
+    <label for="checkbox023">Edit</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox023" name="rekam_medik_ugd_edit">
+    <label for="checkbox023">Edit</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['rekam_medik_ugd_hapus'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox024" name="rekam_medik_ugd_hapus" checked="">
+    <label for="checkbox024">Hapus</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox024" name="rekam_medik_ugd_hapus">
+    <label for="checkbox024">Hapus</label> <br>';  
+}
+
+ ?>
+
+</div> <!-- / of otoritas registrasi UGD -->
 
 
 <div class="form-group col-sm-2"> <!-- start otoritas penjualan -->
@@ -537,6 +1105,631 @@ else{
 
 </div> <!-- / of otoritas user -->
 
+
+
+
+<div class="form-group col-sm-2"> <!-- start otoritas poli -->
+<label>Poli</label><br>
+
+<?php 
+
+if ($data_otoritas['poli_lihat'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox251" name="poli_lihat" checked="">
+    <label for="checkbox251">Lihat</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox251" name="poli_lihat">
+    <label for="checkbox251">Lihat</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['poli_tambah'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox261" name="poli_tambah" checked=""> 
+    <label for="checkbox261">Tambah</label><br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox261" name="poli_tambah"> 
+    <label for="checkbox261">Tambah</label><br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['poli_edit'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox271" name="poli_edit" checked="">
+    <label for="checkbox271">Edit</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox271" name="poli_edit">
+    <label for="checkbox271">Edit</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['poli_hapus'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox281" name="poli_hapus" checked="">
+    <label for="checkbox281">Hapus</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox281" name="poli_hapus">
+    <label for="checkbox281">Hapus</label> <br>';  
+}
+
+ ?>
+
+</div> <!-- / of otoritas poli -->
+
+
+
+<div class="form-group col-sm-2"> <!-- start otoritas kamar -->
+<label>Kamar</label><br>
+
+<?php 
+
+if ($data_otoritas['kamar_lihat'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox250" name="kamar_lihat" checked="">
+    <label for="checkbox250">Lihat</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox250" name="kamar_lihat">
+    <label for="checkbox250">Lihat</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['kamar_tambah'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox260" name="kamar_tambah" checked=""> 
+    <label for="checkbox260">Tambah</label><br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox260" name="kamar_tambah"> 
+    <label for="checkbox260">Tambah</label><br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['kamar_edit'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox270" name="kamar_edit" checked="">
+    <label for="checkbox270">Edit</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox270" name="kamar_edit">
+    <label for="checkbox270">Edit</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['kamar_hapus'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox280" name="kamar_hapus" checked="">
+    <label for="checkbox280">Hapus</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox280" name="kamar_hapus">
+    <label for="checkbox280">Hapus</label> <br>';  
+}
+
+ ?>
+
+</div> <!-- / of otoritas kamar -->
+
+
+
+<div class="form-group col-sm-2"> <!-- start otoritas penjamin -->
+<label>Penjamin</label><br>
+
+<?php 
+
+if ($data_otoritas['penjamin_lihat'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox252" name="penjamin_lihat" checked="">
+    <label for="checkbox252">Lihat</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox252" name="penjamin_lihat">
+    <label for="checkbox252">Lihat</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['penjamin_tambah'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox262" name="penjamin_tambah" checked=""> 
+    <label for="checkbox262">Tambah</label><br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox262" name="penjamin_tambah"> 
+    <label for="checkbox262">Tambah</label><br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['penjamin_edit'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox272" name="penjamin_edit" checked="">
+    <label for="checkbox272">Edit</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox272" name="penjamin_edit">
+    <label for="checkbox272">Edit</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['penjamin_hapus'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox282" name="penjamin_hapus" checked="">
+    <label for="checkbox282">Hapus</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox282" name="penjamin_hapus">
+    <label for="checkbox282">Hapus</label> <br>';  
+}
+
+ ?>
+
+</div> <!-- / of otoritas penjamin -->
+
+
+<div class="form-group col-sm-2"> <!-- start otoritas perujuk -->
+<label>Perujuk</label><br>
+
+<?php 
+
+if ($data_otoritas['perujuk_lihat'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox258" name="perujuk_lihat" checked="">
+    <label for="checkbox258">Lihat</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox258" name="perujuk_lihat">
+    <label for="checkbox258">Lihat</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['perujuk_tambah'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox268" name="perujuk_tambah" checked=""> 
+    <label for="checkbox268">Tambah</label><br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox268" name="perujuk_tambah"> 
+    <label for="checkbox268">Tambah</label><br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['perujuk_edit'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox278" name="perujuk_edit" checked="">
+    <label for="checkbox278">Edit</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox278" name="perujuk_edit">
+    <label for="checkbox278">Edit</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['perujuk_hapus'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox288" name="perujuk_hapus" checked="">
+    <label for="checkbox288">Hapus</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox288" name="perujuk_hapus">
+    <label for="checkbox288">Hapus</label> <br>';  
+}
+
+ ?>
+
+</div> <!-- / of otoritas perujuk -->
+
+
+<div class="form-group col-sm-2"> <!-- start otoritas jenis obat -->
+<label>Jenis Obat</label><br>
+
+<?php 
+
+if ($data_otoritas['jenis_obat_lihat'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2501" name="jenis_obat_lihat" checked="">
+    <label for="checkbox2501">Lihat</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2501" name="jenis_obat_lihat">
+    <label for="checkbox2501">Lihat</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['jenis_obat_tambah'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2601" name="jenis_obat_tambah" checked=""> 
+    <label for="checkbox2601">Tambah</label><br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2601" name="jenis_obat_tambah"> 
+    <label for="checkbox2601">Tambah</label><br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['jenis_obat_edit'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2701" name="jenis_obat_edit" checked="">
+    <label for="checkbox2701">Edit</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2701" name="jenis_obat_edit">
+    <label for="checkbox2701">Edit</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['jenis_obat_hapus'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2801" name="jenis_obat_hapus" checked="">
+    <label for="checkbox2801">Hapus</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2801" name="jenis_obat_hapus">
+    <label for="checkbox2801">Hapus</label> <br>';  
+}
+
+ ?>
+
+</div> <!-- / of otoritas jenis obat -->
+
+
+<div class="form-group col-sm-2"> <!-- start otoritas kelas kamar -->
+<label>Kelas Kamar</label><br>
+
+<?php 
+
+if ($data_otoritas['kelas_kamar_lihat'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2091" name="kelas_kamar_lihat" checked="">
+    <label for="checkbox2091">Lihat</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2091" name="kelas_kamar_lihat">
+    <label for="checkbox2091">Lihat</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['kelas_kamar_tambah'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2092" name="kelas_kamar_tambah" checked=""> 
+    <label for="checkbox2092">Tambah</label><br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2092" name="kelas_kamar_tambah"> 
+    <label for="checkbox2092">Tambah</label><br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['kelas_kamar_edit'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2093" name="kelas_kamar_edit" checked="">
+    <label for="checkbox2093">Edit</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2093" name="kelas_kamar_edit">
+    <label for="checkbox2093">Edit</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['kelas_kamar_hapus'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2094" name="kelas_kamar_hapus" checked="">
+    <label for="checkbox2094">Hapus</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2094" name="kelas_kamar_hapus">
+    <label for="checkbox2094">Hapus</label> <br>';  
+}
+
+ ?>
+
+</div> <!-- / of otoritas kelas kamar -->
+
+
+<div class="form-group col-sm-2"> <!-- start otoritas cito -->
+<label>Cito</label><br>
+
+<?php 
+
+if ($data_otoritas['cito_lihat'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2505" name="cito_lihat" checked="">
+    <label for="checkbox2505">Lihat</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2505" name="cito_lihat">
+    <label for="checkbox2505">Lihat</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['cito_tambah'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2605" name="cito_tambah" checked=""> 
+    <label for="checkbox2605">Tambah</label><br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2605" name="cito_tambah"> 
+    <label for="checkbox2605">Tambah</label><br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['cito_edit'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2705" name="cito_edit" checked="">
+    <label for="checkbox2705">Edit</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2705" name="cito_edit">
+    <label for="checkbox2705">Edit</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['cito_hapus'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2805" name="cito_hapus" checked="">
+    <label for="checkbox2805">Hapus</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2805" name="cito_hapus">
+    <label for="checkbox2805">Hapus</label> <br>';  
+}
+
+ ?>
+
+</div> <!-- / of otoritas cito -->
+
+
+<div class="form-group col-sm-2"> <!-- start otoritas operasi -->
+<label>Operasi</label><br>
+
+<?php 
+
+if ($data_otoritas['operasi_lihat'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox25012" name="operasi_lihat" checked="">
+    <label for="checkbox25012">Lihat</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox25012" name="operasi_lihat">
+    <label for="checkbox25012">Lihat</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['operasi_tambah'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox26012" name="operasi_tambah" checked=""> 
+    <label for="checkbox26012">Tambah</label><br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox26012" name="operasi_tambah"> 
+    <label for="checkbox26012">Tambah</label><br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['operasi_edit'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox27012" name="operasi_edit" checked="">
+    <label for="checkbox27012">Edit</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox27012" name="operasi_edit">
+    <label for="checkbox27012">Edit</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['operasi_hapus'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox28012" name="operasi_hapus" checked="">
+    <label for="checkbox28012">Hapus</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox28012" name="operasi_hapus">
+    <label for="checkbox28012">Hapus</label> <br>';  
+}
+
+ ?>
+
+</div> <!-- / of otoritas operasi -->
+
+
+
+<div class="form-group col-sm-2"> <!-- start otoritas sub operasi -->
+<label>Sub Operasi</label><br>
+
+<?php 
+
+if ($data_otoritas['sub_operasi_lihat'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox25058" name="sub_operasi_lihat" checked="">
+    <label for="checkbox25058">Lihat</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox25058" name="sub_operasi_lihat">
+    <label for="checkbox25058">Lihat</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['sub_operasi_tambah'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox21235" name="sub_operasi_tambah" checked=""> 
+    <label for="checkbox21235">Tambah</label><br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox21235" name="sub_operasi_tambah"> 
+    <label for="checkbox21235">Tambah</label><br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['sub_operasi_edit'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2748" name="sub_operasi_edit" checked="">
+    <label for="checkbox2748">Edit</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox2748" name="sub_operasi_edit">
+    <label for="checkbox2748">Edit</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['sub_operasi_hapus'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox24785" name="sub_operasi_hapus" checked="">
+    <label for="checkbox24785">Hapus</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox24785" name="sub_operasi_hapus">
+    <label for="checkbox24785">Hapus</label> <br>';  
+}
+
+ ?>
+
+</div> <!-- / of otoritas sub operasi -->
+
+
+
+<div class="form-group col-sm-2"> <!-- start otoritas detail sub operasi -->
+<label>Detail Sub Operasi</label><br>
+
+<?php 
+
+if ($data_otoritas['detail_sub_operasi_lihat'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox250581" name="detail_sub_operasi_lihat" checked="">
+    <label for="checkbox250581">Lihat</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox250581" name="detail_sub_operasi_lihat">
+    <label for="checkbox250581">Lihat</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['detail_sub_operasi_tambah'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox212351" name="detail_sub_operasi_tambah" checked=""> 
+    <label for="checkbox212351">Tambah</label><br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox212351" name="detail_sub_operasi_tambah"> 
+    <label for="checkbox212351">Tambah</label><br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['detail_sub_operasi_edit'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox27481" name="detail_sub_operasi_edit" checked="">
+    <label for="checkbox27481">Edit</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox27481" name="detail_sub_operasi_edit">
+    <label for="checkbox27481">Edit</label> <br>';  
+}
+
+ ?>
+
+<?php 
+
+if ($data_otoritas['detail_sub_operasi_hapus'] == '1'){
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox247851" name="detail_sub_operasi_hapus" checked="">
+    <label for="checkbox247851">Hapus</label> <br>';
+}
+
+else{
+    echo '<input type="checkbox" value="1" class="cekcbox filled-in" id="checkbox247851" name="detail_sub_operasi_hapus">
+    <label for="checkbox247851">Hapus</label> <br>';  
+}
+
+ ?>
+
+</div> <!-- / of otoritas detail sub operasi -->
 
 
 
@@ -2604,12 +3797,8 @@ else{
 
 
 
-
-
-
-
 <div class="form-group col-sm-12">
-<button type="submit" class="btn btn-info" id="submit_tambah"> <span class='glyphicon glyphicon-save'> </span> Simpan </button>
+<button type="submit" class="btn btn-info" id="submit_tambah"><i class='fa fa-save'></i> Simpan</button>
 </div>
 
 

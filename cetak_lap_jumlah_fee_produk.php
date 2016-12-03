@@ -20,17 +20,15 @@ $sampai_tanggal = $_GET['sampai_tanggal'];
     
  ?>
 
-<div class="container">
+<div style="padding-right: 5%; padding-left: 5%;">
     
+                 <h3> <b> <center>BUKTI KOMISI PRODUK / PETUGAS </center></b></h3><hr>
     <div class="row"><!--row1-->
         <div class="col-sm-2">
-        <br><br>
                 <img src='save_picture/<?php echo $data1['foto']; ?>' class='img-rounded' alt='Cinque Terre' width='160' height='140`'> 
         </div><!--penutup colsm2-->
 
         <div class="col-sm-4">
-                 <h3> <b> BUKTI KOMISI PRODUK / PETUGAS </b></h3>
-                 <hr>
                  <h4> <b> <?php echo $data1['nama_perusahaan']; ?> </b> </h4> 
                  <p> <?php echo $data1['alamat_perusahaan']; ?> </p> 
                  <p> No.Telp:<?php echo $data1['no_telp']; ?> </p> 
@@ -38,7 +36,6 @@ $sampai_tanggal = $_GET['sampai_tanggal'];
         </div><!--penutup colsm4-->
 
         <div class="col-sm-5">
-                          <br><br><br><br><br>
 <table>
   <tbody>
   
@@ -61,7 +58,7 @@ $sampai_tanggal = $_GET['sampai_tanggal'];
 <br>
 <div class="container">
 
-<table id="tableuser" class="table table-bordered">
+<table id="tableuser" class="table table-bordered table-sm">
             <thead>
                   <th> Nama Petugas </th>
                   <th> Nomor Faktur </th>

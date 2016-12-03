@@ -5,7 +5,6 @@ include 'db.php';
 
 
 $no_faktur_pembayaran = $_GET['no_faktur_pembayaran'];
-$no_faktur = $_GET['no_faktur'];
 $nama = $_GET['nama'];
 $cara_bayar = $_GET['cara_bayar'];
 
@@ -24,17 +23,16 @@ $perintah2 = $db->query("DELETE FROM tbs_pembayaran_hutang WHERE no_faktur_pemba
 $perintah = $db->query("SELECT * FROM detail_pembayaran_hutang WHERE no_faktur_pembayaran = '$no_faktur_pembayaran'");
 while ($data = mysqli_fetch_array($perintah))
 {
-		$perintah4 = $db->query("SELECT total FROM pembelian WHERE no_faktur = '$no_faktur'");
+		$perintah4 = $db->query("SELECT total FROM pembelian WHERE no_faktur = '$data[no_faktur_pembelian]'");
 		$data4 = mysqli_fetch_array($perintah4);
-		echo $total = $data4['total'];
+		$total = $data4['total'];
 
-$perintah1 = $db->query("INSERT INTO tbs_pembayaran_hutang (no_faktur_pembayaran, no_faktur_pembelian, tanggal, tanggal_jt, kredit, potongan, total, jumlah_bayar) VALUES ( '$data[no_faktur_pembayaran]', '$data[no_faktur_pembelian]', now(), '$data[tanggal_jt]', '$data[kredit]', '$data[potongan]', '$data[total]', '$data[jumlah_bayar]')");
+$perintah1 = $db->query("INSERT INTO tbs_pembayaran_hutang (no_faktur_pembayaran, no_faktur_pembelian, tanggal, tanggal_jt, kredit, potongan, total, jumlah_bayar,suplier) VALUES ( '$data[no_faktur_pembayaran]', '$data[no_faktur_pembelian]', now(), '$data[tanggal_jt]', '$data[kredit]', '$data[potongan]', '$data[total]', '$data[jumlah_bayar]', '$data[suplier]')");
 
 
 }
 
- header ('location:edit_pembayaran_hutang.php?no_faktur_pembayaran='.$no_faktur_pembayaran.'&nama='.$nama.'&cara_bayar='.$cara_bayar.'');
-
+   echo '<META HTTP-EQUIV="Refresh" Content="0; URL=edit_pembayaran_hutang.php?no_faktur_pembayaran='.$no_faktur_pembayaran.'&nama='.$nama.'&cara_bayar='.$cara_bayar.'">';
 
 //Untuk Memutuskan Koneksi Ke Database
 mysqli_close($db);   
